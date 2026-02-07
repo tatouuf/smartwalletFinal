@@ -7,60 +7,140 @@ import entities.user.User;
 import services.service.ServiceServices;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
         ServiceServices serviceServices = new ServiceServices();
+        Scanner sc = new Scanner(System.in);
 
-        // 🔹 Création d’utilisateurs
+        // 🔹 Création d’utilisateurs pour tester
         User u1 = new User(1, "Itaf", "Tattou", "itaf@example.com");
         User u2 = new User(2, "Ali", "Ben Ali", "ali@example.com");
 
-        // 🔹 Création d’un service sans ID (pour insertion)
-        Services s1 = new Services(
-                250.0f,
-                "Maison moderne avec jardin",
-                "Immobilier",
-                Statut.DISPONIBLE,
-                u1,   // objet User
-                "36.8065,10.1815",
-                "Tunis Centre",
-                TypeService.maison
-        );
+        boolean exit = false;
 
-        // 🔹 Service avec ID (pour modification/suppression)
-        Services s2 = new Services(
-                1,
-                120.0f,
-                "Voiture de location",
-                "Transport",
-                Statut.NON_DISPONIBLE,
-                u2,   // objet User
-                "35.8256,10.6084",
-                "Sousse",
-                TypeService.voiture
-        );
+        while (!exit) {
+            System.out.println("\n===== MENU SERVICES =====");
+            System.out.println("1. Ajouter un service");
+            System.out.println("2. Modifier un service");
+            System.out.println("3. Supprimer un service");
+            System.out.println("4. Afficher tous les services");
+            System.out.println("5. Quitter");
+            System.out.print("Choisissez une option : ");
 
-        try {
-            // ➕ Ajouter le service s1
-            serviceServices.ajouterServices(s1);
+            int choix = sc.nextInt();
+            sc.nextLine(); // consommer le \n
 
-            // ✏️ Modifier le service s2
-            serviceServices.modifierServices(s2);
+            try {
+                switch (choix) {
+                    case 1 -> {
+                        // ===== AJOUTER =====
+                        System.out.print("Prix : ");
+                        float prix = sc.nextFloat();
+                        sc.nextLine();
 
-            // 🗑 Supprimer le service s2
-            serviceServices.supprimerServices(s2);
+                        System.out.print("Description : ");
+                        String desc = sc.nextLine();
 
-            // 📋 Afficher tous les services
-            System.out.println("Liste des services :");
-            serviceServices.recupererServices().forEach(System.out::println);
+                        System.out.print("Type : ");
+                        String type = sc.nextLine();
 
-            // 🔹 Exemple : accéder aux infos de l'utilisateur d’un service
-            System.out.println("\nNom de l'utilisateur du service 1 : " + s1.getUser().getNom());
+                        System.out.print("Statut (DISPONIBLE/NON_DISPONIBLE) : ");
+                        Statut statut = Statut.valueOf(sc.nextLine().toUpperCase());
 
-        } catch (SQLException e) {
-            System.out.println("Erreur SQL : " + e.getMessage());
+                        System.out.print("Localisation (lat,lon) : ");
+                        String loc = sc.nextLine().trim();
+
+                        // Vérification format lat,lon
+                        if (!loc.matches("\\d+(\\.\\d+)?,\\d+(\\.\\d+)?")) {
+                            System.out.println("Erreur : format invalide. Exemple attendu : 36.8065,10.1815");
+                            break;
+                        }
+
+                        System.out.print("Adresse : ");
+                        String adresse = sc.nextLine();
+
+                        System.out.print("Type de service (maison, voiture, etc.) : ");
+                        TypeService typeService = TypeService.valueOf(sc.nextLine().toLowerCase());
+
+                        Services s = new Services(prix, desc, type, statut, u1, loc, adresse, typeService);
+                        serviceServices.ajouterServices(s);
+                    }
+
+                    case 2 -> {
+                        // ===== MODIFIER =====
+                        System.out.print("ID du service à modifier : ");
+                        int id = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Prix : ");
+                        float prix = sc.nextFloat();
+                        sc.nextLine();
+
+                        System.out.print("Description : ");
+                        String desc = sc.nextLine();
+
+                        System.out.print("Type : ");
+                        String type = sc.nextLine();
+
+                        System.out.print("Statut (DISPONIBLE/NON_DISPONIBLE) : ");
+                        Statut statut = Statut.valueOf(sc.nextLine().toUpperCase());
+
+                        System.out.print("Localisation (lat,lon) : ");
+                        String loc = sc.nextLine().trim();
+                        if (!loc.matches("\\d+(\\.\\d+)?,\\d+(\\.\\d+)?")) {
+                            System.out.println("Erreur : format invalide. Exemple attendu : 36.8065,10.1815");
+                            break;
+                        }
+
+                        System.out.print("Adresse : ");
+                        String adresse = sc.nextLine();
+
+                        System.out.print("Type de service (maison, voiture, etc.) : ");
+                        TypeService typeService = TypeService.valueOf(sc.nextLine().toLowerCase());
+
+                        Services s = new Services(id, prix, desc, type, statut, u1, loc, adresse, typeService);
+                        serviceServices.modifierServices(s);
+                    }
+
+                    case 3 -> {
+                        // ===== SUPPRIMER =====
+                        System.out.print("ID du service à supprimer : ");
+                        int id = sc.nextInt();
+                        sc.nextLine();
+                        Services s = new Services();
+                        s.setId(id);
+                        serviceServices.supprimerServices(s);
+                    }
+
+                    case 4 -> {
+                        // ===== AFFICHER =====
+                        List<Services> services = serviceServices.recupererServices();
+                        System.out.println("===== LISTE DES SERVICES =====");
+                        if (services.isEmpty()) {
+                            System.out.println("Aucun service trouvé.");
+                        } else {
+                            services.forEach(System.out::println);
+                        }
+                    }
+
+                    case 5 -> {
+                        exit = true;
+                        System.out.println("Au revoir !");
+                    }
+
+                    default -> System.out.println("Option invalide ! Veuillez choisir entre 1 et 5.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Erreur SQL : " + e.getMessage());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erreur : valeur invalide pour Statut ou TypeService.");
+            }
         }
+
+        sc.close();
     }
 }

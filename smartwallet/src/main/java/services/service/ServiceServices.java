@@ -21,7 +21,6 @@ public class ServiceServices implements IServiceServices {
     // 🔹 Ajouter un service
     @Override
     public void ajouterServices(Services s) throws SQLException {
-        // Utilisation de ST_GeomFromText pour le POINT
         String sql = "INSERT INTO services (prix, description, type, statut, id_user, localisation, adresse, TypeService) " +
                 "VALUES (?, ?, ?, ?, ?, ST_GeomFromText(?), ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -31,9 +30,17 @@ public class ServiceServices implements IServiceServices {
         ps.setString(4, s.getStatut().name());
         ps.setInt(5, s.getUser().getId());
 
-        // Conversion lat,lon -> POINT(lon lat)
-        String[] coords = s.getLocalisation().split(",");
-        String pointWKT = "POINT(" + coords[1].trim() + " " + coords[0].trim() + ")";
+        // 🔹 Conversion sécurisée lat,lon -> POINT(lon lat)
+        String localisation = s.getLocalisation();
+        String[] coords = localisation.split(",");
+        if (coords.length != 2) {
+            throw new IllegalArgumentException(
+                    "La localisation doit être au format lat,lon (ex: 36.8065,10.1815). Vous avez saisi : " + localisation
+            );
+        }
+        String lat = coords[0].trim();
+        String lon = coords[1].trim();
+        String pointWKT = "POINT(" + lon + " " + lat + ")";
         ps.setString(6, pointWKT);
 
         ps.setString(7, s.getAdresse());
@@ -53,8 +60,16 @@ public class ServiceServices implements IServiceServices {
         ps.setString(4, s.getStatut().name());
         ps.setInt(5, s.getUser().getId());
 
-        String[] coords = s.getLocalisation().split(",");
-        String pointWKT = "POINT(" + coords[1].trim() + " " + coords[0].trim() + ")";
+        String localisation = s.getLocalisation();
+        String[] coords = localisation.split(",");
+        if (coords.length != 2) {
+            throw new IllegalArgumentException(
+                    "La localisation doit être au format lat,lon (ex: 36.8065,10.1815). Vous avez saisi : " + localisation
+            );
+        }
+        String lat = coords[0].trim();
+        String lon = coords[1].trim();
+        String pointWKT = "POINT(" + lon + " " + lat + ")";
         ps.setString(6, pointWKT);
 
         ps.setString(7, s.getAdresse());
@@ -87,7 +102,7 @@ public class ServiceServices implements IServiceServices {
             User u = new User();
             u.setId(userId);
 
-            // Conversion "POINT(lon lat)" -> "lat,lon"
+            // 🔹 Conversion "POINT(lon lat)" -> "lat,lon"
             String loc = rs.getString("localisation"); // ex: "POINT(10.1815 36.8065)"
             loc = loc.replace("POINT(", "").replace(")", ""); // "10.1815 36.8065"
             String[] coords = loc.split(" ");
