@@ -10,6 +10,7 @@ module com.example.smartwallet {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
     opens com.example.smartwallet to javafx.fxml;
     exports com.example.smartwallet;
