@@ -1,6 +1,7 @@
 package com.example.smartwallet.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 
 @Entity
 public class Budget {

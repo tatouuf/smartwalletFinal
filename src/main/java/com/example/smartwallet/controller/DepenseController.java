@@ -1,6 +1,6 @@
 package com.example.smartwallet.controller;
 
-import com.example.smartwallet.entity.Depense;
+import com.example.smartwallet.model.Depense;
 import com.example.smartwallet.service.DepenseService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -21,8 +21,8 @@ public class DepenseController {
     }
 
     @GetMapping
-    public List<Depense> all() {
-        return service.all();
+    public <Depense> List<Depense> all() {
+        return (List<Depense>) service.all();
     }
 
     @DeleteMapping("/{id}")
