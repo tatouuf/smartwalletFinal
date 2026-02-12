@@ -1,6 +1,9 @@
 package services.service;
 
 import entities.service.Services;
+import entities.service.Statut;
+import entities.service.TypeService;
+import entities.user.User;
 import utils.MyDataBase;
 
 import java.sql.*;
@@ -12,192 +15,104 @@ public class ServiceServices implements IServiceServices {
     private Connection cnx;
 
     public ServiceServices() {
-        // Récupération de la connexion depuis MyDataBase
         this.cnx = MyDataBase.getInstance().getConnection();
     }
 
+    // ======== AJOUTER ========
     @Override
     public void ajouterServices(Services s) throws SQLException {
-        // Vérification que l'utilisateur existe
-        if (s.getUser() == null) {
-            throw new SQLException("❌ Aucun utilisateur associé au service");
-        }
+        // Vérifier localisation
+        String[] coords = s.getLocalisation().split(",");
+        if (coords.length != 2) throw new SQLException("Localisation invalide ! Format attendu : lat,lon");
+        String pointWKT = "POINT(" + coords[0].trim() + " " + coords[1].trim() + ")";
 
-        String query = "INSERT INTO services (prix, localisation, adresse, description, type_service, statut, user_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO services (prix, localisation, adresse, description, type, statut, id_user, TypeService) " +
+                "VALUES (?, ST_GeomFromText(?), ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             pst.setFloat(1, s.getPrix());
-            pst.setString(2, s.getLocalisation());
+            pst.setString(2, pointWKT);
             pst.setString(3, s.getAdresse());
             pst.setString(4, s.getDescription());
-            pst.setString(5, s.getTypeService().name());
+            pst.setString(5, s.getType());
             pst.setString(6, s.getStatut().name());
             pst.setInt(7, s.getUser().getId());
+            pst.setString(8, s.getTypeService().name());
 
             pst.executeUpdate();
 
-            // Récupérer l'ID généré pour le service
-            ResultSet rs = pst.getGeneratedKeys();
-            if (rs.next()) {
-                s.setId(rs.getInt(1));
-                System.out.println("✅ Service ajouté avec ID: " + s.getId());
+            ResultSet rsKeys = pst.getGeneratedKeys();
+            if (rsKeys.next()) {
+                s.setId(rsKeys.getInt(1));
+                System.out.println("Service ajouté avec ID: " + s.getId());
             }
         }
     }
 
+    // ======== MODIFIER ========
     @Override
     public void modifierServices(Services s) throws SQLException {
-        if (s.getUser() == null) {
-            throw new SQLException("❌ Aucun utilisateur associé au service");
-        }
+        String[] coords = s.getLocalisation().split(",");
+        if (coords.length != 2) throw new SQLException("Localisation invalide ! Format attendu : lat,lon");
+        String pointWKT = "POINT(" + coords[0].trim() + " " + coords[1].trim() + ")";
 
-        String query = "UPDATE services SET prix = ?, localisation = ?, adresse = ?, " +
-                "description = ?, type_service = ?, statut = ?, user_id = ? WHERE id = ?";
+        String query = "UPDATE services SET prix=?, localisation=ST_GeomFromText(?), adresse=?, description=?, " +
+                "type=?, statut=?, id_user=?, TypeService=? WHERE id=?";
 
         try (PreparedStatement pst = cnx.prepareStatement(query)) {
             pst.setFloat(1, s.getPrix());
-            pst.setString(2, s.getLocalisation());
+            pst.setString(2, pointWKT);
             pst.setString(3, s.getAdresse());
             pst.setString(4, s.getDescription());
-            pst.setString(5, s.getTypeService().name());
+            pst.setString(5, s.getType());
             pst.setString(6, s.getStatut().name());
             pst.setInt(7, s.getUser().getId());
-            pst.setInt(8, s.getId());
+            pst.setString(8, s.getTypeService().name());
+            pst.setInt(9, s.getId());
 
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("✅ Service modifié avec succès");
-            } else {
-                System.out.println("⚠️ Aucun service trouvé avec l'ID: " + s.getId());
-            }
+            int rows = pst.executeUpdate();
+            if (rows > 0) System.out.println("Service modifié avec succès");
+            else System.out.println("Aucun service trouvé avec l'ID: " + s.getId());
         }
     }
 
+    // ======== SUPPRIMER ========
     @Override
     public void supprimerServices(Services s) throws SQLException {
-        String query = "DELETE FROM services WHERE id = ?";
-
+        String query = "DELETE FROM services WHERE id=?";
         try (PreparedStatement pst = cnx.prepareStatement(query)) {
             pst.setInt(1, s.getId());
-
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("✅ Service supprimé avec succès");
-            } else {
-                System.out.println("⚠️ Aucun service trouvé avec l'ID: " + s.getId());
-            }
+            int rows = pst.executeUpdate();
+            if (rows > 0) System.out.println("Service supprimé avec succès");
+            else System.out.println("Aucun service trouvé avec l'ID: " + s.getId());
         }
     }
 
+    // ======== RECUPERER ========
     @Override
     public List<Services> recupererServices() throws SQLException {
-        List<Services> services = new ArrayList<>();
-        String query = "SELECT * FROM services";
+        List<Services> list = new ArrayList<>();
+        String query = "SELECT id, prix, ST_AsText(localisation) AS localisation, adresse, description, type, statut, id_user, TypeService FROM services";
+        Statement st = cnx.createStatement();
+        ResultSet rs = st.executeQuery(query);
 
-        try (Statement st = cnx.createStatement();
-             ResultSet rs = st.executeQuery(query)) {
+        while (rs.next()) {
+            Services s = new Services();
+            s.setId(rs.getInt("id"));
+            s.setPrix(rs.getFloat("prix"));
 
-            while (rs.next()) {
-                Services s = new Services();
-                s.setId(rs.getInt("id"));
-                s.setPrix(rs.getFloat("prix"));
-                s.setLocalisation(rs.getString("localisation"));
-                s.setAdresse(rs.getString("adresse"));
-                s.setDescription(rs.getString("description"));
-                s.setTypeService(entities.service.TypeService.valueOf(rs.getString("type_service")));
-                s.setStatut(entities.service.Statut.valueOf(rs.getString("statut")));
+            String loc = rs.getString("localisation");
+            if (loc != null) loc = loc.replace("POINT(", "").replace(")", "").replace(" ", ",");
+            s.setLocalisation(loc);
 
-                // Note: user_id n'est pas chargé ici pour éviter une requête supplémentaire
-                // Vous pouvez ajouter une méthode pour charger l'utilisateur séparément
-
-                services.add(s);
-            }
+            s.setAdresse(rs.getString("adresse"));
+            s.setDescription(rs.getString("description"));
+            s.setType(rs.getString("type"));
+            s.setStatut(Statut.valueOf(rs.getString("statut")));
+            s.setTypeService(TypeService.valueOf(rs.getString("TypeService")));
+            s.setUser(new User(rs.getInt("id_user"), "", "", ""));
+            list.add(s);
         }
-
-        System.out.println("📋 " + services.size() + " services récupérés");
-        return services;
-    }
-
-    // ===========================
-    // 🔹 Méthodes supplémentaires
-    // ===========================
-
-    public List<Services> recupererServicesParUtilisateur(int userId) throws SQLException {
-        List<Services> services = new ArrayList<>();
-        String query = "SELECT * FROM services WHERE user_id = ?";
-
-        try (PreparedStatement pst = cnx.prepareStatement(query)) {
-            pst.setInt(1, userId);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                Services s = new Services();
-                s.setId(rs.getInt("id"));
-                s.setPrix(rs.getFloat("prix"));
-                s.setLocalisation(rs.getString("localisation"));
-                s.setAdresse(rs.getString("adresse"));
-                s.setDescription(rs.getString("description"));
-                s.setTypeService(entities.service.TypeService.valueOf(rs.getString("type_service")));
-                s.setStatut(entities.service.Statut.valueOf(rs.getString("statut")));
-
-                services.add(s);
-            }
-        }
-
-        return services;
-    }
-
-    public Services recupererServiceParId(int id) throws SQLException {
-        String query = "SELECT * FROM services WHERE id = ?";
-
-        try (PreparedStatement pst = cnx.prepareStatement(query)) {
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                Services s = new Services();
-                s.setId(rs.getInt("id"));
-                s.setPrix(rs.getFloat("prix"));
-                s.setLocalisation(rs.getString("localisation"));
-                s.setAdresse(rs.getString("adresse"));
-                s.setDescription(rs.getString("description"));
-                s.setTypeService(entities.service.TypeService.valueOf(rs.getString("type_service")));
-                s.setStatut(entities.service.Statut.valueOf(rs.getString("statut")));
-
-                return s;
-            }
-        }
-
-        return null;
-    }
-
-    public int compterServices() throws SQLException {
-        String query = "SELECT COUNT(*) FROM services";
-
-        try (Statement st = cnx.createStatement();
-             ResultSet rs = st.executeQuery(query)) {
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        }
-
-        return 0;
-    }
-
-    public int compterServicesParUtilisateur(int userId) throws SQLException {
-        String query = "SELECT COUNT(*) FROM services WHERE user_id = ?";
-
-        try (PreparedStatement pst = cnx.prepareStatement(query)) {
-            pst.setInt(1, userId);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        }
-
-        return 0;
+        return list;
     }
 }

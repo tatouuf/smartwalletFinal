@@ -10,7 +10,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import services.service.ServiceServices;
 import tests.services.MainFXML;
-import utils.SessionManager;
 
 import java.sql.SQLException;
 
@@ -25,13 +24,15 @@ public class AjouterService {
     @FXML
     private TextField descriptionservice;
     @FXML
-    private ComboBox<String> typeserviceservice;
+    private TextField typeservice; // texte libre
+    @FXML
+    private ComboBox<String> typeserviceservice; // enum
     @FXML
     private ComboBox<String> statutservice;
 
     @FXML
     public void initialize() {
-        // Remplir ComboBox TypeService
+        // Remplir ComboBox TypeService (enum)
         typeserviceservice.getItems().clear();
         for (TypeService ts : TypeService.values()) {
             typeserviceservice.getItems().add(ts.name());
@@ -46,40 +47,59 @@ public class AjouterService {
         statutservice.getSelectionModel().selectFirst();
     }
 
+    // Méthode pour récupérer l'utilisateur "connecté" ou par défaut
+    private User getCurrentUser() {
+        User user = new User();
+        user.setId(1);
+        user.setNom("Tattou");
+        user.setPrenom("Itaf");
+        return user;
+    }
+
     @FXML
     void onButtonClicked(ActionEvent event) {
         try {
-            // 🔹 Vérifier que l'utilisateur est connecté
-            User currentUser = SessionManager.getCurrentUser();
+            // 🔹 Vérifier l'utilisateur
+            User currentUser = getCurrentUser();
             if (currentUser == null) {
-                System.out.println("Erreur : Veuillez vous connecter d'abord !");
+                System.out.println("Erreur : Aucun utilisateur disponible !");
                 return;
             }
 
-            // 🔹 Vérifier les champs
+            // 🔹 Vérifier que tous les champs sont remplis
             if (prixservice.getText().isEmpty() ||
                     localisationservice.getText().isEmpty() ||
                     adresseservice.getText().isEmpty() ||
-                    descriptionservice.getText().isEmpty()) {
+                    descriptionservice.getText().isEmpty() ||
+                    typeservice.getText().isEmpty() ||        // texte libre
+                    typeserviceservice.getValue() == null || // enum
+                    statutservice.getValue() == null) {      // statut
+
                 System.out.println("Veuillez remplir tous les champs.");
                 return;
             }
 
-            // 🔹 Création du service avec l'utilisateur connecté
+            // 🔹 Création de l'objet Services
             Services service = new Services();
             service.setPrix(Float.parseFloat(prixservice.getText().trim()));
             service.setLocalisation(localisationservice.getText().trim());
             service.setAdresse(adresseservice.getText().trim());
             service.setDescription(descriptionservice.getText().trim());
-            service.setTypeService(TypeService.valueOf(typeserviceservice.getValue()));
-            service.setStatut(Statut.valueOf(statutservice.getValue()));
-            service.setUser(currentUser);  // 👈 IMPORTANT: Associer l'utilisateur
 
-            // 🔹 Ajout en base
+            // remplir type texte libre et TypeService enum
+            service.setType(typeservice.getText().trim());
+            service.setTypeService(TypeService.valueOf(typeserviceservice.getValue()));
+
+            service.setStatut(Statut.valueOf(statutservice.getValue()));
+            service.setUser(currentUser);
+
+            // 🔹 Ajouter le service en base
             ServiceServices ss = new ServiceServices();
             ss.ajouterServices(service);
 
-            System.out.println("Service ajouté avec succès !");
+            System.out.println("Service ajouté avec succès ! ID=" + service.getId());
+
+            // 🔹 Afficher le service dans la vue si MainFXML existe
             MainFXML.showAfficherService(service);
 
         } catch (NumberFormatException e) {
