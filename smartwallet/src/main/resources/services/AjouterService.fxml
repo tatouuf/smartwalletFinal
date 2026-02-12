@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AjouterService">
 
-<AnchorPane fx:id="typeserviceservice" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AjouterService">
    <children>
       <TextField fx:id="prixservice" layoutX="96.0" layoutY="27.0" />
       <TextField fx:id="typeservice" layoutX="96.0" layoutY="102.0" />
@@ -15,8 +15,8 @@
       <Text layoutX="37.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix" />
       <Text layoutX="13.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type Service" />
       <Text layoutX="35.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" />
-      <ComboBox fx:id="typeserviceservice" layoutX="96.0" layoutY="62.0" prefWidth="150.0" visibleRowCount="2" AnchorPane.topAnchor="62.0" />
-      <ComboBox layoutX="96.0" layoutY="149.0" prefWidth="150.0" />
+      <ComboBox fx:id="typeserviceservice" editable="true" layoutX="96.0" layoutY="62.0" prefWidth="150.0" AnchorPane.topAnchor="62.0" />
+      <ComboBox fx:id="statutservice" editable="true" layoutX="96.0" layoutY="149.0" prefWidth="150.0" />
       <Text layoutX="32.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="statut" />
       <TextField fx:id="localisationservice" layoutX="97.0" layoutY="187.0" />
       <Text layoutX="17.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="localisation" />

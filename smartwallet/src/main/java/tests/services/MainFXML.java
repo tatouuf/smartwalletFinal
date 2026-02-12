@@ -1,5 +1,7 @@
 package tests.services;
 
+import controller.service.AfficherService;
+import entities.service.Services;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,11 +35,15 @@ public class MainFXML extends Application {
         }
     }
 
-    // 🔹 Afficher la page AfficherService
-    public static void showAfficherService() {
+    // 🔹 Afficher la page AfficherService avec données
+    public static void showAfficherService(Services s) {
         try {
             FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/services/AfficherService.fxml"));
             Parent root = loader.load();
+
+            AfficherService controller = loader.getController();
+            controller.setService(s);
+
             primaryStage.setTitle("Afficher Service");
             primaryStage.setScene(new Scene(root));
             primaryStage.show();

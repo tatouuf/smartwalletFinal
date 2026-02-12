@@ -1,5 +1,6 @@
 package controller.service;
 
+import entities.service.Services;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -32,43 +33,16 @@ public class AfficherService {
     @FXML
     private TextField descaffserv;
 
-    // ===========================
-    // 🔹 Setters pour passer les données
-    // ===========================
-
-    public void setId(int id) {
-        this.idaffser.setText(String.valueOf(id));
-    }
-
-    public void setPrix(float prix) {
-        this.prixaffser.setText(String.valueOf(prix));
-    }
-
-    public void setType(String type) {
-        this.typeaffser.setText(type);
-    }
-
-    public void setStatut(String statut) {
-        this.statutaffserv.setText(statut);
-    }
-
-    public void setIdUser(int idUser) {
-        this.iduseraff.setText(String.valueOf(idUser));
-    }
-
-    public void setLocalisation(String localisation) {
-        this.localiaffserv.setText(localisation);
-    }
-
-    public void setAdresse(String adresse) {
-        this.adresseaffserv.setText(adresse);
-    }
-
-    public void setTypeService(String typeService) {
-        this.typeseraffser.setText(typeService);
-    }
-
-    public void setDescription(String description) {
-        this.descaffserv.setText(description);
+    // 🔹 Méthode pour recevoir l'objet Services
+    public void setService(Services s) {
+        idaffser.setText(String.valueOf(s.getId()));
+        prixaffser.setText(String.valueOf(s.getPrix()));
+        typeaffser.setText(s.getTypeService().name());
+        statutaffserv.setText(s.getStatut().name());
+        iduseraff.setText(String.valueOf(s.getId()));
+        localiaffserv.setText(s.getLocalisation());
+        adresseaffserv.setText(s.getAdresse());
+        typeseraffser.setText(s.getTypeService().name());
+        descaffserv.setText(s.getDescription());
     }
 }
