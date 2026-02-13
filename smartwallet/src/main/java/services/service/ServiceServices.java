@@ -12,50 +12,81 @@ import java.util.List;
 
 public class ServiceServices implements IServiceServices {
 
-    private Connection cnx;
+    private final Connection cnx;
 
     public ServiceServices() {
         this.cnx = MyDataBase.getInstance().getConnection();
     }
 
-    // ======== AJOUTER ========
+    // ======== AJOUTER UN SERVICE ========
     @Override
     public void ajouterServices(Services s) throws SQLException {
-        // Vérifier localisation
+
+        if (s.getLocalisation() == null || s.getLocalisation().isEmpty()) {
+            throw new SQLException("Localisation invalide !");
+        }
+
         String[] coords = s.getLocalisation().split(",");
-        if (coords.length != 2) throw new SQLException("Localisation invalide ! Format attendu : lat,lon");
+        if (coords.length != 2)
+            throw new SQLException("Localisation invalide ! Format attendu : lat,lon");
+
         String pointWKT = "POINT(" + coords[0].trim() + " " + coords[1].trim() + ")";
 
-        String query = "INSERT INTO services (prix, localisation, adresse, description, type, statut, id_user, TypeService) " +
-                "VALUES (?, ST_GeomFromText(?), ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO services (prix, localisation, adresse, description, type, statut, id_user, TypeService, image) " +
+                "VALUES (?, ST_GeomFromText(?), ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
             pst.setFloat(1, s.getPrix());
             pst.setString(2, pointWKT);
             pst.setString(3, s.getAdresse());
             pst.setString(4, s.getDescription());
             pst.setString(5, s.getType());
-            pst.setString(6, s.getStatut().name());
-            pst.setInt(7, s.getUser().getId());
-            pst.setString(8, s.getTypeService().name());
+
+            // Statut
+            if (s.getStatut() != null)
+                pst.setString(6, s.getStatut().name());
+            else
+                pst.setNull(6, java.sql.Types.VARCHAR);
+
+            // User
+            pst.setInt(7, s.getUser() != null ? s.getUser().getId() : 0);
+
+            // TypeService
+            if (s.getTypeService() != null)
+                pst.setString(8, s.getTypeService().name());
+            else
+                pst.setNull(8, java.sql.Types.VARCHAR);
+
+            // ✅ IMAGE (NOUVEAU)
+            if (s.getImage() != null && !s.getImage().isEmpty())
+                pst.setString(9, s.getImage());
+            else
+                pst.setNull(9, java.sql.Types.VARCHAR);
 
             pst.executeUpdate();
 
-            ResultSet rsKeys = pst.getGeneratedKeys();
-            if (rsKeys.next()) {
-                s.setId(rsKeys.getInt(1));
-                System.out.println("Service ajouté avec ID: " + s.getId());
+            try (ResultSet rsKeys = pst.getGeneratedKeys()) {
+                if (rsKeys.next()) {
+                    s.setId(rsKeys.getInt(1));
+                    System.out.println("Service ajouté avec ID: " + s.getId());
+                }
             }
         }
     }
 
-    // ======== MODIFIER ========
+
+    // ======== MODIFIER UN SERVICE ========
     @Override
     public void modifierServices(Services s) throws SQLException {
+        if (s.getLocalisation() == null || s.getLocalisation().isEmpty()) {
+            throw new SQLException("Localisation invalide !");
+        }
+
         String[] coords = s.getLocalisation().split(",");
         if (coords.length != 2) throw new SQLException("Localisation invalide ! Format attendu : lat,lon");
-        String pointWKT = "POINT(" + coords[0].trim() + " " + coords[1].trim() + ")";
 
+        String pointWKT = "POINT(" + coords[0].trim() + " " + coords[1].trim() + ")";
         String query = "UPDATE services SET prix=?, localisation=ST_GeomFromText(?), adresse=?, description=?, " +
                 "type=?, statut=?, id_user=?, TypeService=? WHERE id=?";
 
@@ -65,54 +96,69 @@ public class ServiceServices implements IServiceServices {
             pst.setString(3, s.getAdresse());
             pst.setString(4, s.getDescription());
             pst.setString(5, s.getType());
-            pst.setString(6, s.getStatut().name());
-            pst.setInt(7, s.getUser().getId());
-            pst.setString(8, s.getTypeService().name());
+
+            if (s.getStatut() != null) pst.setString(6, s.getStatut().name());
+            else pst.setNull(6, java.sql.Types.VARCHAR);
+
+            pst.setInt(7, s.getUser() != null ? s.getUser().getId() : 0);
+
+            if (s.getTypeService() != null) pst.setString(8, s.getTypeService().name());
+            else pst.setNull(8, java.sql.Types.VARCHAR);
+
             pst.setInt(9, s.getId());
 
             int rows = pst.executeUpdate();
-            if (rows > 0) System.out.println("Service modifié avec succès");
-            else System.out.println("Aucun service trouvé avec l'ID: " + s.getId());
+            System.out.println(rows > 0 ? "Service modifié avec succès" : "Aucun service trouvé avec l'ID: " + s.getId());
         }
     }
 
-    // ======== SUPPRIMER ========
+
+    // ======== SUPPRIMER UN SERVICE ========
     @Override
     public void supprimerServices(Services s) throws SQLException {
         String query = "DELETE FROM services WHERE id=?";
         try (PreparedStatement pst = cnx.prepareStatement(query)) {
             pst.setInt(1, s.getId());
             int rows = pst.executeUpdate();
-            if (rows > 0) System.out.println("Service supprimé avec succès");
-            else System.out.println("Aucun service trouvé avec l'ID: " + s.getId());
+            System.out.println(rows > 0 ? "Service supprimé avec succès" : "Aucun service trouvé avec l'ID: " + s.getId());
         }
     }
 
-    // ======== RECUPERER ========
+    // ======== RECUPERER TOUS LES SERVICES ========
     @Override
     public List<Services> recupererServices() throws SQLException {
         List<Services> list = new ArrayList<>();
-        String query = "SELECT id, prix, ST_AsText(localisation) AS localisation, adresse, description, type, statut, id_user, TypeService FROM services";
-        Statement st = cnx.createStatement();
-        ResultSet rs = st.executeQuery(query);
+        String query = "SELECT id, prix, ST_AsText(localisation) AS localisation, adresse, description, " +
+                "type, statut, id_user, TypeService FROM services";
 
-        while (rs.next()) {
-            Services s = new Services();
-            s.setId(rs.getInt("id"));
-            s.setPrix(rs.getFloat("prix"));
+        try (Statement st = cnx.createStatement(); ResultSet rs = st.executeQuery(query)) {
+            while (rs.next()) {
+                Services s = new Services();
+                s.setId(rs.getInt("id"));
+                s.setPrix(rs.getFloat("prix"));
 
-            String loc = rs.getString("localisation");
-            if (loc != null) loc = loc.replace("POINT(", "").replace(")", "").replace(" ", ",");
-            s.setLocalisation(loc);
+                String loc = rs.getString("localisation");
+                if (loc != null) loc = loc.replace("POINT(", "").replace(")", "").replace(" ", ",");
+                s.setLocalisation(loc);
 
-            s.setAdresse(rs.getString("adresse"));
-            s.setDescription(rs.getString("description"));
-            s.setType(rs.getString("type"));
-            s.setStatut(Statut.valueOf(rs.getString("statut")));
-            s.setTypeService(TypeService.valueOf(rs.getString("TypeService")));
-            s.setUser(new User(rs.getInt("id_user"), "", "", ""));
-            list.add(s);
+                s.setAdresse(rs.getString("adresse"));
+                s.setDescription(rs.getString("description"));
+                s.setType(rs.getString("type"));
+
+                // ⚠️ Ne pas mettre de valeur par défaut
+                String statutStr = rs.getString("statut");
+                s.setStatut(statutStr != null ? Statut.valueOf(statutStr) : null);
+
+                String typeServiceStr = rs.getString("TypeService");
+                s.setTypeService(typeServiceStr != null ? TypeService.valueOf(typeServiceStr) : null);
+
+                int userId = rs.getInt("id_user");
+                s.setUser(new User(userId, "", "", ""));
+
+                list.add(s);
+            }
         }
         return list;
     }
+
 }

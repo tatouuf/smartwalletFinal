@@ -92,7 +92,11 @@ public class Main {
                 String adresse = sc.nextLine();
                 TypeService typeService = readTypeService(sc);
 
-                Services s = new Services(prix, loc, adresse, desc, type, statutService, typeService, u1);
+                // ====== AJOUT IMAGE ======
+                System.out.print("Chemin de l'image : ");
+                String imagePath = sc.nextLine();
+
+                Services s = new Services(prix, loc, adresse, desc, type, statutService, typeService, u1, imagePath);
                 serviceServices.ajouterServices(s);
                 System.out.println("Service ajouté avec succès !");
             }
@@ -156,7 +160,11 @@ public class Main {
                 String adresse = sc.nextLine();
                 TypeService typeService = readTypeService(sc);
 
-                Services s = new Services(id, prix, loc, adresse, desc, type, statutService, typeService, u1);
+                // ====== AJOUT IMAGE ======
+                System.out.print("Chemin de l'image : ");
+                String imagePath = sc.nextLine();
+
+                Services s = new Services(id, prix, loc, adresse, desc, type, statutService, typeService, u1, imagePath);
                 serviceServices.modifierServices(s);
                 System.out.println("Service modifié avec succès !");
             }

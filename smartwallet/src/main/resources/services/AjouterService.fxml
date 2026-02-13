@@ -11,12 +11,12 @@
    <children>
       <TextField fx:id="prixservice" layoutX="96.0" layoutY="27.0" />
       <TextField fx:id="typeservice" layoutX="96.0" layoutY="102.0" />
-      <Button fx:id="buttonajoutservice" layoutX="214.0" layoutY="330.0" mnemonicParsing="false" onAction="#onButtonClicked" text="Button" />
+      <Button fx:id="buttonajoutservice" layoutX="473.0" layoutY="352.0" mnemonicParsing="false" onAction="#onButtonClicked" text="ajouter service" />
       <Text layoutX="37.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix" />
       <Text layoutX="13.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type Service" />
       <Text layoutX="35.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" />
-      <ComboBox fx:id="typeserviceservice" editable="true" layoutX="96.0" layoutY="62.0" prefWidth="150.0" AnchorPane.topAnchor="62.0" />
-      <ComboBox fx:id="statutservice" editable="true" layoutX="96.0" layoutY="149.0" prefWidth="150.0" />
+      <ComboBox fx:id="typeserviceservice" layoutX="96.0" layoutY="62.0" prefWidth="150.0" AnchorPane.topAnchor="62.0" />
+      <ComboBox fx:id="statutservice" layoutX="96.0" layoutY="149.0" prefWidth="150.0" />
       <Text layoutX="32.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="statut" />
       <TextField fx:id="localisationservice" layoutX="97.0" layoutY="187.0" />
       <Text layoutX="17.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="localisation" />
@@ -24,5 +24,8 @@
       <Text layoutX="18.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="description" />
       <TextField fx:id="adresseservice" layoutX="79.0" layoutY="234.0" />
       <TextField fx:id="descriptionservice" layoutX="90.0" layoutY="275.0" />
+      <TextField fx:id="imagajt" layoutX="91.0" layoutY="315.0" />
+      <Text fx:id="image" layoutX="26.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Image" />
+      <Button fx:id="btnParcourirImage" layoutX="254.0" layoutY="315.0" mnemonicParsing="false" onAction="#choisirImage" text="parcourir dossiers" />
    </children>
 </AnchorPane>

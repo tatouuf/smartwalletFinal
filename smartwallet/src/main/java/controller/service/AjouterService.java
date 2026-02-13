@@ -4,19 +4,27 @@ import entities.service.Services;
 import entities.service.Statut;
 import entities.service.TypeService;
 import entities.user.User;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.service.ServiceServices;
-import tests.services.MainFXML;
 
-import java.sql.SQLException;
+import java.io.File;
 
 public class AjouterService {
 
     @FXML
     private TextField prixservice;
+    @FXML
+    private TextField typeservice;
+    @FXML
+    private ComboBox<TypeService> typeserviceservice;
+    @FXML
+    private ComboBox<Statut> statutservice;
     @FXML
     private TextField localisationservice;
     @FXML
@@ -24,88 +32,89 @@ public class AjouterService {
     @FXML
     private TextField descriptionservice;
     @FXML
-    private TextField typeservice; // texte libre
-    @FXML
-    private ComboBox<String> typeserviceservice; // enum
-    @FXML
-    private ComboBox<String> statutservice;
+    private TextField imagajt;
+
+    private File selectedFile;
 
     @FXML
     public void initialize() {
-        // Remplir ComboBox TypeService (enum)
-        typeserviceservice.getItems().clear();
-        for (TypeService ts : TypeService.values()) {
-            typeserviceservice.getItems().add(ts.name());
-        }
-        typeserviceservice.getSelectionModel().selectFirst();
-
-        // Remplir ComboBox Statut
-        statutservice.getItems().clear();
-        for (Statut st : Statut.values()) {
-            statutservice.getItems().add(st.name());
-        }
-        statutservice.getSelectionModel().selectFirst();
-    }
-
-    // Méthode pour récupérer l'utilisateur "connecté" ou par défaut
-    private User getCurrentUser() {
-        User user = new User();
-        user.setId(1);
-        user.setNom("Tattou");
-        user.setPrenom("Itaf");
-        return user;
+        typeserviceservice.getItems().addAll(TypeService.values());
+        statutservice.getItems().addAll(Statut.values());
     }
 
     @FXML
-    void onButtonClicked(ActionEvent event) {
+    private void choisirImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        Stage stage = (Stage) imagajt.getScene().getWindow();
+        selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            // Copier l'image vers ton dossier D:\imageprojet
+            File dest = new File("D:\\imageprojet\\" + selectedFile.getName());
+            selectedFile.renameTo(dest); // Ou Files.copy pour éviter les pertes
+            imagajt.setText(dest.getAbsolutePath()); // chemin complet à stocker
+        }
+    }
+
+    @FXML
+    private void onButtonClicked() {
         try {
-            // 🔹 Vérifier l'utilisateur
-            User currentUser = getCurrentUser();
-            if (currentUser == null) {
-                System.out.println("Erreur : Aucun utilisateur disponible !");
+            if (prixservice.getText().isEmpty()
+                    || typeserviceservice.getValue() == null
+                    || statutservice.getValue() == null) {
+
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Veuillez remplir tous les champs obligatoires !");
+                alert.show();
                 return;
             }
 
-            // 🔹 Vérifier que tous les champs sont remplis
-            if (prixservice.getText().isEmpty() ||
-                    localisationservice.getText().isEmpty() ||
-                    adresseservice.getText().isEmpty() ||
-                    descriptionservice.getText().isEmpty() ||
-                    typeservice.getText().isEmpty() ||        // texte libre
-                    typeserviceservice.getValue() == null || // enum
-                    statutservice.getValue() == null) {      // statut
+            float prix = Float.parseFloat(prixservice.getText());
 
-                System.out.println("Veuillez remplir tous les champs.");
-                return;
-            }
+            // 🔹 Utilisateur connecté
+            User currentUser = new User(); // Remplace par ton SessionManager
 
-            // 🔹 Création de l'objet Services
-            Services service = new Services();
-            service.setPrix(Float.parseFloat(prixservice.getText().trim()));
-            service.setLocalisation(localisationservice.getText().trim());
-            service.setAdresse(adresseservice.getText().trim());
-            service.setDescription(descriptionservice.getText().trim());
+            // 🔹 Chemin complet de l'image
+            String cheminImage = imagajt.getText(); // doit contenir D:\imageprojet\image.jpg
 
-            // remplir type texte libre et TypeService enum
-            service.setType(typeservice.getText().trim());
-            service.setTypeService(TypeService.valueOf(typeserviceservice.getValue()));
+            Services s = new Services(
+                    prix,
+                    localisationservice.getText(),
+                    adresseservice.getText(),
+                    descriptionservice.getText(),
+                    typeservice.getText(),
+                    statutservice.getValue(),
+                    typeserviceservice.getValue(),
+                    currentUser,
+                    cheminImage
+            );
 
-            service.setStatut(Statut.valueOf(statutservice.getValue()));
-            service.setUser(currentUser);
-
-            // 🔹 Ajouter le service en base
             ServiceServices ss = new ServiceServices();
-            ss.ajouterServices(service);
+            ss.ajouterServices(s);
 
-            System.out.println("Service ajouté avec succès ! ID=" + service.getId());
+            Alert success = new Alert(Alert.AlertType.INFORMATION);
+            success.setContentText("Service ajouté avec succès !");
+            success.show();
 
-            // 🔹 Afficher le service dans la vue si MainFXML existe
-            MainFXML.showAfficherService(service);
+            // Redirection vers AfficherService
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/services/AfficherService.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) prixservice.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Afficher Services");
+            stage.show();
 
         } catch (NumberFormatException e) {
-            System.out.println("Erreur : Le prix doit être un nombre valide.");
-        } catch (SQLException e) {
-            System.out.println("Erreur SQL : " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Le prix doit être un nombre valide !");
+            alert.show();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
