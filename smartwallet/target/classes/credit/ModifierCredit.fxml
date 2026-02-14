@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.credit.ModifierCredit">
+
+    <GridPane layoutX="50" layoutY="50" hgap="10" vgap="10">
+
+        <TextField fx:id="txtNomClient" promptText="Nom Client" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <TextField fx:id="txtMontant" promptText="Montant" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <DatePicker fx:id="dateCredit" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <TextField fx:id="txtDescription" promptText="Description" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <ComboBox fx:id="comboStatut" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Button fx:id="btnEnregistrer" text="Enregistrer" GridPane.rowIndex="5" GridPane.columnIndex="1"
+                onAction="#enregistrerModifications"/>
+    </GridPane>
+</AnchorPane>
+

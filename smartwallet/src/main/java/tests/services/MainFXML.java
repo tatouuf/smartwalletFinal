@@ -17,12 +17,17 @@ public class MainFXML extends Application {
     @Override
     public void start(Stage stage) {
         primaryStage = stage;
-        showAjouterService(); // Démarre avec la fenêtre Ajouter Service
+
+        // 🔹 Choisir la fenêtre de départ
+        showAjouterCredit(); // Exemple : démarre avec Ajouter Assurance
+        // showAjouterService(); // OU démarrer avec Ajouter Service
+        // showAjouterCredit();  // OU démarrer avec Ajouter Credit
     }
 
-    /**
-     * Affiche la fenêtre AjouterService dans le stage principal
-     */
+    // =====================================================
+    // 🔹 PARTIE SERVICES (NE PAS MODIFIER)
+    // =====================================================
+
     public static void showAjouterService() {
         try {
             FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/services/AjouterService.fxml"));
@@ -40,15 +45,12 @@ public class MainFXML extends Application {
         }
     }
 
-    /**
-     * Affiche la fenêtre AfficherService dans un nouveau Stage
-     */
     public static void showAfficherService() {
         try {
             FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/services/AfficherService.fxml"));
             Parent root = loader.load();
 
-            Stage stage = new Stage(); // Nouveau stage pour afficher tous les services
+            Stage stage = new Stage();
             stage.setTitle("Afficher Tous les Services");
             stage.setScene(new Scene(root));
             stage.show();
@@ -61,6 +63,85 @@ public class MainFXML extends Application {
         }
     }
 
+    // =====================================================
+    // 🔹 PARTIE ASSURANCES (NE PAS MODIFIER)
+    // =====================================================
+
+    public static void showAjouterAssurance() {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/assurance/AjouterAssurance.fxml"));
+            Parent root = loader.load();
+
+            primaryStage.setTitle("Ajouter Assurance");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+        } catch (NullPointerException e) {
+            System.err.println("FXML non trouvé : Vérifie le chemin AjouterAssurance.fxml");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erreur lors de l'ouverture de AjouterAssurance.fxml");
+        }
+    }
+
+    public static void showAfficherAssurance() {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/assurance/AfficherAssurance.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Afficher Toutes les Assurances");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (NullPointerException e) {
+            System.err.println("FXML non trouvé : Vérifie le chemin AfficherAssurance.fxml");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erreur lors de l'ouverture de AfficherAssurance.fxml");
+        }
+    }
+
+    // =====================================================
+    // 🔹 PARTIE CREDITS (AJOUTÉE)
+    // =====================================================
+
+    public static void showAjouterCredit() {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/credit/AjouterCredit.fxml"));
+            Parent root = loader.load();
+
+            primaryStage.setTitle("Ajouter Crédit");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+        } catch (NullPointerException e) {
+            System.err.println("FXML non trouvé : Vérifie le chemin AjouterCredit.fxml");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erreur lors de l'ouverture de AjouterCredit.fxml");
+        }
+    }
+
+    public static void showAfficherCredit() {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/credit/AfficherCredit.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Afficher Tous les Crédits");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (NullPointerException e) {
+            System.err.println("FXML non trouvé : Vérifie le chemin AfficherCredit.fxml");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erreur lors de l'ouverture de AfficherCredit.fxml");
+        }
+    }
+
+    // =====================================================
     public static Stage getPrimaryStage() {
         return primaryStage;
     }

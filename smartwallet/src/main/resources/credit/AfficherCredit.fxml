@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="450.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.credit.AfficherCredit">
+
+    <TableView fx:id="tableCredits" layoutX="20" layoutY="20" prefHeight="400" prefWidth="760">
+        <columns>
+            <TableColumn fx:id="colActions" text="Actions" prefWidth="150"/>
+            <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="colNomClient" text="Nom Client" prefWidth="150"/>
+            <TableColumn fx:id="colMontant" text="Montant" prefWidth="100"/>
+            <TableColumn fx:id="colDateCredit" text="Date" prefWidth="100"/>
+            <TableColumn fx:id="colDescription" text="Description" prefWidth="200"/>
+            <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+</AnchorPane>
+

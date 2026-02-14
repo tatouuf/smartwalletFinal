@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.credit.AjouterCredit">
+
+    <Text layoutX="30" layoutY="40" text="Nom Client"/>
+    <TextField fx:id="txtNomClient" layoutX="150" layoutY="25" prefWidth="200"/>
+
+    <Text layoutX="30" layoutY="80" text="Montant"/>
+    <TextField fx:id="txtMontant" layoutX="150" layoutY="65" prefWidth="200"/>
+
+    <Text layoutX="30" layoutY="120" text="Date du Crédit"/>
+    <DatePicker fx:id="dateCredit" layoutX="150" layoutY="105"/>
+
+    <Text layoutX="30" layoutY="160" text="Description"/>
+    <TextField fx:id="txtDescription" layoutX="150" layoutY="145" prefWidth="200"/>
+
+    <Text layoutX="30" layoutY="200" text="Statut"/>
+    <ComboBox fx:id="comboStatut" layoutX="150" layoutY="185" prefWidth="200"/>
+
+    <Button fx:id="btnAjouter" text="Ajouter" layoutX="150" layoutY="250"
+            onAction="#ajouterCredit"/>
+</AnchorPane>

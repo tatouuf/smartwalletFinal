@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+
+<AnchorPane prefHeight="450.0" prefWidth="500.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.assurance.ModifierAssurance">
+
+    <GridPane layoutX="50" layoutY="40" hgap="15" vgap="15">
+
+        <!-- Nom -->
+        <TextField fx:id="txtNomAssurance" promptText="Nom Assurance"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <!-- Type (ENUM) -->
+        <ComboBox fx:id="txtTypeAssurance"
+                  GridPane.rowIndex="1" GridPane.columnIndex="1"
+                  promptText="Type Assurance"/>
+
+        <!-- Prix -->
+        <TextField fx:id="txtPrix"
+                   promptText="Prix"
+                   GridPane.rowIndex="2"
+                   GridPane.columnIndex="1"/>
+
+        <!-- Durée -->
+        <TextField fx:id="txtDuree"
+                   promptText="Durée en mois"
+                   GridPane.rowIndex="3"
+                   GridPane.columnIndex="1"/>
+
+        <!-- Description -->
+        <TextArea fx:id="txtDescription"
+                  promptText="Description"
+                  prefHeight="60"
+                  GridPane.rowIndex="4"
+                  GridPane.columnIndex="1"/>
+
+        <!-- Conditions -->
+        <TextArea fx:id="txtConditions"
+                  promptText="Conditions"
+                  prefHeight="60"
+                  GridPane.rowIndex="5"
+                  GridPane.columnIndex="1"/>
+
+        <!-- Statut -->
+        <ComboBox fx:id="txtStatut"
+                  promptText="Statut"
+                  GridPane.rowIndex="6"
+                  GridPane.columnIndex="1"/>
+
+        <!-- Bouton -->
+        <Button fx:id="btnEnregistrer"
+                text="Enregistrer"
+                GridPane.rowIndex="7"
+                GridPane.columnIndex="1"
+                onAction="#enregistrerModifications"/>
+    </GridPane>
+</AnchorPane>

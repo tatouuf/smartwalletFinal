@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="500.0" prefWidth="650.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.assurance.AjouterAssurance">
+
+    <children>
+
+        <!-- Nom Assurance -->
+        <Text layoutX="30.0" layoutY="40.0" text="Nom Assurance" />
+        <TextField fx:id="nomAssuranceField" layoutX="150.0" layoutY="25.0" prefWidth="200"/>
+
+        <!-- Type Assurance (ENUM) -->
+        <Text layoutX="30.0" layoutY="90.0" text="Type Assurance" />
+        <ComboBox fx:id="typeAssuranceCombo" layoutX="150.0" layoutY="75.0" prefWidth="200"/>
+
+        <!-- Prix -->
+        <Text layoutX="30.0" layoutY="140.0" text="Prix" />
+        <TextField fx:id="prixField" layoutX="150.0" layoutY="125.0" prefWidth="200"/>
+
+        <!-- Durée en mois -->
+        <Text layoutX="30.0" layoutY="190.0" text="Durée (mois)" />
+        <TextField fx:id="dureeField" layoutX="150.0" layoutY="175.0" prefWidth="200"/>
+
+        <!-- Description -->
+        <Text layoutX="30.0" layoutY="240.0" text="Description" />
+        <TextArea fx:id="descriptionField" layoutX="150.0" layoutY="225.0" prefWidth="300" prefHeight="70"/>
+
+        <!-- Conditions -->
+        <Text layoutX="30.0" layoutY="330.0" text="Conditions" />
+        <TextArea fx:id="conditionsField" layoutX="150.0" layoutY="315.0" prefWidth="300" prefHeight="70"/>
+
+        <!-- Statut -->
+        <Text layoutX="30.0" layoutY="410.0" text="Statut" />
+        <ComboBox fx:id="statutCombo" layoutX="150.0" layoutY="395.0" prefWidth="200"/>
+
+        <!-- Bouton Ajouter -->
+        <Button fx:id="btnAjouterAssurance"
+                layoutX="450.0"
+                layoutY="450.0"
+                text="Ajouter Assurance"
+                onAction="#ajouterAssurance"/>
+
+    </children>
+</AnchorPane>
