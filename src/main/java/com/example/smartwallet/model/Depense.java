@@ -1,84 +1,47 @@
 package com.example.smartwallet.model;
 
-// REMPLACE javax.persistence PAR jakarta.persistence
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import org.springframework.data.annotation.Id;
-
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "depenses")
 public class Depense {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Double montant;
+    private int id;
+    private double montant;
     private String description;
     private LocalDate dateDepense;
+    private String categorie;
+    private int userId;
 
-    // Si tu veux utiliser des relations ManyToOne, ajoute ces champs :
-    // Exemple avec une relation ManyToOne vers User (si tu as une classe User)
-    // @ManyToOne
-    // @JoinColumn(name = "user_id")
-    // private User user;
+    public Depense() {}
 
-    // Constructeurs
-    public Depense() {
-        this.dateDepense = LocalDate.now();
-    }
-
-    public Depense(Double montant, String description) {
+    public Depense(double montant, String description, LocalDate dateDepense) {
         this.montant = montant;
         this.description = description;
-        this.dateDepense = LocalDate.now();
-    }
-
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Double getMontant() {
-        return montant;
-    }
-
-    public void setMontant(Double montant) {
-        this.montant = montant;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getDateDepense() {
-        return dateDepense;
-    }
-
-    public void setDateDepense(LocalDate dateDepense) {
         this.dateDepense = dateDepense;
     }
 
-    @Override
-    public String toString() {
-        return "Depense{" +
-                "id=" + id +
-                ", montant=" + montant +
-                ", description='" + description + '\'' +
-                ", dateDepense=" + dateDepense +
-                '}';
+    public Depense(int id, double montant, String description, LocalDate dateDepense, String categorie) {
+        this.id = id;
+        this.montant = montant;
+        this.description = description;
+        this.dateDepense = dateDepense;
+        this.categorie = categorie;
     }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public double getMontant() { return montant; }
+    public void setMontant(double montant) { this.montant = montant; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public LocalDate getDateDepense() { return dateDepense; }
+    public void setDateDepense(LocalDate dateDepense) { this.dateDepense = dateDepense; }
+
+    public String getCategorie() { return categorie; }
+    public void setCategorie(String categorie) { this.categorie = categorie; }
+
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 }

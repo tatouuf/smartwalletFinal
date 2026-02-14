@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.smartwallet.controller.javafx.BudgetJavaFXController" prefHeight="700" prefWidth="1000">
+    <top>
+        <VBox style="-fx-background-color: #7B1FA2; -fx-padding: 15;">
+            <Label text="Gestion des Budgets" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Formulaire d'ajout -->
+            <TitledPane text="Ajouter/Modifier un Budget" animated="false" expanded="true">
+                <GridPane hgap="10" vgap="10" style="-fx-padding: 15;">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="150" prefWidth="150"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                        <ColumnConstraints minWidth="150" prefWidth="150"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="Catégorie" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="categorieCombo" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Montant Max (DT)" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <TextField fx:id="montantMaxField" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                    <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Mois" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                    <ComboBox fx:id="moisCombo" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                    <Label text="Année" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <ComboBox fx:id="anneeCombo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <!-- Progression -->
+                    <Label text="Progression" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                    <ProgressBar fx:id="budgetProgressBar" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                    <!-- Boutons -->
+                    <HBox spacing="10" GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="3">
+                        <Button fx:id="ajouterBtn" text="Ajouter" style="-fx-font-size: 12; -fx-padding: 8;"/>
+                        <Button fx:id="modifierBtn" text="Modifier" style="-fx-font-size: 12; -fx-padding: 8;"/>
+                        <Button fx:id="supprimerBtn" text="Supprimer" style="-fx-font-size: 12; -fx-padding: 8; -fx-text-fill: white; -fx-background-color: #f44336;"/>
+                    </HBox>
+                </GridPane>
+            </TitledPane>
+
+            <!-- Tableau des budgets -->
+            <TitledPane text="Liste des Budgets" animated="false" expanded="true">
+                <VBox spacing="10" style="-fx-padding: 10;">
+                    <TableView fx:id="budgetsTable" prefHeight="300">
+                        <columns>
+                            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                            <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="120"/>
+                            <TableColumn fx:id="montantMaxColumn" text="Montant Max (DT)" prefWidth="120"/>
+                            <TableColumn fx:id="montantActuelColumn" text="Montant Actuel (DT)" prefWidth="120"/>
+                            <TableColumn fx:id="moisColumn" text="Mois" prefWidth="60"/>
+                            <TableColumn fx:id="anneeColumn" text="Année" prefWidth="80"/>
+                        </columns>
+                    </TableView>
+                    <Label fx:id="totalBudgetsLabel" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                </VBox>
+            </TitledPane>
+        </VBox>
+    </center>
+</BorderPane>
+

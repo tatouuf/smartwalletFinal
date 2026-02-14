@@ -1,0 +1,289 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║           📖 GUIDE D'UTILISATION - SmartWallet v1.0                      ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+🎯 DÉMARRAGE RAPIDE
+═══════════════════════════════════════════════════════════════════════════
+
+1️⃣  Lancer l'application:
+    Double-cliquez sur: run-smartwallet.bat
+
+2️⃣  Attendez que la fenêtre JavaFX s'affiche (15-30 secondes)
+
+3️⃣  Utilisez l'interface pour:
+    • Créer des budgets
+    • Enregistrer des dépenses
+    • Consulter les statistiques
+    • Gérer les planifications
+
+🎨 INTERFACE GRAPHIQUE - GUIDE DÉTAILLÉ
+═══════════════════════════════════════════════════════════════════════════
+
+📊 TABLEAU DE BORD (Page d'accueil)
+──────────────────────────────────
+
+Affiche 4 statistiques clés:
+┌─────────────────────────────────────────┐
+│ Revenu Total: 15,250.00€ (vert)         │
+│ Dépenses Totales: 8,430.50€ (rouge)     │
+│ Épargne: 6,819.50€ (bleu)               │
+│ Budgets Actifs: 8 (orange)              │
+└─────────────────────────────────────────┘
+
+💰 SECTION BUDGETS
+──────────────────
+
+Tableau des budgets actifs:
+┌─────────────────────────────────────────────────────────┐
+│ Catégorie    │ Montant │ Utilisé │ Restant            │
+├─────────────────────────────────────────────────────────┤
+│ Alimentation │  500€   │  320€   │  180€              │
+│ Transport    │  200€   │  150€   │   50€              │
+│ Loisirs      │  300€   │  200€   │  100€              │
+│ Logement     │ 1000€   │ 1000€   │    0€ (Maximal!)  │
+└─────────────────────────────────────────────────────────┘
+
+Bouton "+ Ajouter Budget" pour créer un nouveau
+
+💳 SECTION DÉPENSES RÉCENTES
+────────────────────────────
+
+Tableau des dernières transactions:
+┌───────────────────────────────────────────────────────────┐
+│ Date       │ Catégorie    │ Description    │ Montant    │
+├───────────────────────────────────────────────────────────┤
+│ 14/02/2026 │ Alimentation │ Supermarché    │  65.50€    │
+│ 13/02/2026 │ Transport    │ Essence        │  50.00€    │
+│ 12/02/2026 │ Loisirs      │ Cinéma         │  25.00€    │
+│ 11/02/2026 │ Alimentation │ Restaurant     │  45.30€    │
+└───────────────────────────────────────────────────────────┘
+
+Bouton "+ Ajouter Dépense" pour enregistrer une nouvelle
+
+🔍 FILTRES ET RECHERCHE
+─────────────────────────
+
+En haut de chaque section:
+┌─────────────────────────────────────────────────────────┐
+│ Recherche: [___________]                                │
+│ Catégorie: [Tous ▼]  Mois: [Février 2026 ▼]            │
+│ [Filtrer]                                               │
+└─────────────────────────────────────────────────────────┘
+
+📋 MENU PRINCIPAL (Barre du haut)
+──────────────────────────────────
+
+Fichier:
+  • Nouveau
+  • Ouvrir
+  • Quitter
+
+Édition:
+  • Couper
+  • Copier
+  • Coller
+
+Affichage:
+  • Actualiser
+  • Zoom avant
+  • Zoom arrière
+
+Aide:
+  • À propos
+
+📱 NAVIGATION LATÉRALE (Gauche)
+───────────────────────────────
+
+SmartWallet
+───────────
+📊 Tableau de Bord  ← Page actuelle
+💰 Budgets
+💳 Dépenses
+📅 Planifications
+🏷️ Catégories
+🔔 Notifications
+───────────
+⚙️ Paramètres
+
+🔄 CAS D'USAGE COURANTS
+═══════════════════════════════════════════════════════════════════════════
+
+1️⃣  CRÉER UN NOUVEAU BUDGET
+────────────────────────────
+
+1. Cliquez sur "+ Ajouter Budget" en bas de la section "Budgets Actifs"
+2. Remplissez le formulaire:
+   - Catégorie: [Sélectionnez une catégorie]
+   - Montant Max: [Entrez le montant]
+   - Mois: [Février 2026]
+   - Année: [2026]
+3. Cliquez sur "Créer"
+4. Le budget apparaît dans le tableau
+
+Exemple:
+   Catégorie: "Abonnements"
+   Montant: 50€
+   Le budget est créé pour février 2026
+
+2️⃣  ENREGISTRER UNE DÉPENSE
+────────────────────────────
+
+1. Cliquez sur "+ Ajouter Dépense" en bas de "Dépenses Récentes"
+2. Remplissez le formulaire:
+   - Date: [14/02/2026]
+   - Catégorie: [Alimentation]
+   - Description: [Courses supermarché]
+   - Montant: [65.50€]
+3. Cliquez sur "Enregistrer"
+4. La dépense s'ajoute au tableau et au budget correspondant
+
+3️⃣  FILTRER LES DÉPENSES PAR CATÉGORIE
+────────────────────────────────────────
+
+1. Dans la section filtres:
+   - Catégorie: [Alimentation ▼]
+2. Cliquez sur [Filtrer]
+3. Seules les dépenses "Alimentation" s'affichent
+
+4️⃣  CONSULTER LES BUDGETS D'UN MOIS
+────────────────────────────────────
+
+1. Section "Budgets Actifs":
+   - Cliquez sur la colonne "Mois"
+   - Sélectionnez [Janvier 2026]
+2. Le tableau met à jour automatiquement
+
+🔐 DONNÉES EXEMPLE INCLUSES
+═══════════════════════════════════════════════════════════════════════════
+
+L'application s'installe avec des données de démonstration:
+
+Budgets:
+  • Alimentation: 500€ (utilisé: 320€) - 64% utilisé
+  • Transport: 200€ (utilisé: 150€) - 75% utilisé
+  • Loisirs: 300€ (utilisé: 200€) - 67% utilisé
+  • Logement: 1000€ (utilisé: 1000€) - 100% utilisé ⚠️
+
+Dépenses:
+  • 14/02 - Supermarché - 65.50€
+  • 13/02 - Essence - 50.00€
+  • 12/02 - Cinéma - 25.00€
+  • 11/02 - Restaurant - 45.30€
+
+💡 ASTUCES ET CONSEILS
+═══════════════════════════════════════════════════════════════════════════
+
+✅ Conseil 1: Établir des budgets réalistes
+   Ne fixez pas des budgets trop bas, vous les dépasseriez
+   Basez-vous sur vos dépenses réelles des mois précédents
+
+✅ Conseil 2: Mettre à jour régulièrement
+   Enregistrez vos dépenses au fur et à mesure
+   Ne les entrez pas toutes à la fin du mois
+
+✅ Conseil 3: Utiliser les catégories judicieusement
+   Créez des catégories claires (pas "Divers" trop large)
+   Exemples: Alimentation, Transport, Santé, Éducation
+
+✅ Conseil 4: Revoir vos budgets mensuellement
+   Analysez vos dépenses réelles vs budgétisées
+   Ajustez les budgets pour le mois suivant
+
+✅ Conseil 5: Utiliser les filtres
+   Filtrez par catégorie pour voir vos habitudes
+   Identifiez les zones de dépenses excessives
+
+🎯 OBJECTIFS DE GESTION BUDGÉTAIRE
+═══════════════════════════════════════════════════════════════════════════
+
+1. Suivi des dépenses:
+   ✓ Savoir exactement où va votre argent
+   ✓ Détecter les fuites budgétaires
+
+2. Contrôle des budgets:
+   ✓ Définir des limites par catégorie
+   ✓ Rester dans les limites fixées
+
+3. Épargne:
+   ✓ Prévoir un budget "Épargne"
+   ✓ Automatiser les virements
+
+4. Planification:
+   ✓ Prévoir les dépenses futures
+   ✓ Ajuster le mode de vie
+
+📊 COMPRENDRE LES STATISTIQUES
+═══════════════════════════════════════════════════════════════════════════
+
+Revenu Total:
+  Somme de tous vos revenus enregistrés
+
+Dépenses Totales:
+  Somme de toutes vos dépenses pour la période
+
+Épargne (Taux d'épargne):
+  = Revenu - Dépenses
+  Taux = (Épargne / Revenu) × 100%
+
+  Exemple:
+  Revenu: 15,250€
+  Dépenses: 8,430€
+  Épargne: 6,820€
+  Taux: 44.7% (excellent!)
+
+Budgets Actifs:
+  Nombre de budgets définis et en cours
+
+🆘 DÉPANNAGE
+═══════════════════════════════════════════════════════════════════════════
+
+❓ Fenêtre ne s'affiche pas?
+   1. Attendez 30 secondes (chargement Spring Boot)
+   2. Vérifiez que Java 21 est installé
+   3. Relancez l'application
+
+❓ Les données ne se sauvegardent pas?
+   1. Vérifiez la base de données (application.properties)
+   2. H2 sauvegarde en mémoire par défaut
+   3. Configurez une vraie base de données pour la persistance
+
+❓ Impossible de créer un budget?
+   1. Assurez-vous d'avoir rempli tous les champs
+   2. Vérifiez que le montant est positif
+   3. Vérifiez que la catégorie existe
+
+❓ L'application est très lente?
+   1. Fermez les autres applications
+   2. Allouez plus de RAM: java -Xmx2G -jar ...
+   3. Redémarrez votre ordinateur
+
+🌍 UTILISATION AVANCÉE
+═══════════════════════════════════════════════════════════════════════════
+
+API REST (pour intégrations):
+
+Exemple d'appel curl pour ajouter un budget:
+  curl -X POST http://localhost:8080/api/budgets \
+    -H "Content-Type: application/json" \
+    -d '{
+      "categorie": "Santé",
+      "montantMax": 150,
+      "mois": 2,
+      "annee": 2026,
+      "userId": 1
+    }'
+
+Exemple d'appel pour obtenir les budgets:
+  curl http://localhost:8080/api/budgets/user/1
+
+Les réponses sont en JSON et peuvent être utilisées
+par d'autres applications ou sites web.
+
+════════════════════════════════════════════════════════════════════════════
+
+Version: SmartWallet 1.0
+Date: 2026-02-14
+Status: Production Ready ✅
+
+Pour plus d'informations, voir GUIDE_EXECUTION.md ou RAPPORT_FINAL.txt
+

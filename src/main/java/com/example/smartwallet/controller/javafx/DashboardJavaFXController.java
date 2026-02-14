@@ -1,10 +1,11 @@
-package com.example.smartwallet.controller;
+package com.example.smartwallet.controller.javafx;
 
 import dao.BudgetDAO;
 import dao.DepenseDAO;
 import dao.PlanningDAO;
 import com.example.smartwallet.model.Budget;
 import com.example.smartwallet.model.Depense;
+import com.example.smartwallet.model.Planning;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
@@ -19,36 +20,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DashboardController {
+public class DashboardJavaFXController {
 
     @FXML
     private Label totalDepensesLabel;
-
     @FXML
     private Label totalBudgetsLabel;
-
     @FXML
     private Label totalPlanningsLabel;
-
     @FXML
     private Label depensesMoisLabel;
-
     @FXML
     private Label budgetUtiliseLabel;
-
     @FXML
     private PieChart depensesCategorieChart;
-
     @FXML
     private BarChart<String, Number> depensesParMoisChart;
-
     @FXML
     private LineChart<String, Number> evolutionDepensesChart;
 
     private DepenseDAO depenseDAO = new DepenseDAO();
     private BudgetDAO budgetDAO = new BudgetDAO();
     private PlanningDAO planningDAO = new PlanningDAO();
-    private int userId = 1; // User connecté (à remplacer par l'utilisateur réel)
+    private int userId = 1; // User connecté
 
     @FXML
     public void initialize() {
@@ -136,3 +130,5 @@ public class DashboardController {
         return months[mois - 1];
     }
 }
+
+
