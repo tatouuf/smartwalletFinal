@@ -14,23 +14,33 @@ import javafx.stage.Stage;
 import services.service.ServiceServices;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class AjouterService {
 
     @FXML
     private TextField prixservice;
+
     @FXML
     private TextField typeservice;
+
     @FXML
     private ComboBox<TypeService> typeserviceservice;
+
     @FXML
     private ComboBox<Statut> statutservice;
+
     @FXML
     private TextField localisationservice;
+
     @FXML
     private TextField adresseservice;
+
     @FXML
     private TextField descriptionservice;
+
     @FXML
     private TextField imagajt;
 
@@ -38,6 +48,7 @@ public class AjouterService {
 
     @FXML
     public void initialize() {
+        // Initialiser les ComboBox
         typeserviceservice.getItems().addAll(TypeService.values());
         statutservice.getItems().addAll(Statut.values());
     }
@@ -54,19 +65,33 @@ public class AjouterService {
         selectedFile = fileChooser.showOpenDialog(stage);
 
         if (selectedFile != null) {
-            // Copier l'image vers ton dossier D:\imageprojet
-            File dest = new File("D:\\imageprojet\\" + selectedFile.getName());
-            selectedFile.renameTo(dest); // Ou Files.copy pour éviter les pertes
-            imagajt.setText(dest.getAbsolutePath()); // chemin complet à stocker
+            try {
+                // Copier l'image vers ton dossier D:\imageprojet
+                File destDir = new File("D:\\imageprojet");
+                if (!destDir.exists()) destDir.mkdirs(); // créer le dossier si inexistant
+
+                File dest = new File(destDir, selectedFile.getName());
+                Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                imagajt.setText(dest.getAbsolutePath()); // chemin complet à stocker
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Erreur lors de la copie de l'image !");
+                alert.show();
+            }
         }
     }
 
     @FXML
     private void onButtonClicked() {
         try {
+            // Vérification des champs obligatoires
             if (prixservice.getText().isEmpty()
                     || typeserviceservice.getValue() == null
-                    || statutservice.getValue() == null) {
+                    || statutservice.getValue() == null
+                    || localisationservice.getText().isEmpty()
+                    || adresseservice.getText().isEmpty()) {
 
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setContentText("Veuillez remplir tous les champs obligatoires !");
@@ -74,14 +99,16 @@ public class AjouterService {
                 return;
             }
 
+            // Convertir le prix
             float prix = Float.parseFloat(prixservice.getText());
 
-            // 🔹 Utilisateur connecté
-            User currentUser = new User(); // Remplace par ton SessionManager
+            // 🔹 Utilisateur connecté (à adapter selon ta session)
+            User currentUser = new User(); // Remplace par ton SessionManager si nécessaire
 
             // 🔹 Chemin complet de l'image
-            String cheminImage = imagajt.getText(); // doit contenir D:\imageprojet\image.jpg
+            String cheminImage = imagajt.getText(); // contient le chemin D:\imageprojet\image.jpg
 
+            // Créer le service
             Services s = new Services(
                     prix,
                     localisationservice.getText(),
@@ -94,12 +121,14 @@ public class AjouterService {
                     cheminImage
             );
 
+            // Ajouter le service à la base
             ServiceServices ss = new ServiceServices();
             ss.ajouterServices(s);
 
+            // Message succès
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setContentText("Service ajouté avec succès !");
-            success.show();
+            success.showAndWait();
 
             // Redirection vers AfficherService
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/services/AfficherService.fxml"));
@@ -116,6 +145,9 @@ public class AjouterService {
             alert.show();
         } catch (Exception e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Erreur lors de l'ajout du service !");
+            alert.show();
         }
     }
 }

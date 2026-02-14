@@ -125,40 +125,63 @@ public class ServiceServices implements IServiceServices {
     }
 
     // ======== RECUPERER TOUS LES SERVICES ========
-    @Override
     public List<Services> recupererServices() throws SQLException {
+
         List<Services> list = new ArrayList<>();
-        String query = "SELECT id, prix, ST_AsText(localisation) AS localisation, adresse, description, " +
-                "type, statut, id_user, TypeService FROM services";
+        String req = "SELECT * FROM services";
 
-        try (Statement st = cnx.createStatement(); ResultSet rs = st.executeQuery(query)) {
-            while (rs.next()) {
-                Services s = new Services();
-                s.setId(rs.getInt("id"));
-                s.setPrix(rs.getFloat("prix"));
+        Statement st = cnx.createStatement();
+        ResultSet rs = st.executeQuery(req);
 
-                String loc = rs.getString("localisation");
-                if (loc != null) loc = loc.replace("POINT(", "").replace(")", "").replace(" ", ",");
-                s.setLocalisation(loc);
+        while (rs.next()) {
 
-                s.setAdresse(rs.getString("adresse"));
-                s.setDescription(rs.getString("description"));
-                s.setType(rs.getString("type"));
+            Services s = new Services();
 
-                // ⚠️ Ne pas mettre de valeur par défaut
-                String statutStr = rs.getString("statut");
-                s.setStatut(statutStr != null ? Statut.valueOf(statutStr) : null);
+            s.setId(rs.getInt("id"));
+            s.setPrix(rs.getFloat("prix"));
+            s.setDescription(rs.getString("description"));
+            s.setType(rs.getString("type"));
 
-                String typeServiceStr = rs.getString("TypeService");
-                s.setTypeService(typeServiceStr != null ? TypeService.valueOf(typeServiceStr) : null);
-
-                int userId = rs.getInt("id_user");
-                s.setUser(new User(userId, "", "", ""));
-
-                list.add(s);
+            // ===== STATUT (ENUM) =====
+            String statutStr = rs.getString("statut");
+            if (statutStr != null) {
+                s.setStatut(Statut.valueOf(statutStr));
             }
+
+            // ===== TYPE SERVICE (ENUM) =====
+            String typeServiceStr = rs.getString("TypeService");
+            if (typeServiceStr != null) {
+                s.setTypeService(TypeService.valueOf(typeServiceStr));
+            }
+
+            // ===== USER =====
+            int userId = rs.getInt("id_user");
+            User u = new User();
+            u.setId(userId);
+            s.setUser(u);
+
+            // ===== LOCALISATION (POINT → lat,lon) =====
+            ResultSet rsLoc = cnx.createStatement().executeQuery(
+                    "SELECT ST_AsText(localisation) AS loc FROM services WHERE id=" + rs.getInt("id")
+            );
+
+            if (rsLoc.next()) {
+                String point = rsLoc.getString("loc"); // ex: POINT(36.8 10.1)
+                if (point != null && point.startsWith("POINT(")) {
+                    point = point.replace("POINT(", "").replace(")", "");
+                    point = point.replace(" ", ",");
+                    s.setLocalisation(point);
+                }
+            }
+
+            s.setAdresse(rs.getString("adresse"));
+            s.setImage(rs.getString("image"));
+
+            list.add(s);
         }
+
         return list;
     }
+
 
 }

@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
 
 <AnchorPane prefHeight="450.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AfficherService">
    <children>
-      <TableView fx:id="tableServices" layoutX="186.0" layoutY="52.0" prefHeight="388.0" prefWidth="817.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="52.0">
-         <columns>
-            <TableColumn fx:id="imagecolomserv" minWidth="130.0" prefWidth="75.0" text="Image" />
-          <TableColumn fx:id="idcolomserv" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="priccolomserv" prefWidth="75.0" text="Prix" />
-            <TableColumn fx:id="desccolomserv" prefWidth="75.0" text="Description" />
-            <TableColumn fx:id="typecolomserv" prefWidth="75.0" text="Type" />
-            <TableColumn fx:id="statutcolomserv" prefWidth="75.0" text="Statut" />
-            <TableColumn fx:id="idusercolomserv" prefWidth="75.0" text="Id_User" />
-            <TableColumn fx:id="localicolomsheck" prefWidth="75.0" text="Localisation" />
-            <TableColumn fx:id="adressecolomserv" prefWidth="75.0" text="Adresse" />
-            <TableColumn fx:id="typeservcolom" prefWidth="82.39990234375" text="Type_Service" />
-        </columns>
-      </TableView>
+      <!-- ScrollPane pour permettre le scroll horizontal -->
+      <ScrollPane layoutX="23.0" layoutY="80.0" prefHeight="346.0" prefWidth="842.0" hbarPolicy="AS_NEEDED" vbarPolicy="NEVER">
+         <content>
+            <!-- HBox qui contiendra les VBoxes dynamiques -->
+            <HBox fx:id="cardaffserv" spacing="10" alignment="CENTER_LEFT">
+               <children>
+                  <!-- Les VBoxes seront ajoutées dynamiquement par le code Java -->
+               </children>
+            </HBox>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>
