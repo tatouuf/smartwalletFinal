@@ -18,11 +18,20 @@ public class MainFXML extends Application {
     public void start(Stage stage) {
         primaryStage = stage;
 
-        // 🔹 Choisir la fenêtre de départ
-        showAjouterCredit(); // Exemple : démarre avec Ajouter Assurance
-        // showAjouterService(); // OU démarrer avec Ajouter Service
-        // showAjouterCredit();  // OU démarrer avec Ajouter Credit
+        try {
+            // Chemin corrigé vers le FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainALC/MainALC.fxml"));
+            Parent root = loader.load();
+
+            primaryStage.setTitle("Smart Wallet - Menu Principal");
+            primaryStage.setScene(new Scene(root, 600, 400));
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erreur : FXML non trouvé ou invalide !");
+        }
     }
+
 
     // =====================================================
     // 🔹 PARTIE SERVICES (NE PAS MODIFIER)
