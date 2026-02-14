@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import services.service.ServiceServices;
@@ -24,10 +25,27 @@ public class AfficherService {
     private HBox cardaffserv;
 
     @FXML
+    private ImageView imgLogoList; // Logo en haut à droite
+
+    @FXML
     public void initialize() {
-        loadServices();  // Charger les services au démarrage
+        // Charger le logo en haut à droite
+        if (imgLogoList != null) {
+            imgLogoList.setImage(
+                    new Image(getClass().getResourceAsStream("/icons/logoservices.png"))
+            );
+            // Rendre le logo circulaire
+            Circle clip = new Circle(40, 40, 40); // rayon = 40 pour fitWidth/fitHeight = 80
+            imgLogoList.setClip(clip);
+        }
+
+        // Charger les services au démarrage
+        loadServices();
     }
 
+    /**
+     * Charger tous les services depuis la base et créer des cartes dynamiques
+     */
     public void loadServices() {
         ServiceServices ss = new ServiceServices();
 
@@ -36,14 +54,13 @@ public class AfficherService {
             cardaffserv.getChildren().clear(); // vider le HBox avant d'ajouter
 
             for (Services s : services) {
-
                 // Créer VBox pour chaque service
                 VBox card = new VBox();
                 card.setPrefWidth(200);
                 card.setSpacing(5);
                 card.setStyle("-fx-border-color: black; -fx-padding: 10; -fx-background-color: #f4f4f4;");
 
-                // ===== IMAGE =====
+                // ===== IMAGE DU SERVICE =====
                 ImageView imageView = new ImageView();
                 imageView.setFitWidth(200);
                 imageView.setFitHeight(120);
@@ -106,7 +123,9 @@ public class AfficherService {
         }
     }
 
-    // Ouvrir ModifierService.fxml pour un service donné
+    /**
+     * Ouvrir ModifierService.fxml pour un service donné
+     */
     private void showModifierService(Services s) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/services/ModifierService.fxml"));

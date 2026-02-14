@@ -1,77 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.mainalc.MainALC"
-            style="-fx-background-color: linear-gradient(to bottom, #08010e, #ffffff);">
+<BorderPane style="-fx-background-color: linear-gradient(to bottom, #08010e, #ffffff);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.mainalc.MainALC">
 
     <!-- Logo et introduction -->
     <top>
-        <VBox alignment="CENTER" spacing="15">
+        <VBox alignment="CENTER" prefHeight="357.0" prefWidth="612.0" spacing="10.0">
             <padding>
-                <Insets top="30" right="20" bottom="20" left="20"/>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
 
             <!-- Logo circulaire -->
-            <ImageView fx:id="imgLogo"
-                       fitWidth="180"
-                       fitHeight="180"
-                       pickOnBounds="true"
-                       preserveRatio="true"/>
+            <ImageView fx:id="imgLogo" fitHeight="180.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
 
             <!-- Introduction / description -->
-            <Label text="Welcome to SmartWallet"
-                   style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: black;"/>
-            <Label text="Services Department"
-                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black;"/>
-            <Label text="Manage your Rentals, Insurance, and Loans easily from our SmartWallet platform."
-                   style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-wrap-text: true;"
-                   maxWidth="400"/>
+            <Label prefHeight="33.0" prefWidth="354.0" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: black;" text="Welcome to SmartWallet" />
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black;" text="Services Department" />
+            <Label maxWidth="534.0" prefHeight="30.0" prefWidth="534.0" style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-wrap-text: true;" text="Manage your Rentals, Insurance, and Loans easily from our SmartWallet platform." />
         </VBox>
     </top>
 
     <!-- Contenu principal avec les trois icônes -->
     <center>
-        <HBox spacing="60" alignment="CENTER">
+        <HBox alignment="CENTER" prefHeight="194.0" prefWidth="612.0" spacing="60">
             <padding>
-                <Insets top="50" right="50" bottom="50" left="50"/>
+                <Insets bottom="50.0" left="10.0" right="10.0" top="10.0" />
             </padding>
 
             <!-- Location -->
-            <VBox spacing="10" alignment="CENTER"
-                  style="-fx-background-color: #FFEBEE; -fx-padding: 15; -fx-background-radius: 15;">
-                <ImageView fx:id="imgLocation"
-                           fitWidth="100"
-                           fitHeight="100"
-                           pickOnBounds="true"
-                           preserveRatio="true"/>
+            <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #FFEBEE; -fx-padding: 15; -fx-background-radius: 15;">
+                <ImageView fx:id="imgLocation" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true" />
             </VBox>
 
             <!-- Assurance -->
-            <VBox spacing="10" alignment="CENTER"
-                  style="-fx-background-color: #E3F2FD; -fx-padding: 15; -fx-background-radius: 15;">
-                <ImageView fx:id="imgAssurance"
-                           fitWidth="100"
-                           fitHeight="100"
-                           pickOnBounds="true"
-                           preserveRatio="true"/>
+            <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #E3F2FD; -fx-padding: 15; -fx-background-radius: 15;">
+                <ImageView fx:id="imgAssurance" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true" />
             </VBox>
 
             <!-- Crédit -->
-            <VBox spacing="10" alignment="CENTER"
-                  style="-fx-background-color: #E8F5E9; -fx-padding: 15; -fx-background-radius: 15;">
-                <ImageView fx:id="imgCredit"
-                           fitWidth="100"
-                           fitHeight="100"
-                           pickOnBounds="true"
-                           preserveRatio="true"/>
+            <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #E8F5E9; -fx-padding: 15; -fx-background-radius: 15;">
+                <ImageView fx:id="imgCredit" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true" />
             </VBox>
 
         </HBox>

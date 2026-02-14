@@ -1,24 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.GridPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="400.0"
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="500.0"
+            prefWidth="900.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #a7bbdc, #c3cfe2);"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controller.service.ModifierService">
 
-    <GridPane layoutX="50" layoutY="50" hgap="10" vgap="10">
+    <children>
 
-        <TextField fx:id="txtPrix" promptText="Prix" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-        <TextField fx:id="txtType" promptText="Type" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-        <TextField fx:id="txtStatut" promptText="Statut" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-        <TextField fx:id="txtLocalisation" promptText="Localisation" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-        <TextField fx:id="txtAdresse" promptText="Adresse" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-        <TextField fx:id="txtTypeService" promptText="TypeService" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+        <!-- ================= LEFT FORM ================= -->
 
-        <Button fx:id="btnEnregistrer" text="Enregistrer" GridPane.rowIndex="6" GridPane.columnIndex="1"
-                onAction="#enregistrerModifications"/>
-    </GridPane>
+        <Text layoutX="40.0" layoutY="50.0" text="Price" />
+        <TextField fx:id="txtPrix" layoutX="150.0" layoutY="30.0" prefWidth="220" promptText="Enter price" />
+
+        <Text layoutX="40.0" layoutY="95.0" text="Service Category" />
+        <ComboBox fx:id="txtTypeServiceCategory" layoutX="150.0" layoutY="75.0" prefWidth="220.0" />
+
+        <Text layoutX="40.0" layoutY="140.0" text="Service Type" />
+        <TextField fx:id="txtType" layoutX="150.0" layoutY="120.0" prefWidth="220" promptText="Enter type" />
+
+        <Text layoutX="40.0" layoutY="185.0" text="Status" />
+        <ComboBox fx:id="txtStatut" layoutX="150.0" layoutY="165.0" prefWidth="220.0" />
+
+        <Text layoutX="40.0" layoutY="230.0" text="Location" />
+        <TextField fx:id="txtLocalisation" layoutX="150.0" layoutY="210.0" prefWidth="220" promptText="Enter location" />
+
+        <Text layoutX="40.0" layoutY="275.0" text="Address" />
+        <TextField fx:id="txtAdresse" layoutX="150.0" layoutY="255.0" prefWidth="220" promptText="Enter address" />
+
+        <Text layoutX="40.0" layoutY="320.0" text="Description" />
+        <TextField fx:id="txtDescription" layoutX="150.0" layoutY="300.0" prefWidth="220" promptText="Enter description" />
+
+        <Text layoutX="40.0" layoutY="365.0" text="Image" />
+        <TextField fx:id="txtImage" layoutX="150.0" layoutY="345.0" prefWidth="220" promptText="Select image" />
+
+        <Button fx:id="btnBrowseImage" layoutX="380.0" layoutY="345.0" onAction="#choisirImage" text="Browse" />
+
+        <Button fx:id="btnSave"
+                layoutX="150.0"
+                layoutY="410.0"
+                onAction="#enregistrerModifications"
+                prefWidth="220"
+                style="-fx-background-color: #c388b5; -fx-text-fill: white; -fx-font-weight: bold;"
+                text="Save Changes" />
+
+        <!-- Vertical Pink Bar -->
+        <Rectangle
+                layoutX="520.0"
+                layoutY="70.0"
+                width="8.0"
+                height="380.0"
+                arcWidth="20"
+                arcHeight="20"
+                fill="#c388b5"/>
+
+        <!-- ================= RIGHT SIDE LOGO ================= -->
+        <ImageView fx:id="imgLogoModifier"
+                   fitHeight="300.0"
+                   fitWidth="300.0"
+                   layoutX="560.0"
+                   layoutY="90.0"
+                   preserveRatio="true" />
+
+        <!-- TITLE UNDER LOGO -->
+        <Label alignment="CENTER"
+               layoutX="531.0"
+               layoutY="324.0"
+               prefWidth="380.0"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0e0024;"
+               text="Modify a Car or Home Rental Service" />
+
+    </children>
 </AnchorPane>

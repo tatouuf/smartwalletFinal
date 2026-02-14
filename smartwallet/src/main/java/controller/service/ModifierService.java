@@ -4,12 +4,18 @@ import entities.service.Services;
 import entities.service.Statut;
 import entities.service.TypeService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.service.ServiceServices;
 
-import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class ModifierService {
 
@@ -17,10 +23,13 @@ public class ModifierService {
     private TextField txtPrix;
 
     @FXML
+    private ComboBox<TypeService> txtTypeServiceCategory;
+
+    @FXML
     private TextField txtType;
 
     @FXML
-    private TextField txtStatut;
+    private ComboBox<Statut> txtStatut;
 
     @FXML
     private TextField txtLocalisation;
@@ -29,62 +38,132 @@ public class ModifierService {
     private TextField txtAdresse;
 
     @FXML
-    private TextField txtTypeService;
+    private TextField txtDescription;
 
     @FXML
-    private Button btnEnregistrer;
+    private TextField txtImage;
 
-    private Services service; // le service à modifier
-    private ServiceServices serviceServices = new ServiceServices();
+    @FXML
+    private Button btnBrowseImage;
 
-    // Préremplir les champs avec le service sélectionné
+    @FXML
+    private Button btnSave;
+
+    @FXML
+    private ImageView imgLogoModifier;
+
+    private Services currentService;
+    private File selectedFile;
+
+    @FXML
+    public void initialize() {
+        // Charger le logo
+        if (imgLogoModifier != null) {
+            imgLogoModifier.setImage(
+                    new Image(getClass().getResourceAsStream("/icons/logoservices.png"))
+            );
+            Circle clip = new Circle(150, 150, 150);
+            imgLogoModifier.setClip(clip);
+        }
+
+        // Initialiser les ComboBox
+        txtTypeServiceCategory.getItems().addAll(TypeService.values());
+        txtStatut.getItems().addAll(Statut.values());
+    }
+
+    // Méthode pour remplir les champs avec un service existant
     public void setService(Services s) {
-        this.service = s;
+        this.currentService = s;
 
         txtPrix.setText(String.valueOf(s.getPrix()));
         txtType.setText(s.getType());
-        txtStatut.setText(s.getStatut() != null ? s.getStatut().name() : "");
         txtLocalisation.setText(s.getLocalisation());
         txtAdresse.setText(s.getAdresse());
-        txtTypeService.setText(s.getTypeService() != null ? s.getTypeService().name() : "");
+        txtDescription.setText(s.getDescription());
+        txtImage.setText(s.getImage());
+
+        txtTypeServiceCategory.setValue(s.getTypeService());
+        txtStatut.setValue(s.getStatut());
     }
 
-    // Action du bouton Enregistrer
+    // Bouton Browse pour choisir une image
     @FXML
-    public void enregistrerModifications() {
+    private void choisirImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Image");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        Stage stage = (Stage) txtImage.getScene().getWindow();
+        selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            try {
+                File destDir = new File("D:\\imageprojet");
+                if (!destDir.exists()) destDir.mkdirs();
+
+                File dest = new File(destDir, selectedFile.getName());
+                Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                txtImage.setText(dest.getAbsolutePath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Error copying image!");
+                alert.show();
+            }
+        }
+    }
+
+    // Bouton Save pour enregistrer les modifications
+    @FXML
+    private void enregistrerModifications() {
         try {
-            service.setPrix((float) Double.parseDouble(txtPrix.getText()));
-            service.setType(txtType.getText());
-            service.setLocalisation(txtLocalisation.getText());
-            service.setAdresse(txtAdresse.getText());
+            if (txtPrix.getText().isEmpty() || txtType.getText().isEmpty() ||
+                    txtLocalisation.getText().isEmpty() || txtAdresse.getText().isEmpty() ||
+                    txtTypeServiceCategory.getValue() == null || txtStatut.getValue() == null) {
 
-            // Conversion en enum
-            if (!txtStatut.getText().isEmpty()) {
-                service.setStatut(Statut.valueOf(txtStatut.getText()));
-            } else {
-                service.setStatut(null);
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Please fill all mandatory fields!");
+                alert.show();
+                return;
             }
 
-            if (!txtTypeService.getText().isEmpty()) {
-                service.setTypeService(TypeService.valueOf(txtTypeService.getText()));
-            } else {
-                service.setTypeService(null);
-            }
+            float prix = Float.parseFloat(txtPrix.getText());
 
-            serviceServices.modifierServices(service);
+            String cheminImage = txtImage.getText();
 
-            // Fermer la fenêtre après modification
-            Stage stage = (Stage) btnEnregistrer.getScene().getWindow();
+            currentService.setPrix(prix);
+            currentService.setType(txtType.getText());
+            currentService.setLocalisation(txtLocalisation.getText());
+            currentService.setAdresse(txtAdresse.getText());
+            currentService.setDescription(txtDescription.getText());
+            currentService.setImage(cheminImage);
+            currentService.setTypeService(txtTypeServiceCategory.getValue());
+            currentService.setStatut(txtStatut.getValue());
+
+            ServiceServices ss = new ServiceServices();
+            ss.modifierServices(currentService);
+
+            Alert success = new Alert(Alert.AlertType.INFORMATION);
+            success.setContentText("Service updated successfully!");
+            success.showAndWait();
+
+            // Fermer la fenêtre après sauvegarde
+            Stage stage = (Stage) btnSave.getScene().getWindow();
             stage.close();
 
-            System.out.println("Service modifié avec succès !");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         } catch (NumberFormatException e) {
-            System.out.println("Le prix doit être un nombre !");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Le statut ou le type de service est invalide !");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Price must be a valid number!");
+            alert.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Error updating the service!");
+            alert.show();
         }
     }
 }

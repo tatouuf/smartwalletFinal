@@ -3,7 +3,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="450.0" prefWidth="800.0"
+<AnchorPane prefHeight="500.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controller.credit.AfficherCredit">

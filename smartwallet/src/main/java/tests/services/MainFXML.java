@@ -24,7 +24,7 @@ public class MainFXML extends Application {
             Parent root = loader.load();
 
             primaryStage.setTitle("Smart Wallet - Menu Principal");
-            primaryStage.setScene(new Scene(root, 600, 400));
+            primaryStage.setScene(new Scene(root, 900, 500));
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();

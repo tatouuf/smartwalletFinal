@@ -1,22 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.Region?>
 
-<AnchorPane prefHeight="450.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AfficherService">
+<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #f5f7fa, #e4ecf7);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AfficherService">
+
    <children>
-      <!-- ScrollPane pour permettre le scroll horizontal -->
-      <ScrollPane layoutX="23.0" layoutY="80.0" prefHeight="346.0" prefWidth="842.0" hbarPolicy="AS_NEEDED" vbarPolicy="NEVER">
+
+      <!-- ================= TOP HEADER: TITLE CENTER + LOGO RIGHT ================= -->
+
+      <HBox layoutX="20" layoutY="20" prefWidth="860" spacing="10" style="-fx-padding: 10; -fx-alignment: center-left;">
+
+         <children>
+
+            <!-- Logo à l'extrémité droite -->
+            <ImageView fx:id="imgLogoList" fitHeight="80" fitWidth="80" preserveRatio="true" />
+
+            <!-- Empty region to push the title to center -->
+            <Region fx:id="spacerLeft" HBox.hgrow="ALWAYS" />
+
+            <!-- Title centered -->
+            <Label style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Service List" HBox.hgrow="NEVER" />
+
+            <!-- Empty region to balance spacing -->
+            <Region fx:id="spacerRight" HBox.hgrow="ALWAYS" />
+
+         </children>
+
+      </HBox>
+
+      <!-- ================= SCROLLPANE POUR LES CARDS ================= -->
+
+      <ScrollPane hbarPolicy="AS_NEEDED" layoutX="23.0" layoutY="103.0" prefHeight="358.0" prefWidth="842.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+
          <content>
-            <!-- HBox qui contiendra les VBoxes dynamiques -->
-            <HBox fx:id="cardaffserv" spacing="10" alignment="CENTER_LEFT">
-               <children>
-                  <!-- Les VBoxes seront ajoutées dynamiquement par le code Java -->
-               </children>
+
+            <HBox fx:id="cardaffserv" alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10;">
+               <!-- Les VBoxes seront ajoutées dynamiquement par le code Java -->
             </HBox>
+
          </content>
+
       </ScrollPane>
+
    </children>
 </AnchorPane>

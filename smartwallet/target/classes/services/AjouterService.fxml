@@ -2,30 +2,65 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AjouterService">
+<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #a7bbdc, #c3cfe2);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AjouterService">
 
    <children>
-      <TextField fx:id="prixservice" layoutX="96.0" layoutY="27.0" />
-      <TextField fx:id="typeservice" layoutX="96.0" layoutY="102.0" />
-      <Button fx:id="buttonajoutservice" layoutX="473.0" layoutY="352.0" mnemonicParsing="false" onAction="#onButtonClicked" text="ajouter service" />
-      <Text layoutX="37.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prix" />
-      <Text layoutX="13.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type Service" />
-      <Text layoutX="35.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" />
-      <ComboBox fx:id="typeserviceservice" layoutX="96.0" layoutY="62.0" prefWidth="150.0" AnchorPane.topAnchor="62.0" />
-      <ComboBox fx:id="statutservice" layoutX="96.0" layoutY="149.0" prefWidth="150.0" />
-      <Text layoutX="32.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="statut" />
-      <TextField fx:id="localisationservice" layoutX="97.0" layoutY="187.0" />
-      <Text layoutX="17.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="localisation" />
-      <Text layoutX="26.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="adresse" />
-      <Text layoutX="18.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="description" />
-      <TextField fx:id="adresseservice" layoutX="79.0" layoutY="234.0" />
-      <TextField fx:id="descriptionservice" layoutX="90.0" layoutY="275.0" />
-      <TextField fx:id="imagajt" layoutX="91.0" layoutY="315.0" />
-      <Text fx:id="image" layoutX="26.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Image" />
-      <Button fx:id="btnParcourirImage" layoutX="254.0" layoutY="315.0" mnemonicParsing="false" onAction="#choisirImage" text="parcourir dossiers" />
+
+      <!-- ================= LEFT FORM ================= -->
+
+      <Text layoutX="40.0" layoutY="50.0" text="Price" />
+      <TextField fx:id="prixservice" layoutX="150.0" layoutY="30.0" prefWidth="220" />
+
+      <Text layoutX="40.0" layoutY="95.0" text="Service Category" />
+      <ComboBox fx:id="typeserviceservice" layoutX="150.0" layoutY="75.0" prefWidth="220.0" />
+
+      <Text layoutX="40.0" layoutY="140.0" text="Service Type" />
+      <TextField fx:id="typeservice" layoutX="150.0" layoutY="120.0" prefWidth="220" />
+
+      <Text layoutX="40.0" layoutY="185.0" text="Status" />
+      <ComboBox fx:id="statutservice" layoutX="150.0" layoutY="165.0" prefWidth="220.0" />
+
+      <Text layoutX="40.0" layoutY="230.0" text="Location" />
+      <TextField fx:id="localisationservice" layoutX="150.0" layoutY="210.0" prefWidth="220" />
+
+      <Text layoutX="40.0" layoutY="275.0" text="Address" />
+      <TextField fx:id="adresseservice" layoutX="150.0" layoutY="255.0" prefWidth="220" />
+
+      <Text layoutX="40.0" layoutY="320.0" text="Description" />
+      <TextField fx:id="descriptionservice" layoutX="150.0" layoutY="300.0" prefWidth="220" />
+
+      <Text layoutX="40.0" layoutY="365.0" text="Image" />
+      <TextField fx:id="imagajt" layoutX="150.0" layoutY="345.0" prefWidth="220" />
+
+      <Button fx:id="btnParcourirImage" layoutX="380.0" layoutY="345.0" onAction="#choisirImage" text="Browse" />
+
+      <Button fx:id="buttonajoutservice" layoutX="150.0" layoutY="410.0" onAction="#onButtonClicked" prefWidth="220" style="-fx-background-color: #c388b5; -fx-text-fill: white; -fx-font-weight: bold;" text="Add Service" />
+
+      <!-- Vertical Pink Bar -->
+
+      <Rectangle
+              layoutX="520.0"
+              layoutY="70.0"
+              width="8.0"
+              height="380.0"
+              arcWidth="20"
+              arcHeight="20"
+              fill="#2c0051"/>
+
+      <!-- ================= RIGHT SIDE LOGO ================= -->
+
+      <ImageView fx:id="imgLogoService" fitHeight="300.0" fitWidth="300.0" layoutX="560.0" layoutY="90.0" preserveRatio="true" />
+
+      <!-- TITLE UNDER LOGO -->
+
+      <Label alignment="CENTER" layoutX="531.0" layoutY="324.0" prefWidth="380.0" style="-fx-font-size: 22px;                     -fx-font-weight: bold;                     -fx-text-fill: #0e0024;" text="Add a Car or Home Rental Service" />
+
    </children>
 </AnchorPane>
