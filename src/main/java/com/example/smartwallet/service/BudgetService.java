@@ -17,12 +17,15 @@ public class BudgetService {
 
     /**
      * Ajouter un nouveau budget
+     *
+     * @return
      */
-    public void save(Budget budget) {
+    public Budget save(Budget budget) {
         if (budget == null) {
             throw new IllegalArgumentException("Le budget ne peut pas être null");
         }
         budgetDAO.ajouterBudget(budget);
+        return budget;
     }
 
     /**

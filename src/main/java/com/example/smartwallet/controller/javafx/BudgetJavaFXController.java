@@ -113,7 +113,6 @@ public class BudgetJavaFXController {
         budgetsList.addAll(budgets);
         mettreAJourTotalBudgets();
     }
-
     private void ajouterBudget() {
         if (validationFormulaire()) {
             Budget budget = new Budget();
@@ -126,27 +125,42 @@ public class BudgetJavaFXController {
             budget.setUserId(userId);
             budget.setDateCreation(LocalDate.now());
 
+            // Ajouter directement à la liste sans recharger
             budgetDAO.ajouterBudget(budget);
-            loadBudgets();
+            budgetsList.add(budget);  // ← Ajoute immédiatement à la TableView
+
             clearForm();
+            mettreAJourTotalBudgets();
             afficherAlerte("Succès", "Budget ajouté avec succès");
         }
     }
 
+
     private void modifierBudget() {
         if (budgetActuel != null && validationFormulaire()) {
+
+            // Modifier directement l'objet sélectionné
             budgetActuel.setCategorie(categorieCombo.getValue());
             budgetActuel.setMontantMax(Double.parseDouble(montantMaxField.getText()));
             budgetActuel.setDescription(descriptionField.getText());
+            budgetActuel.setMois(moisCombo.getValue());
+            budgetActuel.setAnnee(anneeCombo.getValue());
 
+            // Mise à jour en base
             budgetDAO.modifierBudget(budgetActuel);
-            loadBudgets();
+
+            // Rafraîchir seulement la ligne
+            budgetsTable.refresh();
+            mettreAJourTotalBudgets();
+
             clearForm();
             afficherAlerte("Succès", "Budget modifié avec succès");
+
         } else {
             afficherAlerte("Erreur", "Veuillez sélectionner un budget à modifier");
         }
     }
+
 
     private void supprimerBudget() {
         if (budgetActuel != null) {
@@ -210,6 +224,7 @@ public class BudgetJavaFXController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 
     // ---------------------------
     // NAVIGATION VERS DASHBOARD

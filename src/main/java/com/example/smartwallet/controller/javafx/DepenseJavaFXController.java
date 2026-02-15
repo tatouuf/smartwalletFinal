@@ -112,24 +112,37 @@ public class DepenseJavaFXController {
             depense.setCategorie(categorieCombo.getValue());
             depense.setUserId(userId);
 
+            // Ajout dans la base
             depenseDAO.ajouterDepense(depense);
-            loadDepenses();
+
+            // Ajout direct dans la TableView
+            depensesList.add(depense);
+            mettreAJourTotalDepenses();
             clearForm();
             afficherAlerte("Succès", "Dépense ajoutée avec succès");
         }
     }
 
+
     private void modifierDepense() {
         if (depenseActuelle != null && validationFormulaire()) {
+
+            // Modifier l'objet sélectionné directement
             depenseActuelle.setMontant(Double.parseDouble(montantField.getText()));
             depenseActuelle.setDescription(descriptionField.getText());
             depenseActuelle.setDateDepense(dateDepenseField.getValue());
             depenseActuelle.setCategorie(categorieCombo.getValue());
 
+            // Mise à jour en base
             depenseDAO.modifierDepense(depenseActuelle);
-            loadDepenses();
+
+            // Rafraîchir seulement la ligne (PAS reload)
+            depensesTable.refresh();
+            mettreAJourTotalDepenses();
+
             clearForm();
             afficherAlerte("Succès", "Dépense modifiée avec succès");
+
         } else {
             afficherAlerte("Erreur", "Veuillez sélectionner une dépense à modifier");
         }

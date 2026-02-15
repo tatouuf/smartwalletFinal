@@ -113,23 +113,28 @@ public class DashboardController {
         depensesParMoisChart.getData().add(series);
         depensesParMoisChart.setTitle("Dépenses par Mois");
     }
-
     private void chargerGraphiqueLineChart() {
         List<Depense> depenses = depenseDAO.obtenirToutesDepenses(userId);
+
         Map<LocalDate, Double> depensesParJour = depenses.stream()
-            .collect(Collectors.groupingBy(Depense::getDateDepense, Collectors.summingDouble(Depense::getMontant)));
+                .filter(d -> d.getDateDepense() != null)
+                .collect(Collectors.groupingBy(
+                        Depense::getDateDepense,
+                        Collectors.summingDouble(Depense::getMontant)
+                ));
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Évolution des dépenses");
 
         depensesParJour.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> series.getData().add(new XYChart.Data<>(entry.getKey().toString(), entry.getValue())));
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry ->
+                        series.getData().add(new XYChart.Data<>(entry.getKey().toString(), entry.getValue()))
+                );
 
         evolutionDepensesChart.getData().clear();
         evolutionDepensesChart.getData().add(series);
-        evolutionDepensesChart.setTitle("Évolution des dépenses");
     }
+
 
     private String getMonthName(int mois) {
         String[] months = {"Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"};

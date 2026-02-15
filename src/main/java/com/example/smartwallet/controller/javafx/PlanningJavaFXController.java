@@ -131,31 +131,44 @@ public class PlanningJavaFXController {
             planning.setStatut(statutCombo.getValue());
             planning.setUserId(userId);
 
+            // Ajouter dans la base
             planningDAO.ajouterPlanning(planning);
-            loadPlannings();
+
+            // Ajouter directement dans la TableView
+            planningsList.add(planning);
+            mettreAJourTotalPlannings();
             clearForm();
             afficherAlerte("Succès", "Planning ajouté avec succès");
         }
     }
 
+
     private void modifierPlanning() {
         if (planningActuel != null && validationFormulaire()) {
+            // Modifier l'objet directement
             planningActuel.setNom(nomField.getText());
             planningActuel.setDescription(descriptionField.getText());
             planningActuel.setType(typeCombo.getValue());
+            planningActuel.setMois(moisCombo.getValue());
+            planningActuel.setAnnee(anneeCombo.getValue());
             planningActuel.setRevenuPrevu(Double.parseDouble(revenuPrevuField.getText()));
             planningActuel.setEpargnePrevue(Double.parseDouble(epargnePrevueField.getText()));
             planningActuel.setPourcentageEpargne(Integer.parseInt(pourcentageEpargneField.getText()));
             planningActuel.setStatut(statutCombo.getValue());
 
+            // Mettre à jour dans la base
             planningDAO.modifierPlanning(planningActuel);
-            loadPlannings();
+
+            // **Pas de reload de toute la liste**, juste notifier la TableView
+            planningsTable.refresh();  // <== rafraîchit la ligne modifiée
+            mettreAJourTotalPlannings();
             clearForm();
             afficherAlerte("Succès", "Planning modifié avec succès");
         } else {
             afficherAlerte("Erreur", "Veuillez sélectionner un planning à modifier");
         }
     }
+
 
     private void supprimerPlanning() {
         if (planningActuel != null) {
