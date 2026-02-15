@@ -159,6 +159,12 @@ public class PrimaryStageInitializer {
                     System.out.println("handleNavigation: TabManager showed Depenses view");
                     return;
                 }
+            } else if ("plannings".equals(key)) {
+                boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/planning-view.fxml", "Plannings");
+                if (ok) {
+                    System.out.println("handleNavigation: TabManager showed Plannings view");
+                    return;
+                }
             }
 
             // Fallback: charger le FXML directement et le placer au centre selon la clé
@@ -183,6 +189,15 @@ public class PrimaryStageInitializer {
             if ("depenses".equals(key)) {
                 System.out.println("handleNavigation: fallback loading Depenses FXML");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/depense-view.fxml"));
+                Parent content = loader.load();
+                root.setCenter(content);
+                root.requestLayout();
+                return;
+            }
+
+            if ("plannings".equals(key)) {
+                System.out.println("handleNavigation: fallback loading Plannings FXML");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/planning-view.fxml"));
                 Parent content = loader.load();
                 root.setCenter(content);
                 root.requestLayout();

@@ -35,19 +35,19 @@
                     <Label text="Statut" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
                     <ComboBox fx:id="statutCombo" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
 
-                    <Label text="Revenu Prévu (DT)" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label text="Revenu Prevu DT" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                     <TextField fx:id="revenuPrevuField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                    <Label text="Épargne Prévue (DT)" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                    <Label text="Epargne Prevue DT" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
                     <TextField fx:id="epargnePrevueField" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
-                    <Label text="% Épargne" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <Label text="Taux Epargne" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                     <TextField fx:id="pourcentageEpargneField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
                     <Label text="Mois" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
                     <ComboBox fx:id="moisCombo" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
 
-                    <Label text="Année" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <Label text="Annee" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
                     <ComboBox fx:id="anneeCombo" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
                     <!-- Boutons -->
@@ -68,9 +68,9 @@
                             <TableColumn fx:id="nomColumn" text="Nom" prefWidth="120"/>
                             <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
                             <TableColumn fx:id="moisColumn" text="Mois" prefWidth="60"/>
-                            <TableColumn fx:id="anneeColumn" text="Année" prefWidth="80"/>
-                            <TableColumn fx:id="revenuColumn" text="Revenu Prévu (DT)" prefWidth="130"/>
-                            <TableColumn fx:id="epargneColumn" text="Épargne Prévue (DT)" prefWidth="130"/>
+                            <TableColumn fx:id="anneeColumn" text="Annee" prefWidth="80"/>
+                            <TableColumn fx:id="revenuColumn" text="Revenu Prevu DT" prefWidth="130"/>
+                            <TableColumn fx:id="epargneColumn" text="Epargne Prevue DT" prefWidth="130"/>
                             <TableColumn fx:id="statutColumn" text="Statut" prefWidth="100"/>
                         </columns>
                     </TableView>
