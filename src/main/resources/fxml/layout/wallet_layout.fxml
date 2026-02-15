@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.souha_pi.controllers.WalletLayoutController">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox spacing="18" styleClass="sidebar">
+            <padding>
+                <Insets top="25" right="15" bottom="25" left="15"/>
+            </padding>
+            <Label text="👛 My Wallet" styleClass="sidebar-title"/>
+
+            <Button text="🏠 Dashboard" onAction="#goDashboard" styleClass="sidebar-btn"/>
+
+            <Button text="💳 My Cards" onAction="#goCards" styleClass="sidebar-btn"/>
+
+            <Button text="📤 Send Money" onAction="#goSend" styleClass="sidebar-btn"/>
+
+            <Button text="📥 Receive Money" onAction="#goReceive" styleClass="sidebar-btn"/>
+
+            <Button text="🧾 Transactions History" onAction="#goHistory" styleClass="sidebar-btn"/>
+
+            <Separator/>
+
+            <Label text="🤝 Loans" styleClass="sidebar-title"/>
+
+            <Button text="📨 Loan Requests" styleClass="sidebar-btn" onAction="#goLoanRequests"/>
+
+            <Button text="🤝 Request a Loan" onAction="#goRequestLoan" styleClass="sidebar-btn"/>
+
+            <Button text="📑 My Active Loans" onAction="#goMyLoans" styleClass="sidebar-btn"/>
+
+        </VBox>
+    </left>
+
+    <!-- CONTENT -->
+    <center>
+        <StackPane fx:id="contentArea"/>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.DashboardController"
+           styleClass="page-bg">
+
+    <VBox alignment="CENTER" spacing="25" maxWidth="420">
+
+        <Label text="My Wallet" styleClass="page-header"/>
+
+        <!-- BALANCE CARD -->
+        <VBox styleClass="balance-card" alignment="CENTER" spacing="12">
+            <Label text="Current Balance" styleClass="balance-title"/>
+            <Label fx:id="balanceLabel" text="0.00 TND" styleClass="balance-value"/>
+        </VBox>
+
+    </VBox>
+
+</StackPane>

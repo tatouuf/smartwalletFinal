@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.HistoryController"
+           styleClass="page-bg">
+
+    <VBox spacing="18" alignment="CENTER" maxWidth="900">
+
+        <Label text="Transaction History" styleClass="page-header"/>
+
+        <VBox styleClass="card">
+
+            <TableView fx:id="table" styleClass="modern-table">
+
+                <columns>
+                    <TableColumn text="Type" fx:id="colType" prefWidth="120"/>
+                    <TableColumn text="Amount" fx:id="colAmount" prefWidth="150"/>
+                    <TableColumn text="Target" fx:id="colTarget" prefWidth="250"/>
+                    <TableColumn text="Date" fx:id="colDate" prefWidth="250"/>
+                </columns>
+
+            </TableView>
+
+        </VBox>
+
+    </VBox>
+
+</StackPane>

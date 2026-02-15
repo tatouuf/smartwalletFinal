@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.SendController"
+           styleClass="page-bg">
+
+    <VBox spacing="18" alignment="CENTER" maxWidth="400">
+
+        <Label text="Send Money" styleClass="page-header"/>
+
+        <VBox styleClass="card" spacing="14">
+
+            <TextField fx:id="targetField" promptText="Receiver Email" styleClass="modern-field"/>
+            <TextField fx:id="amountField" promptText="Amount (TND)" styleClass="modern-field"/>
+
+            <Button text="Send Payment"
+                    onAction="#send"
+                    styleClass="primary-btn"/>
+
+        </VBox>
+
+    </VBox>
+
+</StackPane>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.loan.RequestLoanController">
+
+    <VBox alignment="CENTER">
+
+        <!-- CARD -->
+        <VBox spacing="16" maxWidth="420"
+              style="-fx-background-color:white;
+                     -fx-padding:25;
+                     -fx-background-radius:16;
+                     -fx-border-radius:16;
+                     -fx-border-color:#e0e0e0;
+                     -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.12), 15,0,0,4);">
+
+            <Label text="Request a Loan"
+                   style="-fx-font-size:22px; -fx-font-weight:bold;"/>
+
+            <Separator/>
+
+            <!-- SELECT LENDER -->
+            <VBox spacing="6">
+                <Label text="Choose a lender"/>
+                <ComboBox fx:id="userCombo" prefHeight="38" promptText="Select a user"/>
+            </VBox>
+
+            <!-- AMOUNT -->
+            <VBox spacing="6">
+                <Label text="Amount (TND)"/>
+                <TextField fx:id="amountField" prefHeight="38" promptText="Ex: 150"/>
+            </VBox>
+
+            <!-- MESSAGE -->
+            <VBox spacing="6">
+                <Label text="Message (optional)"/>
+                <TextArea fx:id="messageField"
+                          prefHeight="90"
+                          promptText="Explain why you need the loan..."/>
+            </VBox>
+
+            <!-- BUTTON -->
+            <Button text="🤝 Send Loan Request"
+                    prefHeight="42"
+                    onAction="#sendRequest"
+                    style="-fx-background-color:#2ecc71;
+                           -fx-text-fill:white;
+                           -fx-font-weight:bold;
+                           -fx-font-size:14px;"/>
+
+            <Label fx:id="statusLabel"
+                   style="-fx-text-fill:#2c3e50; -fx-font-size:13px;"/>
+
+        </VBox>
+
+    </VBox>
+
+</StackPane>
