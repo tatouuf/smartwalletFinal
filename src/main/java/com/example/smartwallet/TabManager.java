@@ -41,7 +41,6 @@ public class TabManager {
         }
         return false;
     }
-
     public static boolean showView(String fxmlPath, String tabText) {
         System.out.println("TabManager.showView called: fxml=" + fxmlPath + ", tabText=" + tabText);
         // Try to select existing tab
