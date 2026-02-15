@@ -65,6 +65,7 @@ public class TabManager {
                 FXMLLoader loader = new FXMLLoader(TabManager.class.getResource(fxmlPath));
                 Parent content = loader.load();
                 root.setCenter(content);
+                root.requestLayout();
                 System.out.println("TabManager: view loaded and setCenter()");
                 return true;
             } catch (IOException e) {

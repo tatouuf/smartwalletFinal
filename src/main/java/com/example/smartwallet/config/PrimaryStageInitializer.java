@@ -101,13 +101,13 @@ public class PrimaryStageInitializer {
         Label titleLabel = new Label("SmartWallet");
         titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
-        Button dashboardBtn = createNavButton("📊 Tableau de Bord");
-        Button budgetBtn = createNavButton("💰 Budgets");
-        Button expensesBtn = createNavButton("💳 Dépenses");
-        Button planningBtn = createNavButton("📅 Planifications");
-        Button categoriesBtn = createNavButton("🏷️ Catégories");
-        Button notificationsBtn = createNavButton("🔔 Notifications");
-        Button settingsBtn = createNavButton("⚙️ Paramètres");
+        Button dashboardBtn = createNavButton("tableau", "📊 Tableau de Bord");
+        Button budgetBtn = createNavButton("budgets", "💰 Budgets");
+        Button expensesBtn = createNavButton("depenses", "💳 Dépenses");
+        Button planningBtn = createNavButton("plannings", "📅 Planifications");
+        Button categoriesBtn = createNavButton("categories", "🏷️ Catégories");
+        Button notificationsBtn = createNavButton("notifications", "🔔 Notifications");
+        Button settingsBtn = createNavButton("settings", "⚙️ Paramètres");
 
         dashboardBtn.setStyle(dashboardBtn.getStyle() + "; -fx-font-weight: bold; -fx-text-fill: #2980b9;");
 
@@ -127,33 +127,70 @@ public class PrimaryStageInitializer {
         return sidebar;
     }
 
-    private Button createNavButton(String text) {
+    private Button createNavButton(String key, String text) {
         Button btn = new Button(text);
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setStyle("-fx-padding: 10px; -fx-alignment: CENTER_LEFT;");
-        btn.setOnAction(e -> handleNavigation(text));
+        btn.setUserData(key);
+        btn.setOnAction(e -> handleNavigation(key));
         return btn;
     }
 
-    private void handleNavigation(String text) {
-        // Navigation simple : charger le FXML correspondant et le placer au centre
+    private void handleNavigation(String key) {
+        // TRACE: afficher ce qui est demandé
+        System.out.println("handleNavigation called with key: '" + key + "'");
+        // Utiliser d'abord TabManager pour un comportement centralisé
         try {
-            if (text.contains("Budgets") || text.contains("Budgets")) {
+            if ("budgets".equals(key)) {
+                boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/budget-view.fxml", "Budgets");
+                if (ok) {
+                    System.out.println("handleNavigation: TabManager showed Budgets view");
+                    return;
+                }
+            } else if ("tableau".equals(key)) {
+                boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/dashboard-view.fxml", "Tableau de Bord");
+                if (ok) {
+                    System.out.println("handleNavigation: TabManager showed Dashboard view");
+                    return;
+                }
+            } else if ("depenses".equals(key)) {
+                boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/depense-view.fxml", "Dépenses");
+                if (ok) {
+                    System.out.println("handleNavigation: TabManager showed Depenses view");
+                    return;
+                }
+            }
+
+            // Fallback: charger le FXML directement et le placer au centre selon la clé
+            if ("budgets".equals(key)) {
+                System.out.println("handleNavigation: fallback loading Budgets FXML");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/budget-view.fxml"));
                 Parent content = loader.load();
                 root.setCenter(content);
+                root.requestLayout();
                 return;
             }
 
-            if (text.contains("Tableau de Bord") || text.contains("Tableau de Bord")) {
+            if ("tableau".equals(key)) {
+                System.out.println("handleNavigation: fallback loading Dashboard FXML");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/dashboard-view.fxml"));
                 Parent content = loader.load();
                 root.setCenter(content);
+                root.requestLayout();
+                return;
+            }
+
+            if ("depenses".equals(key)) {
+                System.out.println("handleNavigation: fallback loading Depenses FXML");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/depense-view.fxml"));
+                Parent content = loader.load();
+                root.setCenter(content);
+                root.requestLayout();
                 return;
             }
 
             // Pour les autres boutons, on affiche un message temporaire dans le centre
-            Label label = new Label("Section: " + text);
+            Label label = new Label("Section: " + key);
             label.setStyle("-fx-padding: 20px; -fx-font-size: 16px;");
             root.setCenter(new VBox(label));
         } catch (IOException ex) {
