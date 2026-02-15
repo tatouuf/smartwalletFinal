@@ -3,18 +3,28 @@ package com.example.smartwallet.controller.javafx;
 import dao.BudgetDAO;
 import dao.DepenseDAO;
 import dao.PlanningDAO;
+import com.example.smartwallet.TabManager;
 import com.example.smartwallet.model.Budget;
 import com.example.smartwallet.model.Depense;
 import com.example.smartwallet.model.Planning;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +52,7 @@ public class DashboardJavaFXController {
     private DepenseDAO depenseDAO = new DepenseDAO();
     private BudgetDAO budgetDAO = new BudgetDAO();
     private PlanningDAO planningDAO = new PlanningDAO();
-    private int userId = 1; // User connecté
+    private int userId = 1; // ID du user connecté
 
     @FXML
     public void initialize() {
@@ -82,11 +92,11 @@ public class DashboardJavaFXController {
     private void chargerGraphiquePieChart() {
         List<Depense> depenses = depenseDAO.obtenirToutesDepenses(userId);
         Map<String, Double> depensesParCategorie = depenses.stream()
-            .collect(Collectors.groupingBy(Depense::getCategorie, Collectors.summingDouble(Depense::getMontant)));
+                .collect(Collectors.groupingBy(Depense::getCategorie, Collectors.summingDouble(Depense::getMontant)));
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         depensesParCategorie.forEach((categorie, montant) ->
-            pieChartData.add(new PieChart.Data(categorie, montant))
+                pieChartData.add(new PieChart.Data(categorie, montant))
         );
 
         depensesCategorieChart.setData(pieChartData);
@@ -111,14 +121,14 @@ public class DashboardJavaFXController {
     private void chargerGraphiqueLineChart() {
         List<Depense> depenses = depenseDAO.obtenirToutesDepenses(userId);
         Map<LocalDate, Double> depensesParJour = depenses.stream()
-            .collect(Collectors.groupingBy(Depense::getDateDepense, Collectors.summingDouble(Depense::getMontant)));
+                .collect(Collectors.groupingBy(Depense::getDateDepense, Collectors.summingDouble(Depense::getMontant)));
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Évolution des dépenses");
 
         depensesParJour.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> series.getData().add(new XYChart.Data<>(entry.getKey().toString(), entry.getValue())));
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> series.getData().add(new XYChart.Data<>(entry.getKey().toString(), entry.getValue())));
 
         evolutionDepensesChart.getData().clear();
         evolutionDepensesChart.getData().add(series);
@@ -129,6 +139,31 @@ public class DashboardJavaFXController {
         String[] months = {"Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"};
         return months[mois - 1];
     }
+
+    // -------------------------------
+    // MÉTHODE DE NAVIGATION VERS BUDGET
+    // -------------------------------
+    @FXML
+    private void goToBudget(ActionEvent event) {
+        // Essayer via le TabManager
+        boolean ok = TabManager.showView("/com/example/smartwallet/budget-view.fxml", "Budgets");
+        if (ok) return;
+
+        // Fallback : charger la vue et l'insérer dans le BorderPane racine si possible
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/budget-view.fxml"));
+            Parent content = loader.load();
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            if (stage.getScene() != null && stage.getScene().getRoot() instanceof BorderPane) {
+                BorderPane root = (BorderPane) stage.getScene().getRoot();
+                root.setCenter(content);
+            } else {
+                stage.setScene(new Scene(content));
+            }
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-

@@ -17,6 +17,9 @@ public class SmartWalletApp extends Application {
         TabPane tabPane = new TabPane();
         tabPane.setStyle("-fx-font-size: 12;");
 
+        // Stocker la référence globale
+        TabManager.setTabPane(tabPane);
+
         // Tab Tableau de Bord
         Tab dashboardTab = createTab("Tableau de Bord", "dashboard-view.fxml");
         Tab depensesTab = createTab("Dépenses", "depense-view.fxml");
@@ -56,4 +59,3 @@ public class SmartWalletApp extends Application {
         launch(args);
     }
 }
-

@@ -1,13 +1,21 @@
 package com.example.smartwallet.controller.javafx;
 
 import dao.BudgetDAO;
+import com.example.smartwallet.TabManager;
 import com.example.smartwallet.model.Budget;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -47,6 +55,8 @@ public class BudgetJavaFXController {
     private Label totalBudgetsLabel;
     @FXML
     private ProgressBar budgetProgressBar;
+    @FXML
+    private Button retourBtn; // bouton Retour ajouté dans le FXML
 
     private BudgetDAO budgetDAO = new BudgetDAO();
     private ObservableList<Budget> budgetsList = FXCollections.observableArrayList();
@@ -63,6 +73,9 @@ public class BudgetJavaFXController {
         modifierBtn.setOnAction(e -> modifierBudget());
         supprimerBtn.setOnAction(e -> supprimerBudget());
         budgetsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectBudget(newVal));
+        if (retourBtn != null) {
+            retourBtn.setOnAction(this::goToDashboard);
+        }
     }
 
     private void setupTableColumns() {
@@ -77,7 +90,7 @@ public class BudgetJavaFXController {
 
     private void setupCategories() {
         ObservableList<String> categories = FXCollections.observableArrayList(
-            "Alimentation", "Transport", "Logement", "Santé", "Loisirs", "Éducation", "Autre"
+                "Alimentation", "Transport", "Logement", "Santé", "Loisirs", "Éducation", "Autre"
         );
         categorieCombo.setItems(categories);
     }
@@ -168,7 +181,7 @@ public class BudgetJavaFXController {
 
     private boolean validationFormulaire() {
         if (montantMaxField.getText().isEmpty() || categorieCombo.getValue() == null ||
-            moisCombo.getValue() == null || anneeCombo.getValue() == null) {
+                moisCombo.getValue() == null || anneeCombo.getValue() == null) {
             afficherAlerte("Erreur", "Veuillez remplir tous les champs obligatoires");
             return false;
         }
@@ -197,6 +210,30 @@ public class BudgetJavaFXController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    // ---------------------------
+    // NAVIGATION VERS DASHBOARD
+    // ---------------------------
+    @FXML
+    private void goToDashboard(ActionEvent event) {
+        boolean ok = TabManager.showView("/com/example/smartwallet/dashboard-view.fxml", "Tableau de Bord");
+        if (ok) return;
+
+        // Fallback : charger la vue et l'insérer dans le BorderPane racine si possible
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/dashboard-view.fxml"));
+            Parent content = loader.load();
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            if (stage.getScene() != null && stage.getScene().getRoot() instanceof BorderPane) {
+                BorderPane root = (BorderPane) stage.getScene().getRoot();
+                root.setCenter(content);
+            } else {
+                stage.setScene(new Scene(content));
+            }
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-

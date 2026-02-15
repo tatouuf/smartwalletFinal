@@ -8,6 +8,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+
+import com.example.smartwallet.TabManager;
+
+import java.io.IOException;
 
 /**
  * Initialise la scène principale de l'application
@@ -15,9 +21,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrimaryStageInitializer {
 
+    // Stocker la racine pour permettre la navigation depuis la sidebar
+    private BorderPane root;
+
     public void initStage(Stage primaryStage) {
         // Créer la scène principale
         BorderPane root = new BorderPane();
+        this.root = root;
+        // Enregistrer le root dans TabManager
+        TabManager.setRoot(root);
         root.setStyle("-fx-font-family: 'Segoe UI'; -fx-font-size: 12px;");
 
         // Barre de menu
@@ -119,8 +131,34 @@ public class PrimaryStageInitializer {
         Button btn = new Button(text);
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setStyle("-fx-padding: 10px; -fx-alignment: CENTER_LEFT;");
-        btn.setOnAction(e -> System.out.println("Naviguer vers: " + text));
+        btn.setOnAction(e -> handleNavigation(text));
         return btn;
+    }
+
+    private void handleNavigation(String text) {
+        // Navigation simple : charger le FXML correspondant et le placer au centre
+        try {
+            if (text.contains("Budgets") || text.contains("Budgets")) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/budget-view.fxml"));
+                Parent content = loader.load();
+                root.setCenter(content);
+                return;
+            }
+
+            if (text.contains("Tableau de Bord") || text.contains("Tableau de Bord")) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/dashboard-view.fxml"));
+                Parent content = loader.load();
+                root.setCenter(content);
+                return;
+            }
+
+            // Pour les autres boutons, on affiche un message temporaire dans le centre
+            Label label = new Label("Section: " + text);
+            label.setStyle("-fx-padding: 20px; -fx-font-size: 16px;");
+            root.setCenter(new VBox(label));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private VBox createCenterContent() {

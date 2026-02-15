@@ -40,4 +40,3 @@ public class JavaFXApplication extends Application {
         springContext = context;
     }
 }
-

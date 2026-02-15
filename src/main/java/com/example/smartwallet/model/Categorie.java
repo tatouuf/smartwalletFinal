@@ -1,29 +1,28 @@
 package com.example.smartwallet.model;
+
 public class Categorie {
+
     private int id;
     private String nom;
-    private String description;
+    private String type; // DEPENSE ou REVENU
 
-    // Constructeur pour créer une catégorie
-    public Categorie(String nom, String description) {
+    public Categorie(String nom, String type) {
         this.nom = nom;
-        this.description = description;
+        this.type = type;
     }
 
-    // Constructeur avec ID (ex: pour SELECT)
-    public Categorie(int id, String nom, String description) {
+    public Categorie(int id, String nom, String type) {
         this.id = id;
         this.nom = nom;
-        this.description = description;
+        this.type = type;
     }
 
-    // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 }

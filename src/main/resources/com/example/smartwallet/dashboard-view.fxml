@@ -50,6 +50,8 @@
 
                 <!-- Graphiques -->
                 <HBox spacing="20" prefHeight="400">
+                    <Button text="Gérer les Budgets" onAction="#goToBudget"/>
+
                     <!-- Pie Chart -->
                     <TitledPane text="Dépenses par Catégorie" prefWidth="350" prefHeight="400" animated="false">
                         <PieChart fx:id="depensesCategorieChart" prefHeight="360"/>
@@ -83,4 +85,3 @@
         </ScrollPane>
     </center>
 </BorderPane>
-
