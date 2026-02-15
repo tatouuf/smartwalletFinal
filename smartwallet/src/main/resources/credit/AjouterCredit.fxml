@@ -1,31 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.credit.AjouterCredit">
+<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.credit.AjouterCredit">
 
-    <Text layoutX="30" layoutY="40" text="Nom Client"/>
-    <TextField fx:id="txtNomClient" layoutX="150" layoutY="25" prefWidth="200"/>
+    <children>
 
-    <Text layoutX="30" layoutY="80" text="Montant"/>
-    <TextField fx:id="txtMontant" layoutX="150" layoutY="65" prefWidth="200"/>
+        <!-- ================= LEFT FORM ================= -->
+        <Text layoutX="40.0" layoutY="50.0" text="Client Name" />
+        <TextField fx:id="txtNomClient" layoutX="150.0" layoutY="30.0" prefWidth="220" />
 
-    <Text layoutX="30" layoutY="120" text="Date du Crédit"/>
-    <DatePicker fx:id="dateCredit" layoutX="150" layoutY="105"/>
+        <Text layoutX="40.0" layoutY="95.0" text="Amount" />
+        <TextField fx:id="txtMontant" layoutX="150.0" layoutY="75.0" prefWidth="220" />
 
-    <Text layoutX="30" layoutY="160" text="Description"/>
-    <TextField fx:id="txtDescription" layoutX="150" layoutY="145" prefWidth="200"/>
+        <Text layoutX="40.0" layoutY="140.0" text="Credit Date" />
+        <DatePicker fx:id="dateCredit" layoutX="150.0" layoutY="120.0" prefWidth="220" />
 
-    <Text layoutX="30" layoutY="200" text="Statut"/>
-    <ComboBox fx:id="comboStatut" layoutX="150" layoutY="185" prefWidth="200"/>
+        <Text layoutX="40.0" layoutY="185.0" text="Description" />
+        <TextField fx:id="txtDescription" layoutX="150.0" layoutY="165.0" prefWidth="220" />
 
-    <Button fx:id="btnAjouter" text="Ajouter" layoutX="150" layoutY="250"
-            onAction="#ajouterCredit"/>
+        <Text layoutX="40.0" layoutY="230.0" text="Status" />
+        <ComboBox fx:id="comboStatut" layoutX="150.0" layoutY="210.0" prefWidth="220" />
+
+        <Button fx:id="btnAjouter" layoutX="150.0" layoutY="280.0" onAction="#ajouterCredit" prefWidth="220" style="-fx-background-color: #08010e; -fx-text-fill: white; -fx-font-weight: bold;" text="Add Credit" />
+
+        <!-- Vertical Black Bar -->
+        <Rectangle arcHeight="20" arcWidth="20" fill="#000000" height="380.0" layoutX="520.0" layoutY="70.0" width="8.0" />
+
+        <!-- ================= RIGHT SIDE LOGO ================= -->
+        <ImageView fx:id="imgLogoCredit" fitHeight="300.0" fitWidth="300.0" layoutX="560.0" layoutY="90.0" preserveRatio="true" />
+
+        <!-- BOUTON RETOUR -->
+        <Button fx:id="btnRetour" layoutX="600.0" layoutY="400.0" onAction="#retourMain" prefHeight="30" prefWidth="220" style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;" text="Return" />
+
+        <!-- TITLE UNDER LOGO -->
+        <Label alignment="CENTER" layoutX="560.0" layoutY="360.0" prefWidth="300.0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #08010e;" text="Add a New Credit" />
+
+    </children>
 </AnchorPane>

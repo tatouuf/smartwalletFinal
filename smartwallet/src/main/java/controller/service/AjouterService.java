@@ -50,14 +50,27 @@ public class AjouterService {
 
     @FXML
     private TextField descriptionservice;
-
+    @FXML private Button btnAjouterserrr;
     @FXML
     private TextField imagajt;
 
     private File selectedFile;
 
     // ================= INITIALIZE =================
+    @FXML
+    private void retourMain() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainalc/MainALC.fxml"));
+            Parent root = loader.load();
 
+            Stage stage = (Stage) btnAjouterserrr.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Main ALC");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au menu principal !");
+        }
+    }
     @FXML
     public void initialize() {
 
@@ -189,5 +202,11 @@ public class AjouterService {
             alert.setContentText("Erreur lors de l'ajout du service !");
             alert.show();
         }
+    }
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

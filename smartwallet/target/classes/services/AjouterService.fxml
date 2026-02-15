@@ -6,10 +6,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #a7bbdc, #c3cfe2);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AjouterService">
+<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AjouterService">
 
    <children>
 
@@ -41,18 +41,12 @@
 
       <Button fx:id="btnParcourirImage" layoutX="380.0" layoutY="345.0" onAction="#choisirImage" text="Browse" />
 
-      <Button fx:id="buttonajoutservice" layoutX="150.0" layoutY="410.0" onAction="#onButtonClicked" prefWidth="220" style="-fx-background-color: #c388b5; -fx-text-fill: white; -fx-font-weight: bold;" text="Add Service" />
+      <Button fx:id="buttonajoutservice" layoutX="150.0" layoutY="410.0" onAction="#onButtonClicked" prefWidth="220" style="-fx-background-color: #08010e; -fx-text-fill: white; -fx-font-weight: bold;" text="Add Service" />
 
+      <Button fx:id="btnAjouterserrr" layoutX="600.0" layoutY="369.0" onAction="#retourMain" prefHeight="30" prefWidth="220" style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;" text="Return" />
       <!-- Vertical Pink Bar -->
 
-      <Rectangle
-              layoutX="520.0"
-              layoutY="70.0"
-              width="8.0"
-              height="380.0"
-              arcWidth="20"
-              arcHeight="20"
-              fill="#2c0051"/>
+      <Rectangle arcHeight="20" arcWidth="20" fill="#000000" height="380.0" layoutX="520.0" layoutY="70.0" width="8.0" />
 
       <!-- ================= RIGHT SIDE LOGO ================= -->
 
@@ -60,7 +54,7 @@
 
       <!-- TITLE UNDER LOGO -->
 
-      <Label alignment="CENTER" layoutX="531.0" layoutY="324.0" prefWidth="380.0" style="-fx-font-size: 22px;                     -fx-font-weight: bold;                     -fx-text-fill: #0e0024;" text="Add a Car or Home Rental Service" />
+      <Label alignment="CENTER" layoutX="531.0" layoutY="324.0" prefWidth="380.0" style="-fx-font-size: 22px;                     -fx-font-weight: bold;                     -fx-text-fill: #08010e;" text="Add a Car or Home Rental Service" />
 
    </children>
 </AnchorPane>

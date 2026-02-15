@@ -8,8 +8,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import services.assurances.ServiceAssurances;
+
+import java.util.Objects;
 
 public class AjouterAssurance {
 
@@ -27,12 +31,15 @@ public class AjouterAssurance {
 
     @FXML
     private TextArea descriptionField;
-
+    @FXML private Button retouritaf;
     @FXML
     private TextArea conditionsField;
 
     @FXML
     private ComboBox<Statut> statutCombo;
+
+    @FXML
+    private ImageView imgLogoAssurance; // 🔥 LOGO
 
     private ServiceAssurances serviceAssurances = new ServiceAssurances();
 
@@ -40,11 +47,39 @@ public class AjouterAssurance {
     public void initialize() {
         typeAssuranceCombo.getItems().addAll(TypeAssurance.values());
         statutCombo.getItems().addAll(Statut.values());
+        loadLogo(); // ✅ Charger le logo
+    }
+    @FXML
+    private void retourMain() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainalc/MainALC.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) retouritaf.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Main ALC");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au menu principal !");
+        }
+    }
+    // ================== LOGO ==================
+    private void loadLogo() {
+        try {
+            Image logo = new Image(
+                    Objects.requireNonNull(
+                            getClass().getResourceAsStream("/icons/logoservices.png")
+                    )
+            );
+            imgLogoAssurance.setImage(logo);
+        } catch (Exception e) {
+            System.out.println("❌ Logo introuvable !");
+        }
     }
 
+    // ================== AJOUT ==================
     @FXML
     private void ajouterAssurance() {
-
         try {
             if (nomAssuranceField.getText().isEmpty()
                     || typeAssuranceCombo.getValue() == null
@@ -87,5 +122,11 @@ public class AjouterAssurance {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

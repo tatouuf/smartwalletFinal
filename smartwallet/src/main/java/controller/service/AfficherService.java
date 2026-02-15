@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,13 +21,26 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class AfficherService {
-
+    @FXML private Button retouritafser;
     @FXML
     private HBox cardaffserv;
 
     @FXML
     private ImageView imgLogoList; // Logo en haut à droite
+    @FXML
+    private void retourMain() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainalc/MainALC.fxml"));
+            Parent root = loader.load();
 
+            Stage stage = (Stage) retouritafser.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Main ALC");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au menu principal !");
+        }
+    }
     @FXML
     public void initialize() {
         // Charger le logo en haut à droite
@@ -42,6 +56,7 @@ public class AfficherService {
         // Charger les services au démarrage
         loadServices();
     }
+
 
     /**
      * Charger tous les services depuis la base et créer des cartes dynamiques
@@ -75,12 +90,12 @@ public class AfficherService {
                 }
 
                 // ===== TEXTES =====
-                Text id = new Text("ID : " + s.getId());
-                Text prix = new Text("Prix : " + s.getPrix());
+                Text id = new Text("Code : " + s.getId());
+                Text prix = new Text("Price : " + s.getPrix());
                 Text type = new Text("Type : " + s.getType());
                 Text statut = new Text("Statut : " + s.getStatutString());
-                Text localisation = new Text("Coordonnées : " + s.getLocalisation());
-                Text adresse = new Text("Adresse : " + s.getAdresse());
+                Text localisation = new Text("Location : " + s.getLocalisation());
+                Text adresse = new Text("Adress : " + s.getAdresse());
                 Text typeService = new Text("Type Service : " + s.getTypeServiceString());
 
                 card.getChildren().addAll(
@@ -98,10 +113,10 @@ public class AfficherService {
                 HBox buttonsBox = new HBox(10);
                 buttonsBox.setStyle("-fx-alignment: center; -fx-padding: 5;");
 
-                Button btnModifier = new Button("Modifier");
+                Button btnModifier = new Button("Modify");
                 btnModifier.setOnAction(event -> showModifierService(s));
 
-                Button btnSupprimer = new Button("Supprimer");
+                Button btnSupprimer = new Button("Detete");
                 btnSupprimer.setOnAction(event -> {
                     try {
                         ss.supprimerServices(s);
@@ -145,5 +160,11 @@ public class AfficherService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

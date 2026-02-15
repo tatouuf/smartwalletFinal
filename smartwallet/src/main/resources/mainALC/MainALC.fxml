@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane style="-fx-background-color: linear-gradient(to bottom, #08010e, #ffffff);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.mainalc.MainALC">
+<BorderPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom, #08010e, #ffffff);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.mainalc.MainALC">
 
     <!-- Logo et introduction -->
     <top>
@@ -22,7 +22,7 @@
             <!-- Introduction / description -->
             <Label prefHeight="33.0" prefWidth="354.0" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: black;" text="Welcome to SmartWallet" />
             <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black;" text="Services Department" />
-            <Label maxWidth="534.0" prefHeight="30.0" prefWidth="534.0" style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-wrap-text: true;" text="Manage your Rentals, Insurance, and Loans easily from our SmartWallet platform." />
+            <Label maxWidth="534.0" prefHeight="30.0" prefWidth="534.0" style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-wrap-text: true;" text="Manage your Rentals, Insurance, and Credit easily from our SmartWallet platform." />
         </VBox>
     </top>
 

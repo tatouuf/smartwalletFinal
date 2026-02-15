@@ -9,12 +9,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0"
-            prefWidth="900.0"
-            style="-fx-background-color: linear-gradient(to bottom right, #a7bbdc, #c3cfe2);"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.service.ModifierService">
+<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.ModifierService">
 
     <children>
 
@@ -45,40 +40,17 @@
         <TextField fx:id="txtImage" layoutX="150.0" layoutY="345.0" prefWidth="220" promptText="Select image" />
 
         <Button fx:id="btnBrowseImage" layoutX="380.0" layoutY="345.0" onAction="#choisirImage" text="Browse" />
-
-        <Button fx:id="btnSave"
-                layoutX="150.0"
-                layoutY="410.0"
-                onAction="#enregistrerModifications"
-                prefWidth="220"
-                style="-fx-background-color: #c388b5; -fx-text-fill: white; -fx-font-weight: bold;"
-                text="Save Changes" />
+        <Button fx:id="retouritafmod" layoutX="600.0" layoutY="400.0" onAction="#retourMain" prefHeight="30" prefWidth="220" style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;" text="Return" />
+        <Button fx:id="btnSave" layoutX="150.0" layoutY="410.0" onAction="#enregistrerModifications" prefWidth="220" style="-fx-background-color: #08010e; -fx-text-fill: white; -fx-font-weight: bold;" text="Save Changes" />
 
         <!-- Vertical Pink Bar -->
-        <Rectangle
-                layoutX="520.0"
-                layoutY="70.0"
-                width="8.0"
-                height="380.0"
-                arcWidth="20"
-                arcHeight="20"
-                fill="#c388b5"/>
+        <Rectangle arcHeight="20" arcWidth="20" fill="#000000" height="380.0" layoutX="520.0" layoutY="70.0" width="8.0" />
 
         <!-- ================= RIGHT SIDE LOGO ================= -->
-        <ImageView fx:id="imgLogoModifier"
-                   fitHeight="300.0"
-                   fitWidth="300.0"
-                   layoutX="560.0"
-                   layoutY="90.0"
-                   preserveRatio="true" />
+        <ImageView fx:id="imgLogoModifier" fitHeight="300.0" fitWidth="300.0" layoutX="560.0" layoutY="90.0" preserveRatio="true" />
 
         <!-- TITLE UNDER LOGO -->
-        <Label alignment="CENTER"
-               layoutX="531.0"
-               layoutY="324.0"
-               prefWidth="380.0"
-               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0e0024;"
-               text="Modify a Car or Home Rental Service" />
+        <Label alignment="CENTER" layoutX="531.0" layoutY="324.0" prefWidth="380.0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #08010e;" text="Modify a Rental Service" />
 
     </children>
 </AnchorPane>

@@ -7,88 +7,126 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import services.credit.ServiceCredit;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class AjouterCredit {
 
-    @FXML
-    private TextField txtNomClient;
-
-    @FXML
-    private TextField txtMontant;
-
-    @FXML
-    private DatePicker dateCredit;
-
-    @FXML
-    private TextField txtDescription;
-
-    @FXML
-    private ComboBox<StatutCredit> comboStatut;
+    @FXML private TextField txtNomClient;
+    @FXML private TextField txtMontant;
+    @FXML private DatePicker dateCredit;
+    @FXML private TextField txtDescription;
+    @FXML private ComboBox<StatutCredit> comboStatut;
+    @FXML private Button btnRetour;
+    @FXML private ImageView imgLogoCredit;
+    @FXML private Button btnAjouter;
 
     @FXML
     public void initialize() {
-        // Remplir la ComboBox avec les statuts disponibles
-        comboStatut.getItems().addAll(StatutCredit.values());
+        // Charger les statuts dans la ComboBox
+        comboStatut.getItems().setAll(StatutCredit.values());
+        comboStatut.getSelectionModel().selectFirst();
+
+        // Charger le logo
+        try {
+            Image image = new Image(Objects.requireNonNull(
+                    getClass().getResourceAsStream("/icons/logoservices.png")
+            ));
+            imgLogoCredit.setImage(image);
+        } catch (Exception e) {
+            System.out.println("Logo non trouvé !");
+        }
     }
 
-    // Méthode liée au bouton Ajouter Crédit
+    // ================= BUTTON RETOUR =================
+    @FXML
+    private void retourMain() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainalc/MainALC.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnRetour.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Main ALC");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au menu principal !");
+        }
+    }
+
+    // ================= BUTTON AJOUTER =================
     @FXML
     private void ajouterCredit() {
+
+        // Vérification des champs obligatoires
+        if (txtNomClient.getText().trim().isEmpty()
+                || txtMontant.getText().trim().isEmpty()
+                || dateCredit.getValue() == null
+                || comboStatut.getValue() == null) {
+
+            showAlert(Alert.AlertType.WARNING,
+                    "Champs obligatoires",
+                    "Veuillez remplir tous les champs obligatoires !");
+            return;
+        }
+
+        // Vérification que le montant est un nombre
+        float montant;
         try {
-            // Vérification des champs obligatoires
-            if (txtNomClient.getText().isEmpty() ||
-                    txtMontant.getText().isEmpty() ||
-                    dateCredit.getValue() == null ||
-                    comboStatut.getValue() == null) {
+            montant = Float.parseFloat(txtMontant.getText());
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR,
+                    "Erreur de saisie",
+                    "Le montant doit être un nombre valide !");
+            return;
+        }
 
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setContentText("Veuillez remplir tous les champs obligatoires !");
-                alert.show();
-                return;
-            }
+        LocalDate date = dateCredit.getValue();
+        StatutCredit statut = comboStatut.getValue();
 
-            // Conversion du montant
-            float montant = Float.parseFloat(txtMontant.getText());
-            LocalDate date = dateCredit.getValue();
-            StatutCredit statut = comboStatut.getValue();
+        Credit credit = new Credit(
+                txtNomClient.getText(),
+                montant,
+                date,
+                txtDescription.getText(),
+                statut
+        );
 
-            // Création du crédit
-            Credit c = new Credit(txtNomClient.getText(), montant, date, txtDescription.getText(), statut);
+        ServiceCredit service = new ServiceCredit();
 
-            // Ajouter le crédit dans la base
-            ServiceCredit sc = new ServiceCredit();
-            sc.ajouterCredit(c);
+        try {
+            service.ajouterCredit(credit);
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Crédit ajouté avec succès !");
 
-            // Message de succès
-            Alert success = new Alert(Alert.AlertType.INFORMATION);
-            success.setContentText("Crédit ajouté avec succès !");
-            success.showAndWait();
-
-            // 🔹 Redirection vers AfficherCredit.fxml
+            // Redirection vers AfficherCredit.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/credit/AfficherCredit.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) txtNomClient.getScene().getWindow();
+            Stage stage = (Stage) btnAjouter.getScene().getWindow(); // on utilise btnAjouter pour récupérer la scène
             stage.setScene(new Scene(root));
             stage.setTitle("Afficher Crédits");
-            stage.show();
 
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Le montant doit être un nombre valide !");
-            alert.show();
         } catch (SQLException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Erreur lors de l'ajout du crédit !");
-            alert.show();
+            showAlert(Alert.AlertType.ERROR, "Erreur Base de Données", "Erreur lors de l'ajout du crédit !");
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page d'affichage des crédits !");
         }
+    }
+
+    // ================= UTILITAIRE ALERT =================
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

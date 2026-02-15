@@ -4,6 +4,9 @@ import entities.service.Services;
 import entities.service.Statut;
 import entities.service.TypeService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,7 +47,7 @@ public class ModifierService {
     private TextField txtImage;
 
     @FXML
-    private Button btnBrowseImage;
+    private Button retouritafmod;
 
     @FXML
     private Button btnSave;
@@ -70,7 +73,20 @@ public class ModifierService {
         txtTypeServiceCategory.getItems().addAll(TypeService.values());
         txtStatut.getItems().addAll(Statut.values());
     }
+    @FXML
+    private void retourMain() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/services/AfficherService.fxml"));
+            Parent root = loader.load();
 
+            Stage stage = (Stage) retouritafmod.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Main ALC");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au menu principal !");
+        }
+    }
     // Méthode pour remplir les champs avec un service existant
     public void setService(Services s) {
         this.currentService = s;
@@ -165,5 +181,11 @@ public class ModifierService {
             alert.setContentText("Error updating the service!");
             alert.show();
         }
+    }
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

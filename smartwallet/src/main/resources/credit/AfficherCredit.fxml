@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.credit.AfficherCredit">
+<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #a7bbdc, #c3cfe2);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.credit.AfficherCredit">
 
-    <TableView fx:id="tableCredits" layoutX="20" layoutY="20" prefHeight="400" prefWidth="760">
+    <Button fx:id="btnRetourcredit" layoutX="751.0" layoutY="29.0" onAction="#retourMain" prefHeight="10.0" prefWidth="119.0" style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;" text="Return" />
+
+
+    <!-- TableView -->
+    <TableView fx:id="tableCredits" layoutX="29.0" layoutY="86.0" prefHeight="400.0" prefWidth="842.0" style="-fx-background-color: white; -fx-border-color: #c388b5; -fx-border-width: 2;">
         <columns>
-            <TableColumn fx:id="colActions" text="Actions" prefWidth="150"/>
-            <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="colNomClient" text="Nom Client" prefWidth="150"/>
-            <TableColumn fx:id="colMontant" text="Montant" prefWidth="100"/>
-            <TableColumn fx:id="colDateCredit" text="Date" prefWidth="100"/>
-            <TableColumn fx:id="colDescription" text="Description" prefWidth="200"/>
-            <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+            <TableColumn fx:id="colActions" prefWidth="150" text="Actions" />
+            <TableColumn fx:id="colId" prefWidth="50" text="Code" />
+            <TableColumn fx:id="colNomClient" prefWidth="150" text="Client Name" />
+            <TableColumn fx:id="colMontant" prefWidth="100" text="Amount" />
+            <TableColumn fx:id="colDateCredit" prefWidth="100" text="Date" />
+            <TableColumn fx:id="colDescription" prefWidth="200" text="Description" />
+            <TableColumn fx:id="colStatut" prefWidth="100" text="Status" />
         </columns>
     </TableView>
 
-</AnchorPane>
+    <!-- Logo à droite -->
+    <ImageView fx:id="imgLogoCredit" fitHeight="79.0" fitWidth="109.0" layoutX="3.0" layoutY="2.0" preserveRatio="true" />
 
+<!-- Titre au centre, sur la même ligne que le logo -->
+    <Label alignment="CENTER" layoutX="280.0" layoutY="40.0" prefWidth="400.0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0e0024;" text="Credit List" />
+</AnchorPane>
