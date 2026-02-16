@@ -12,6 +12,7 @@ public class ServiceCredit implements IServiceCredit {
 
     private Connection connection;
 
+    // Constructeur par défaut pour l'application
     public ServiceCredit() {
         try {
             connection = MyDataBase.getInstance().getConnection();
@@ -22,16 +23,12 @@ public class ServiceCredit implements IServiceCredit {
             System.err.println("Erreur de connexion à la base : " + e.getMessage());
         }
     }
-    // 🔹 Modifier uniquement le statut d'un crédit
-    public void modifierStatutCredit(Credit c) throws SQLException {
-        String sql = "UPDATE credit SET statut = ? WHERE id_credit = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, c.getStatut().name()); // StatutCredit -> String
-            ps.setInt(2, c.getIdCredit());
-            ps.executeUpdate();
-            System.out.println("Statut du crédit modifié avec succès !");
-        }
+
+    // Nouveau constructeur pour les tests unitaires
+    public ServiceCredit(Connection connection) {
+        this.connection = connection;
     }
+
     // 🔹 Ajouter un crédit
     @Override
     public void ajouterCredit(Credit c) throws SQLException {
@@ -73,6 +70,20 @@ public class ServiceCredit implements IServiceCredit {
         }
     }
 
+    // 🔹 Modifier uniquement le statut d'un crédit
+    public void modifierStatutCredit(Credit c) throws SQLException {
+        if (connection == null) {
+            throw new SQLException("Connexion non disponible !");
+        }
+
+        String sql = "UPDATE credit SET statut = ? WHERE id_credit = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, c.getStatut().name());
+            ps.setInt(2, c.getIdCredit());
+            ps.executeUpdate();
+            System.out.println("Statut du crédit modifié avec succès !");
+        }
+    }
 
     // 🔹 Supprimer un crédit
     @Override
@@ -82,7 +93,6 @@ public class ServiceCredit implements IServiceCredit {
         }
 
         String sql = "DELETE FROM credit WHERE id_credit=?";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, c.getIdCredit());
             ps.executeUpdate();

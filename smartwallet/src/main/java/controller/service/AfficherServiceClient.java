@@ -19,7 +19,9 @@ import services.service.ServiceServices;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AfficherServiceClient {
 
@@ -34,6 +36,9 @@ public class AfficherServiceClient {
 
     private final ServiceServices ss = new ServiceServices();
 
+    // Garde une trace des services ajoutés pour pouvoir annuler
+    private final Map<Integer, Services> addedServices = new HashMap<>();
+
     // ================= RETOUR =================
     @FXML
     private void retourMain() {
@@ -41,7 +46,7 @@ public class AfficherServiceClient {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/acceuilservices/AcceuilServiceClient.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) retouritafser.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(root, 900, 500));
             stage.setTitle("Main ALC");
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,8 +71,8 @@ public class AfficherServiceClient {
             cardaffserv.getChildren().clear();
 
             for (Services s : services) {
-                // Affiche uniquement les services DISPONIBLES
-                if (s.getStatut() != Statut.DISPONIBLE) continue;
+                // Affiche uniquement les services DISPONIBLES ou ceux ajoutés (pour pouvoir Cancel)
+                if (s.getStatut() != Statut.DISPONIBLE && !addedServices.containsKey(s.getId())) continue;
 
                 VBox card = createServiceCard(s);
                 cardaffserv.getChildren().add(card);
@@ -116,6 +121,8 @@ public class AfficherServiceClient {
 
         // ===== BUTTONS =====
         Button btnAdd = new Button("Add");
+        Button btnCancel = new Button("Cancel");
+
         btnAdd.setStyle(
                 "-fx-background-color: #ff96db;" +
                         "-fx-text-fill: white;" +
@@ -123,20 +130,44 @@ public class AfficherServiceClient {
                         "-fx-background-radius: 8;"
         );
 
-        // Action Add : change statut et recharge la liste
+        btnCancel.setStyle(
+                "-fx-background-color: #888888;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 8;"
+        );
+
+        // Action Add : change statut, garde dans addedServices, mais ne supprime pas la carte
         btnAdd.setOnAction(event -> {
             try {
                 s.setStatut(Statut.NON_DISPONIBLE);
                 ss.modifierServiceStatut(s);
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Service added successfully!");
-                loadAvailableServices(); // Recharge la liste pour enlever le service ajouté
+                addedServices.put(s.getId(), s); // marque comme ajouté
+                statutText.setText("Status: " + s.getStatutString());
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Service added! You can Cancel if needed.");
             } catch (SQLException e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to add service!");
             }
         });
 
-        HBox buttonBox = new HBox(10, btnAdd);
+        // Action Cancel : revient à DISPONIBLE si le service avait été ajouté
+        btnCancel.setOnAction(event -> {
+            try {
+                if (addedServices.containsKey(s.getId())) {
+                    s.setStatut(Statut.DISPONIBLE);
+                    ss.modifierServiceStatut(s);
+                    addedServices.remove(s.getId());
+                    statutText.setText("Status: " + s.getStatutString());
+                    showAlert(Alert.AlertType.INFORMATION, "Cancelled", "Service addition cancelled!");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to cancel service!");
+            }
+        });
+
+        HBox buttonBox = new HBox(10, btnAdd, btnCancel);
         card.getChildren().addAll(
                 imageView, id, prix, type, statutText, localisation, adresse, typeService, buttonBox
         );
