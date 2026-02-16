@@ -8,6 +8,7 @@ module com.example.smartwallet {
     opens controller.assurance to javafx.fxml;
     opens controller.credit to javafx.fxml;
     opens controller.mainalc to javafx.fxml;
+    opens controller.acceuilservice to javafx.fxml;
     // Ouvre le package contenant les entités
     opens entities.service to javafx.base;
 

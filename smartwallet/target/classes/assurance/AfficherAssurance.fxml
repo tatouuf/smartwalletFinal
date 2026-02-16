@@ -16,7 +16,7 @@
     <Label alignment="CENTER" layoutX="280.0" layoutY="40.0" prefWidth="400.0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0e0024;" text=" Insurances List" />
 
     <!-- ScrollPane pour cartes assurances -->
-    <ScrollPane hbarPolicy="NEVER" layoutX="106.0" layoutY="81.0" prefHeight="400.0" prefWidth="716.0" style="-fx-background-color: white; -fx-border-color: #c388b5; -fx-border-width: 2;" vbarPolicy="AS_NEEDED">
+    <ScrollPane hbarPolicy="NEVER" layoutX="106.0" layoutY="81.0" prefHeight="376.0" prefWidth="716.0" style="-fx-background-color: white; -fx-border-color: #c388b5; -fx-border-width: 2;" vbarPolicy="AS_NEEDED">
 
         <content>
             <FlowPane fx:id="cardAffAssurance" alignment="TOP_LEFT" hgap="15" prefWrapLength="800" vgap="15">
@@ -25,5 +25,6 @@
         </content>
 
     </ScrollPane>
+   <Button fx:id="haamdi" layoutX="730.0" layoutY="460.0" mnemonicParsing="false" onAction="#haamdiah" text="Add Insurance" />
 
 </AnchorPane>

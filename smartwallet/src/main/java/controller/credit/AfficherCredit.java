@@ -40,6 +40,8 @@ public class AfficherCredit {
     private final ObservableList<Credit> creditList = FXCollections.observableArrayList();
     @FXML private Button btnRetourcredit;
     @FXML
+    private Button itafa;
+    @FXML
     public void initialize() {
         loadLogo();          // ✅ charger logo
         setupColumns();
@@ -49,7 +51,7 @@ public class AfficherCredit {
     @FXML
     private void retourMain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainalc/MainALC.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainALC/MainALC.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) btnRetourcredit.getScene().getWindow();
@@ -170,6 +172,24 @@ public class AfficherCredit {
                 setGraphic(empty ? null : container);
             }
         });
+    }
+    @FXML
+    private void itafaaction() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/credit/AjouterCredit.fxml")
+            );
+
+            Parent root = loader.load();
+
+            Stage stage = (Stage) itafa.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add Credit");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir Ajouter Credit !");
+        }
     }
 
     private void styleTable() {

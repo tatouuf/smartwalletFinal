@@ -36,7 +36,7 @@
 
       <!-- ================= SCROLLPANE POUR LES CARDS ================= -->
 
-      <ScrollPane hbarPolicy="AS_NEEDED" layoutX="23.0" layoutY="103.0" prefHeight="358.0" prefWidth="842.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+      <ScrollPane hbarPolicy="AS_NEEDED" layoutX="23.0" layoutY="103.0" prefHeight="343.0" prefWidth="842.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
 
          <content>
 
@@ -47,6 +47,13 @@
          </content>
 
       </ScrollPane>
+      <Button fx:id="atoufa"
+              layoutX="762.0"
+              layoutY="460.0"
+              mnemonicParsing="false"
+              onAction="#retourAjouter"
+              style="-fx-background-color: rgba(61,35,103,0.65); -fx-text-fill: white; -fx-font-weight: bold;"
+              text="Add Car / Home" />
 
    </children>
 </AnchorPane>

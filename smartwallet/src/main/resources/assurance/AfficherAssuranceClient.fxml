@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+
+<AnchorPane prefHeight="500.0" prefWidth="900.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.assurance.AfficherAssuranceClient">
+
+    <Button fx:id="retourhaamdi" layoutX="748.0" layoutY="25.0"
+            onAction="#retourMain" prefHeight="32.0" prefWidth="131.0"
+            style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;"
+            text="Return" />
+
+    <!-- Logo à gauche -->
+    <ImageView fx:id="imgLogoAssurance" fitHeight="200.0" fitWidth="109.0" preserveRatio="true" />
+
+    <!-- Titre au centre -->
+    <Label alignment="CENTER" layoutX="280.0" layoutY="40.0" prefWidth="400.0"
+           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0e0024;"
+           text="Insurances List" />
+
+    <!-- ScrollPane pour cartes assurances -->
+    <ScrollPane hbarPolicy="NEVER" layoutX="106.0" layoutY="81.0"
+                prefHeight="376.0" prefWidth="716.0"
+                style="-fx-background-color: white; -fx-border-color: #c388b5; -fx-border-width: 2;"
+                vbarPolicy="AS_NEEDED">
+
+        <content>
+            <FlowPane fx:id="cardAffAssurance" alignment="TOP_LEFT" hgap="15" prefWrapLength="800" vgap="15">
+                <!-- Les cartes seront ajoutées dynamiquement via Java -->
+            </FlowPane>
+        </content>
+
+    </ScrollPane>
+
+</AnchorPane>

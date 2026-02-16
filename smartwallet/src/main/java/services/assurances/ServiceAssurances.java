@@ -66,6 +66,15 @@ public class ServiceAssurances implements IServiceAssurance {
             System.out.println("Assurance supprimée avec succès !");
         }
     }
+    // ================= MODIFIER LE STATUT D'UNE ASSURANCE =================
+    public void modifierStatutAssurance(Assurances a) throws SQLException {
+        String query = "UPDATE assurances SET statut = ? WHERE id = ?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) { // <- utiliser 'connection'
+            pst.setString(1, a.getStatut().name()); // ACTIVE ou INACTIVE
+            pst.setInt(2, a.getId());
+            pst.executeUpdate();
+        }
+    }
 
     // 🔹 Récupérer toutes les assurances
     @Override

@@ -23,6 +23,8 @@ public class AfficherAssurance {
     @FXML private Button retourhaamdi;
     @FXML
     private FlowPane cardAffAssurance;
+    @FXML
+    private Button haamdi;
 
     @FXML
     private ImageView imgLogoAssurance; // 🔥 LOGO
@@ -42,6 +44,24 @@ public class AfficherAssurance {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au menu principal !");
         }
     }
+    @FXML
+    private void haamdiah() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/assurance/AjouterAssurance.fxml")
+            );
+            Parent root = loader.load();
+
+            Stage stage = (Stage) haamdi.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add Insurance");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir Ajouter Assurance !");
+        }
+    }
+
     @FXML
     public void initialize() {
         loadLogo();       // ✅ charger logo
