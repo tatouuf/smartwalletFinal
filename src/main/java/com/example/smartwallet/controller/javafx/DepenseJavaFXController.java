@@ -50,7 +50,7 @@ public class DepenseJavaFXController {
 
     private DepenseDAO depenseDAO = new DepenseDAO();
     private ObservableList<Depense> depensesList = FXCollections.observableArrayList();
-    private int userId = 1; // User connecté (à récupérer de la session)
+    private int userId = 1; // correspond à l'utilisateur créé
     private Depense depenseActuelle = null;
 
     @FXML
