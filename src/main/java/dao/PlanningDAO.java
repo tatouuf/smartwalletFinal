@@ -12,27 +12,26 @@ public class PlanningDAO {
     private static final Logger LOGGER = Logger.getLogger(PlanningDAO.class.getName());
 
     public void ajouterPlanning(Planning planning) {
-        String sql = "INSERT INTO plannings (nom, description, type, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut, user_id, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO plannings (nom, description, type, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             if (conn == null) {
-                LOGGER.log(Level.SEVERE, "Impossible de établir la connexion à la base de données");
+                LOGGER.log(Level.SEVERE, "Impossible d'établir la connexion à la base de données");
                 return;
             }
 
             ps.setString(1, planning.getNom());
             ps.setString(2, planning.getDescription());
-            ps.setString(3, planning.getType());
+            ps.setString(3, planning.getType()); // doit correspondre à l'enum MySQL exactement
             ps.setInt(4, planning.getMois());
             ps.setInt(5, planning.getAnnee());
             ps.setDouble(6, planning.getRevenuPrevu());
             ps.setDouble(7, planning.getEpargnePrevue());
             ps.setInt(8, planning.getPourcentageEpargne());
-            ps.setString(9, planning.getStatut());
+            ps.setString(9, planning.getStatut()); // idem enum exact
             ps.setInt(10, planning.getUserId());
-            ps.setDate(11, Date.valueOf(LocalDate.now()));
 
             ps.executeUpdate();
         } catch (SQLException e) {
