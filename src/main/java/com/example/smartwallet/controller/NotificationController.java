@@ -66,7 +66,7 @@ public class NotificationController {
         public String getTitle() { return title; }
         public String getMessage() { return message; }
         public LocalDateTime getTimestamp() { return timestamp; }
-        
+
         @Override
         public String toString() {
             return String.format("[%s] %s: %s", type, title, message);
