@@ -59,25 +59,15 @@
                 </GridPane>
             </TitledPane>
 
-            <!-- Tableau des plannings -->
+            <!-- Liste des plannings -->
             <TitledPane text="Liste des Plannings" animated="false" expanded="true">
                 <VBox spacing="10" style="-fx-padding: 10;">
-                    <TableView fx:id="planningsTable" prefHeight="300">
-                        <columns>
-                            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="120"/>
-                            <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
-                            <TableColumn fx:id="moisColumn" text="Mois" prefWidth="60"/>
-                            <TableColumn fx:id="anneeColumn" text="Annee" prefWidth="80"/>
-                            <TableColumn fx:id="revenuColumn" text="Revenu Prevu DT" prefWidth="130"/>
-                            <TableColumn fx:id="epargneColumn" text="Epargne Prevue DT" prefWidth="130"/>
-                            <TableColumn fx:id="statutColumn" text="Statut" prefWidth="100"/>
-                        </columns>
-                    </TableView>
+                    <ListView fx:id="planningsList" prefHeight="300">
+                        <!-- CellFactory sera défini dans le contrôleur pour afficher les détails -->
+                    </ListView>
                     <Label fx:id="totalPlanningsLabel" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
                 </VBox>
             </TitledPane>
         </VBox>
     </center>
 </BorderPane>
-

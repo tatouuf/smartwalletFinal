@@ -37,64 +37,69 @@ public class PlanningJavaFXController {
     private Button modifierBtn;
     @FXML
     private Button supprimerBtn;
+    // Remplacer TableView par ListView
     @FXML
-    private TableView<Planning> planningsTable;
-    @FXML
-    private TableColumn<Planning, Integer> idColumn;
-    @FXML
-    private TableColumn<Planning, String> nomColumn;
-    @FXML
-    private TableColumn<Planning, String> typeColumn;
-    @FXML
-    private TableColumn<Planning, Integer> moisColumn;
-    @FXML
-    private TableColumn<Planning, Integer> anneeColumn;
-    @FXML
-    private TableColumn<Planning, Double> revenuColumn;
-    @FXML
-    private TableColumn<Planning, Double> epargneColumn;
-    @FXML
-    private TableColumn<Planning, String> statutColumn;
+    private ListView<Planning> planningsList; // correspond au fx:id du FXML
+    // Supprimer toutes les colonnes TableColumn
     @FXML
     private Label totalPlanningsLabel;
 
     private PlanningDAO planningDAO = new PlanningDAO();
-    private ObservableList<Planning> planningsList = FXCollections.observableArrayList();
+    private ObservableList<Planning> planningsData = FXCollections.observableArrayList();
     private int userId = 1; // User connecté
     private Planning planningActuel = null;
 
     @FXML
     public void initialize() {
-        setupTableColumns();
+        // Configuration du ListView avec une cellule personnalisée
+        setupListView();
+        // Configuration des ComboBox
         setupComboBoxes();
+        // Chargement des données
         loadPlannings();
+        // Gestion des boutons
         ajouterBtn.setOnAction(e -> ajouterPlanning());
         modifierBtn.setOnAction(e -> modifierPlanning());
         supprimerBtn.setOnAction(e -> supprimerPlanning());
-        planningsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectPlanning(newVal));
+        // Sélection dans la liste
+        planningsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectPlanning(newVal));
     }
 
-    private void setupTableColumns() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        moisColumn.setCellValueFactory(new PropertyValueFactory<>("mois"));
-        anneeColumn.setCellValueFactory(new PropertyValueFactory<>("annee"));
-        revenuColumn.setCellValueFactory(new PropertyValueFactory<>("revenuPrevu"));
-        epargneColumn.setCellValueFactory(new PropertyValueFactory<>("epargnePrevue"));
-        statutColumn.setCellValueFactory(new PropertyValueFactory<>("statut"));
-        planningsTable.setItems(planningsList);
+    private void setupListView() {
+        // Définir comment afficher chaque Planning dans la liste
+        planningsList.setCellFactory(lv -> new ListCell<Planning>() {
+            @Override
+            protected void updateItem(Planning planning, boolean empty) {
+                super.updateItem(planning, empty);
+                if (empty || planning == null) {
+                    setText(null);
+                } else {
+                    // Format d'affichage : "Nom (Type) - Mois/Année - Revenu: X DT"
+                    String text = String.format("%s (%s) - %d/%d - Revenu: %.2f DT - Épargne: %.2f DT - %s",
+                            planning.getNom(),
+                            planning.getType(),
+                            planning.getMois(),
+                            planning.getAnnee(),
+                            planning.getRevenuPrevu(),
+                            planning.getEpargnePrevue(),
+                            planning.getStatut());
+                    setText(text);
+                }
+            }
+        });
+        // Lier les données
+        planningsList.setItems(planningsData);
     }
 
     private void setupComboBoxes() {
         // Type de planning
         typeCombo.setItems(FXCollections.observableArrayList(
-            "Personnel", "Familial", "Professionnel", "Retraite"
+                "Personnel", "Familial", "Professionnel", "Retraite"
         ));
 
         // Statut
         statutCombo.setItems(FXCollections.observableArrayList(
-            "En cours", "Terminé", "Suspendu", "Annulé"
+                "En cours", "Terminé", "Suspendu", "Annulé"
         ));
 
         // Mois
@@ -111,9 +116,9 @@ public class PlanningJavaFXController {
     }
 
     private void loadPlannings() {
-        planningsList.clear();
+        planningsData.clear();
         List<Planning> plannings = planningDAO.obtenirTousPlannings(userId);
-        planningsList.addAll(plannings);
+        planningsData.addAll(plannings);
         mettreAJourTotalPlannings();
     }
 
@@ -134,14 +139,13 @@ public class PlanningJavaFXController {
             // Ajouter dans la base
             planningDAO.ajouterPlanning(planning);
 
-            // Ajouter directement dans la TableView
-            planningsList.add(planning);
+            // Ajouter directement dans la liste observable
+            planningsData.add(planning);
             mettreAJourTotalPlannings();
             clearForm();
             afficherAlerte("Succès", "Planning ajouté avec succès");
         }
     }
-
 
     private void modifierPlanning() {
         if (planningActuel != null && validationFormulaire()) {
@@ -159,8 +163,14 @@ public class PlanningJavaFXController {
             // Mettre à jour dans la base
             planningDAO.modifierPlanning(planningActuel);
 
-            // **Pas de reload de toute la liste**, juste notifier la TableView
-            planningsTable.refresh();  // <== rafraîchit la ligne modifiée
+            // Rafraîchir l'affichage du ListView (car l'objet a été modifié)
+            planningsList.refresh(); // Nécessite JavaFX 8u60 ou plus
+            // Alternative si refresh() n'existe pas :
+            // int index = planningsData.indexOf(planningActuel);
+            // if (index >= 0) {
+            //     planningsData.set(index, planningActuel); // ceci forcera une mise à jour
+            // }
+
             mettreAJourTotalPlannings();
             clearForm();
             afficherAlerte("Succès", "Planning modifié avec succès");
@@ -169,11 +179,10 @@ public class PlanningJavaFXController {
         }
     }
 
-
     private void supprimerPlanning() {
         if (planningActuel != null) {
             planningDAO.supprimerPlanning(planningActuel.getId());
-            loadPlannings();
+            loadPlannings(); // Recharge la liste depuis la base
             clearForm();
             afficherAlerte("Succès", "Planning supprimé avec succès");
         } else {
@@ -181,6 +190,7 @@ public class PlanningJavaFXController {
         }
     }
 
+    // Méthode pour sélectionner un planning
     private void selectPlanning(Planning planning) {
         if (planning != null) {
             planningActuel = planning;
@@ -197,13 +207,13 @@ public class PlanningJavaFXController {
     }
 
     private void mettreAJourTotalPlannings() {
-        totalPlanningsLabel.setText("Total de plannings: " + planningsList.size());
+        totalPlanningsLabel.setText("Total de plannings: " + planningsData.size());
     }
 
     private boolean validationFormulaire() {
         if (nomField.getText().isEmpty() || typeCombo.getValue() == null ||
-            revenuPrevuField.getText().isEmpty() || epargnePrevueField.getText().isEmpty() ||
-            pourcentageEpargneField.getText().isEmpty() || statutCombo.getValue() == null) {
+                revenuPrevuField.getText().isEmpty() || epargnePrevueField.getText().isEmpty() ||
+                pourcentageEpargneField.getText().isEmpty() || statutCombo.getValue() == null) {
             afficherAlerte("Erreur", "Veuillez remplir tous les champs obligatoires");
             return false;
         }
@@ -229,7 +239,7 @@ public class PlanningJavaFXController {
         moisCombo.setValue(LocalDate.now().getMonthValue());
         anneeCombo.setValue(LocalDate.now().getYear());
         planningActuel = null;
-        planningsTable.getSelectionModel().clearSelection();
+        planningsList.getSelectionModel().clearSelection();
     }
 
     private void afficherAlerte(String titre, String message) {
@@ -239,5 +249,3 @@ public class PlanningJavaFXController {
         alert.showAndWait();
     }
 }
-
-

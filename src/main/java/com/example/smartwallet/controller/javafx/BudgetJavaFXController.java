@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
@@ -37,55 +36,62 @@ public class BudgetJavaFXController {
     private Button modifierBtn;
     @FXML
     private Button supprimerBtn;
+
+    // Remplacement de TableView par ListView
     @FXML
-    private TableView<Budget> budgetsTable;
-    @FXML
-    private TableColumn<Budget, Integer> idColumn;
-    @FXML
-    private TableColumn<Budget, String> categorieColumn;
-    @FXML
-    private TableColumn<Budget, Double> montantMaxColumn;
-    @FXML
-    private TableColumn<Budget, Double> montantActuelColumn;
-    @FXML
-    private TableColumn<Budget, Integer> moisColumn;
-    @FXML
-    private TableColumn<Budget, Integer> anneeColumn;
+    private ListView<Budget> budgetsList;
+
     @FXML
     private Label totalBudgetsLabel;
     @FXML
     private ProgressBar budgetProgressBar;
     @FXML
-    private Button retourBtn; // bouton Retour ajouté dans le FXML
+    private Button retourBtn; // bouton Retour
 
     private BudgetDAO budgetDAO = new BudgetDAO();
-    private ObservableList<Budget> budgetsList = FXCollections.observableArrayList();
-    private int userId = 1; // User connecté
+    private ObservableList<Budget> budgetsData = FXCollections.observableArrayList();
+    private int userId = 1; // Utilisateur connecté
     private Budget budgetActuel = null;
 
     @FXML
     public void initialize() {
-        setupTableColumns();
-        setupCategories();
-        setupMonthsYears();
-        loadBudgets();
+        setupListView();           // Configuration du ListView
+        setupCategories();         // Remplissage des catégories
+        setupMonthsYears();        // Remplissage mois/année
+        loadBudgets();             // Chargement initial
+
         ajouterBtn.setOnAction(e -> ajouterBudget());
         modifierBtn.setOnAction(e -> modifierBudget());
         supprimerBtn.setOnAction(e -> supprimerBudget());
-        budgetsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectBudget(newVal));
+
+        // Écoute de la sélection dans le ListView
+        budgetsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectBudget(newVal));
+
         if (retourBtn != null) {
             retourBtn.setOnAction(this::goToDashboard);
         }
     }
 
-    private void setupTableColumns() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        categorieColumn.setCellValueFactory(new PropertyValueFactory<>("categorie"));
-        montantMaxColumn.setCellValueFactory(new PropertyValueFactory<>("montantMax"));
-        montantActuelColumn.setCellValueFactory(new PropertyValueFactory<>("montantActuel"));
-        moisColumn.setCellValueFactory(new PropertyValueFactory<>("mois"));
-        anneeColumn.setCellValueFactory(new PropertyValueFactory<>("annee"));
-        budgetsTable.setItems(budgetsList);
+    private void setupListView() {
+        // Définition de l'affichage de chaque budget
+        budgetsList.setCellFactory(lv -> new ListCell<Budget>() {
+            @Override
+            protected void updateItem(Budget budget, boolean empty) {
+                super.updateItem(budget, empty);
+                if (empty || budget == null) {
+                    setText(null);
+                } else {
+                    // Affichage formaté : Catégorie - Max: X DT / Actuel: Y DT (Mois/Année)
+                    setText(String.format("%s - Max: %.2f DT / Actuel: %.2f DT (%d/%d)",
+                            budget.getCategorie(),
+                            budget.getMontantMax(),
+                            budget.getMontantActuel(),
+                            budget.getMois(),
+                            budget.getAnnee()));
+                }
+            }
+        });
+        budgetsList.setItems(budgetsData);
     }
 
     private void setupCategories() {
@@ -108,38 +114,38 @@ public class BudgetJavaFXController {
     }
 
     private void loadBudgets() {
-        budgetsList.clear();
+        budgetsData.clear();
         List<Budget> budgets = budgetDAO.obtenirTousBudgets(userId);
-        budgetsList.addAll(budgets);
+        budgetsData.addAll(budgets);
         mettreAJourTotalBudgets();
     }
+
     private void ajouterBudget() {
         if (validationFormulaire()) {
             Budget budget = new Budget();
             budget.setCategorie(categorieCombo.getValue());
             budget.setMontantMax(Double.parseDouble(montantMaxField.getText()));
-            budget.setMontantActuel(0);
+            budget.setMontantActuel(0.0);
             budget.setMois(moisCombo.getValue());
             budget.setAnnee(anneeCombo.getValue());
             budget.setDescription(descriptionField.getText());
             budget.setUserId(userId);
             budget.setDateCreation(LocalDate.now());
 
-            // Ajouter directement à la liste sans recharger
+            // Ajout en base
             budgetDAO.ajouterBudget(budget);
-            budgetsList.add(budget);  // ← Ajoute immédiatement à la TableView
 
-            clearForm();
+            // Ajout dans la liste observable (le ListView se met à jour automatiquement)
+            budgetsData.add(budget);
             mettreAJourTotalBudgets();
+            clearForm();
             afficherAlerte("Succès", "Budget ajouté avec succès");
         }
     }
 
-
     private void modifierBudget() {
         if (budgetActuel != null && validationFormulaire()) {
-
-            // Modifier directement l'objet sélectionné
+            // Modifier l'objet sélectionné
             budgetActuel.setCategorie(categorieCombo.getValue());
             budgetActuel.setMontantMax(Double.parseDouble(montantMaxField.getText()));
             budgetActuel.setDescription(descriptionField.getText());
@@ -149,23 +155,25 @@ public class BudgetJavaFXController {
             // Mise à jour en base
             budgetDAO.modifierBudget(budgetActuel);
 
-            // Rafraîchir seulement la ligne
-            budgetsTable.refresh();
-            mettreAJourTotalBudgets();
+            // Rafraîchir l'affichage de l'élément modifié (JavaFX 8u60+)
+            budgetsList.refresh();
 
+            // Alternative si refresh() n'est pas disponible :
+            // int index = budgetsData.indexOf(budgetActuel);
+            // if (index >= 0) budgetsData.set(index, budgetActuel);
+
+            mettreAJourTotalBudgets();
             clearForm();
             afficherAlerte("Succès", "Budget modifié avec succès");
-
         } else {
             afficherAlerte("Erreur", "Veuillez sélectionner un budget à modifier");
         }
     }
 
-
     private void supprimerBudget() {
         if (budgetActuel != null) {
             budgetDAO.supprimerBudget(budgetActuel.getId());
-            loadBudgets();
+            loadBudgets(); // Recharge la liste depuis la base
             clearForm();
             afficherAlerte("Succès", "Budget supprimé avec succès");
         } else {
@@ -189,7 +197,7 @@ public class BudgetJavaFXController {
     }
 
     private void mettreAJourTotalBudgets() {
-        double total = budgetsList.stream().mapToDouble(Budget::getMontantMax).sum();
+        double total = budgetsData.stream().mapToDouble(Budget::getMontantMax).sum();
         totalBudgetsLabel.setText(String.format("Total: %.2f DT", total));
     }
 
@@ -214,8 +222,9 @@ public class BudgetJavaFXController {
         categorieCombo.setValue(null);
         moisCombo.setValue(LocalDate.now().getMonthValue());
         anneeCombo.setValue(LocalDate.now().getYear());
+        budgetProgressBar.setProgress(0.0);
         budgetActuel = null;
-        budgetsTable.getSelectionModel().clearSelection();
+        budgetsList.getSelectionModel().clearSelection();
     }
 
     private void afficherAlerte(String titre, String message) {
@@ -225,20 +234,15 @@ public class BudgetJavaFXController {
         alert.showAndWait();
     }
 
-
-    // ---------------------------
-    // NAVIGATION VERS DASHBOARD
-    // ---------------------------
     @FXML
     private void goToDashboard(ActionEvent event) {
         boolean ok = TabManager.showView("/com/example/smartwallet/dashboard-view.fxml", "Tableau de Bord");
         if (ok) return;
 
-        // Fallback : charger la vue et l'insérer dans le BorderPane racine si possible
+        // Fallback
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/dashboard-view.fxml"));
             Parent content = loader.load();
-
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             if (stage.getScene() != null && stage.getScene().getRoot() instanceof BorderPane) {
                 BorderPane root = (BorderPane) stage.getScene().getRoot();

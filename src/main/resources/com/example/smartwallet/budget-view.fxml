@@ -53,18 +53,10 @@
             </TitledPane>
 
             <!-- Tableau des budgets -->
+            <!-- Liste des budgets -->
             <TitledPane text="Liste des Budgets" animated="false" expanded="true">
                 <VBox spacing="10" style="-fx-padding: 10;">
-                    <TableView fx:id="budgetsTable" prefHeight="300">
-                        <columns>
-                            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                            <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="120"/>
-                            <TableColumn fx:id="montantMaxColumn" text="Montant Max (DT)" prefWidth="120"/>
-                            <TableColumn fx:id="montantActuelColumn" text="Montant Actuel (DT)" prefWidth="120"/>
-                            <TableColumn fx:id="moisColumn" text="Mois" prefWidth="60"/>
-                            <TableColumn fx:id="anneeColumn" text="Année" prefWidth="80"/>
-                        </columns>
-                    </TableView>
+                    <ListView fx:id="budgetsList" prefHeight="300" />
                     <Label fx:id="totalBudgetsLabel" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
                 </VBox>
             </TitledPane>

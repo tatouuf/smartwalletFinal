@@ -144,6 +144,25 @@ public class DepenseDAO {
         return 0.0;
     }
 
+    public double getTotalDepensesCategorieMois(int userId, String categorie, int mois, int annee) {
+        String sql = "SELECT SUM(montant) as total FROM depenses WHERE user_id = ? AND categorie = ? AND MONTH(date_depense) = ? AND YEAR(date_depense) = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setString(2, categorie);
+            ps.setInt(3, mois);
+            ps.setInt(4, annee);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
+
     public void supprimerDepense(int depenseId) {
         String sql = "DELETE FROM depenses WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();

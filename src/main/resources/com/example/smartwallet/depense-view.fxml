@@ -68,17 +68,10 @@
             </TitledPane>
 
             <!-- Tableau des dépenses -->
+            <!-- Liste des dépenses -->
             <TitledPane text="Liste des Dépenses" animated="false" expanded="true">
                 <VBox spacing="10" style="-fx-padding: 10;">
-                    <TableView fx:id="depensesTable" prefHeight="300">
-                        <columns>
-                            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                            <TableColumn fx:id="montantColumn" text="Montant (DT)" prefWidth="100"/>
-                            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="250"/>
-                            <TableColumn fx:id="dateColumn" text="Date" prefWidth="100"/>
-                            <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="150"/>
-                        </columns>
-                    </TableView>
+                    <ListView fx:id="depensesList" prefHeight="300" />
                     <Label fx:id="totalDepensesLabel" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
                 </VBox>
             </TitledPane>

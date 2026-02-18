@@ -1,15 +1,19 @@
 package com.example.smartwallet.controller.javafx;
 
 import dao.DepenseDAO;
+import dao.BudgetDAO;
 import com.example.smartwallet.model.Depense;
+import com.example.smartwallet.model.Budget;
+import com.example.smartwallet.controller.NotificationController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DepenseJavaFXController {
 
@@ -27,18 +31,11 @@ public class DepenseJavaFXController {
     private Button modifierBtn;
     @FXML
     private Button supprimerBtn;
+
+    // Remplacer TableView par ListView
     @FXML
-    private TableView<Depense> depensesTable;
-    @FXML
-    private TableColumn<Depense, Integer> idColumn;
-    @FXML
-    private TableColumn<Depense, Double> montantColumn;
-    @FXML
-    private TableColumn<Depense, String> descriptionColumn;
-    @FXML
-    private TableColumn<Depense, LocalDate> dateColumn;
-    @FXML
-    private TableColumn<Depense, String> categorieColumn;
+    private ListView<Depense> depensesList;
+
     @FXML
     private Label totalDepensesLabel;
     @FXML
@@ -49,37 +46,55 @@ public class DepenseJavaFXController {
     private ComboBox<Integer> filterAnneeCombo;
 
     private DepenseDAO depenseDAO = new DepenseDAO();
-    private ObservableList<Depense> depensesList = FXCollections.observableArrayList();
+    private BudgetDAO budgetDAO = new BudgetDAO();
+    private ObservableList<Depense> depensesData = FXCollections.observableArrayList();
     private int userId = 1; // correspond à l'utilisateur créé
     private Depense depenseActuelle = null;
 
     @FXML
     public void initialize() {
-        setupTableColumns();
-        setupCategories();
-        setupFilters();
-        loadDepenses();
+        setupListView();           // Configuration du ListView
+        setupCategories();         // Remplissage des ComboBox de catégories
+        setupFilters();            // Configuration des filtres
+        loadDepenses();            // Chargement initial
+
         ajouterBtn.setOnAction(e -> ajouterDepense());
         modifierBtn.setOnAction(e -> modifierDepense());
         supprimerBtn.setOnAction(e -> supprimerDepense());
-        depensesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectDepense(newVal));
+
+        // Écoute de la sélection dans le ListView
+        depensesList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectDepense(newVal));
     }
 
-    private void setupTableColumns() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        montantColumn.setCellValueFactory(new PropertyValueFactory<>("montant"));
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateDepense"));
-        categorieColumn.setCellValueFactory(new PropertyValueFactory<>("categorie"));
-        depensesTable.setItems(depensesList);
+    private void setupListView() {
+        // Définition de l'affichage de chaque dépense
+        depensesList.setCellFactory(lv -> new ListCell<Depense>() {
+            private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            @Override
+            protected void updateItem(Depense depense, boolean empty) {
+                super.updateItem(depense, empty);
+                if (empty || depense == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f DT - %s (%s) [%s]",
+                            depense.getMontant(),
+                            depense.getDescription(),
+                            depense.getDateDepense().format(formatter),
+                            depense.getCategorie()));
+                }
+            }
+        });
+        depensesList.setItems(depensesData);
     }
 
     private void setupCategories() {
         ObservableList<String> categories = FXCollections.observableArrayList(
-            "Alimentation", "Transport", "Logement", "Santé", "Loisirs", "Éducation", "Autre"
+                "Alimentation", "Transport", "Logement", "Santé", "Loisirs", "Éducation", "Autre"
         );
         categorieCombo.setItems(categories);
         filterCategorieCombo.setItems(FXCollections.observableArrayList("Tous", "Alimentation", "Transport", "Logement", "Santé", "Loisirs", "Éducation", "Autre"));
+        filterCategorieCombo.setValue("Tous"); // Valeur par défaut
     }
 
     private void setupFilters() {
@@ -97,9 +112,9 @@ public class DepenseJavaFXController {
     }
 
     private void loadDepenses() {
-        depensesList.clear();
+        depensesData.clear();
         List<Depense> depenses = depenseDAO.obtenirToutesDepenses(userId);
-        depensesList.addAll(depenses);
+        depensesData.addAll(depenses);
         mettreAJourTotalDepenses();
     }
 
@@ -115,19 +130,20 @@ public class DepenseJavaFXController {
             // Ajout dans la base
             depenseDAO.ajouterDepense(depense);
 
-            // Ajout direct dans la TableView
-            depensesList.add(depense);
+            // Vérifier le budget
+            verifierBudget(depense);
+
+            // Ajout dans la liste observable (le ListView se met à jour automatiquement)
+            depensesData.add(depense);
             mettreAJourTotalDepenses();
             clearForm();
             afficherAlerte("Succès", "Dépense ajoutée avec succès");
         }
     }
 
-
     private void modifierDepense() {
         if (depenseActuelle != null && validationFormulaire()) {
-
-            // Modifier l'objet sélectionné directement
+            // Modifier l'objet sélectionné
             depenseActuelle.setMontant(Double.parseDouble(montantField.getText()));
             depenseActuelle.setDescription(descriptionField.getText());
             depenseActuelle.setDateDepense(dateDepenseField.getValue());
@@ -136,13 +152,19 @@ public class DepenseJavaFXController {
             // Mise à jour en base
             depenseDAO.modifierDepense(depenseActuelle);
 
-            // Rafraîchir seulement la ligne (PAS reload)
-            depensesTable.refresh();
-            mettreAJourTotalDepenses();
+            // Vérifier le budget
+            verifierBudget(depenseActuelle);
 
+            // Rafraîchir l'affichage de l'élément modifié (nécessite JavaFX 8u60+)
+            depensesList.refresh();
+
+            // Alternative si refresh() n'est pas disponible :
+            // int index = depensesData.indexOf(depenseActuelle);
+            // if (index >= 0) depensesData.set(index, depenseActuelle);
+
+            mettreAJourTotalDepenses();
             clearForm();
             afficherAlerte("Succès", "Dépense modifiée avec succès");
-
         } else {
             afficherAlerte("Erreur", "Veuillez sélectionner une dépense à modifier");
         }
@@ -151,7 +173,7 @@ public class DepenseJavaFXController {
     private void supprimerDepense() {
         if (depenseActuelle != null) {
             depenseDAO.supprimerDepense(depenseActuelle.getId());
-            loadDepenses();
+            loadDepenses(); // Recharge la liste depuis la base (simple)
             clearForm();
             afficherAlerte("Succès", "Dépense supprimée avec succès");
         } else {
@@ -170,35 +192,39 @@ public class DepenseJavaFXController {
     }
 
     private void filtrerDepenses() {
-        depensesList.clear();
         String categorieFiltre = filterCategorieCombo.getValue();
         Integer moisFiltre = filterMoisCombo.getValue();
         Integer anneeFiltre = filterAnneeCombo.getValue();
 
-        List<Depense> depenses;
+        List<Depense> toutesDepenses = depenseDAO.obtenirToutesDepenses(userId);
 
+        // Filtre par mois/année si spécifié
         if (moisFiltre != null && anneeFiltre != null) {
-            depenses = depenseDAO.obtenirDepensesMois(userId, moisFiltre, anneeFiltre);
-        } else {
-            depenses = depenseDAO.obtenirToutesDepenses(userId);
+            toutesDepenses = toutesDepenses.stream()
+                    .filter(d -> d.getDateDepense().getMonthValue() == moisFiltre &&
+                            d.getDateDepense().getYear() == anneeFiltre)
+                    .collect(Collectors.toList());
         }
 
+        // Filtre par catégorie
         if (categorieFiltre != null && !categorieFiltre.equals("Tous")) {
-            depenses.removeIf(d -> !d.getCategorie().equals(categorieFiltre));
+            toutesDepenses = toutesDepenses.stream()
+                    .filter(d -> d.getCategorie().equals(categorieFiltre))
+                    .collect(Collectors.toList());
         }
 
-        depensesList.addAll(depenses);
+        depensesData.setAll(toutesDepenses);
         mettreAJourTotalDepenses();
     }
 
     private void mettreAJourTotalDepenses() {
-        double total = depensesList.stream().mapToDouble(Depense::getMontant).sum();
+        double total = depensesData.stream().mapToDouble(Depense::getMontant).sum();
         totalDepensesLabel.setText(String.format("Total: %.2f DT", total));
     }
 
     private boolean validationFormulaire() {
         if (montantField.getText().isEmpty() || descriptionField.getText().isEmpty() ||
-            dateDepenseField.getValue() == null || categorieCombo.getValue() == null) {
+                dateDepenseField.getValue() == null || categorieCombo.getValue() == null) {
             afficherAlerte("Erreur", "Veuillez remplir tous les champs");
             return false;
         }
@@ -217,7 +243,7 @@ public class DepenseJavaFXController {
         dateDepenseField.setValue(null);
         categorieCombo.setValue(null);
         depenseActuelle = null;
-        depensesTable.getSelectionModel().clearSelection();
+        depensesList.getSelectionModel().clearSelection();
     }
 
     private void afficherAlerte(String titre, String message) {
@@ -226,6 +252,26 @@ public class DepenseJavaFXController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    private void verifierBudget(Depense depense) {
+        int mois = depense.getDateDepense().getMonthValue();
+        int annee = depense.getDateDepense().getYear();
+        String categorie = depense.getCategorie();
+
+        // Récupérer le budget pour cette catégorie/mois/année
+        Budget budget = budgetDAO.obtenirBudgetParCategorie(userId, categorie, mois, annee);
+
+        if (budget != null) {
+            // Calculer le total des dépenses pour cette catégorie/mois/année
+            double totalDepenses = depenseDAO.getTotalDepensesCategorieMois(userId, categorie, mois, annee);
+
+            if (totalDepenses > budget.getMontantMax()) {
+                NotificationController.showWarning(
+                    "Budget Dépassé !",
+                    "Attention : Vous avez dépassé votre budget pour " + categorie + 
+                    " (" + String.format("%.2f", totalDepenses) + " / " + String.format("%.2f", budget.getMontantMax()) + " DT)"
+                );
+            }
+        }
+    }
 }
-
-
