@@ -190,4 +190,26 @@ public class DepenseDAO {
             e.printStackTrace();
         }
     }
+
+    public java.util.Map<String, Double> getMonthlyTotals(int userId) {
+        java.util.Map<String, Double> totals = new java.util.LinkedHashMap<>();
+        String sql = "SELECT DATE_FORMAT(date_depense, '%Y-%m') as mois, SUM(montant) as total " +
+                     "FROM depenses WHERE user_id = ? " +
+                     "GROUP BY DATE_FORMAT(date_depense, '%Y-%m') " +
+                     "ORDER BY mois ASC";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                totals.put(rs.getString("mois"), rs.getDouble("total"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totals;
+    }
 }

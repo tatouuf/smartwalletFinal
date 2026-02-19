@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.smartwallet.controller.javafx.AdvisorJavaFXController" prefHeight="700" prefWidth="1000">
+    <top>
+        <VBox style="-fx-background-color: #424242; -fx-padding: 15;">
+            <Label text="Conseiller Financier IA" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" alignment="TOP_CENTER" style="-fx-padding: 30;">
+            <Label text="Simulez un Achat Important" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+            <Label text="Entrez le montant de l'article que vous souhaitez acheter pour obtenir un conseil personnalisé." style="-fx-font-size: 14; -fx-text-fill: #555;"/>
+
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Montant de l'achat (TND):" style="-fx-font-size: 14;"/>
+                <TextField fx:id="purchaseAmountField" promptText="Ex: 1800.00" prefWidth="150"/>
+                <Button fx:id="analyzeButton" text="Analyser l'achat" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 8 15;"/>
+            </HBox>
+
+            <Separator prefWidth="200.0" />
+
+            <Label fx:id="resultLabel" text=" " style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+
+            <TextArea fx:id="adviceTextArea" editable="false" wrapText="true" prefHeight="250" prefWidth="600" style="-fx-font-size: 14; -fx-control-inner-background: #f9f9f9; -fx-border-color: #ccc; -fx-border-radius: 5;">
+                <font>
+                    <Font name="Monospaced Regular" size="14.0" />
+                </font>
+            </TextArea>
+        </VBox>
+    </center>
+</BorderPane>

@@ -174,4 +174,24 @@ public class PlanningDAO {
             LOGGER.log(Level.SEVERE, "Erreur lors de la modification du planning", e);
         }
     }
+
+    public double getTotalRevenuMois(int userId, int mois, int annee) {
+        String sql = "SELECT SUM(revenu_prevu) as total FROM plannings WHERE user_id = ? AND mois = ? AND annee = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (conn == null) return 0.0;
+
+            ps.setInt(1, userId);
+            ps.setInt(2, mois);
+            ps.setInt(3, annee);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erreur lors du calcul du revenu total", e);
+        }
+        return 0.0;
+    }
 }

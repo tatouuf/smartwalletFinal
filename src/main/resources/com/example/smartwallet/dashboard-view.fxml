@@ -46,6 +46,12 @@
                         <Label text="Budget Utilisé" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #C62828;"/>
                         <Label fx:id="budgetUtiliseLabel" text="0.00 DT" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #B71C1C;"/>
                     </VBox>
+
+                    <!-- Prédiction Dépenses Mois Prochain -->
+                    <VBox style="-fx-border-color: #00BCD4; -fx-border-radius: 5; -fx-padding: 20; -fx-background-color: #E0F7FA;" HBox.hgrow="ALWAYS">
+                        <Label text="Prédiction Mois Prochain" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #00838F;"/>
+                        <Label fx:id="predictionDepensesLabel" text="0.00 DT" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #006064;"/>
+                    </VBox>
                 </HBox>
 
                 <!-- Graphiques -->

@@ -37,7 +37,7 @@ public class PrimaryStageInitializer {
         root.setTop(menuBar);
 
         // Barre latérale de navigation
-        VBox sidebar = createSidebar();
+        ScrollPane sidebar = createSidebar();
         root.setLeft(sidebar);
 
         // Contenu principal
@@ -92,11 +92,12 @@ public class PrimaryStageInitializer {
         return menuBar;
     }
 
-    private VBox createSidebar() {
-        VBox sidebar = new VBox();
-        sidebar.setStyle("-fx-border-color: #eeeeee; -fx-padding: 10px; -fx-background-color: #f5f5f5;");
-        sidebar.setSpacing(10);
-        sidebar.setPrefWidth(150);
+    private ScrollPane createSidebar() {
+        System.out.println("Creating Sidebar...");
+        VBox sidebarContent = new VBox();
+        sidebarContent.setStyle("-fx-padding: 10px; -fx-background-color: #f5f5f5;");
+        sidebarContent.setSpacing(10);
+        sidebarContent.setPrefWidth(150);
 
         Label titleLabel = new Label("SmartWallet");
         titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
@@ -107,11 +108,14 @@ public class PrimaryStageInitializer {
         Button planningBtn = createNavButton("plannings", "📅 Planifications");
         Button categoriesBtn = createNavButton("categories", "🏷️ Catégories");
         Button notificationsBtn = createNavButton("notifications", "🔔 Notifications");
+        Button advisorBtn = createNavButton("advisor", "🤖 Conseiller IA");
         Button settingsBtn = createNavButton("settings", "⚙️ Paramètres");
 
         dashboardBtn.setStyle(dashboardBtn.getStyle() + "; -fx-font-weight: bold; -fx-text-fill: #2980b9;");
+        // Updated style to ensure visibility
+        advisorBtn.setStyle("-fx-padding: 10px; -fx-alignment: CENTER_LEFT; -fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-background-color: #E8F5E9; -fx-border-color: #4CAF50; -fx-border-radius: 3;");
 
-        sidebar.getChildren().addAll(
+        sidebarContent.getChildren().addAll(
             titleLabel,
             new Separator(),
             dashboardBtn,
@@ -120,11 +124,17 @@ public class PrimaryStageInitializer {
             planningBtn,
             categoriesBtn,
             notificationsBtn,
+            advisorBtn,
             new Separator(),
             settingsBtn
         );
 
-        return sidebar;
+        ScrollPane scrollPane = new ScrollPane(sidebarContent);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #eeeeee;");
+        
+        return scrollPane;
     }
 
     private Button createNavButton(String key, String text) {
@@ -171,6 +181,12 @@ public class PrimaryStageInitializer {
                     System.out.println("handleNavigation: TabManager showed Notifications view");
                     return;
                 }
+            } else if ("advisor".equals(key)) {
+                boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/advisor-view.fxml", "Conseiller IA");
+                if (ok) {
+                    System.out.println("handleNavigation: TabManager showed Advisor view");
+                    return;
+                }
             }
 
             // Fallback: charger le FXML directement et le placer au centre selon la clé
@@ -213,6 +229,15 @@ public class PrimaryStageInitializer {
             if ("notifications".equals(key)) {
                 System.out.println("handleNavigation: fallback loading Notifications FXML");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/notification-view.fxml"));
+                Parent content = loader.load();
+                root.setCenter(content);
+                root.requestLayout();
+                return;
+            }
+
+            if ("advisor".equals(key)) {
+                System.out.println("handleNavigation: fallback loading Advisor FXML");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/advisor-view.fxml"));
                 Parent content = loader.load();
                 root.setCenter(content);
                 root.requestLayout();

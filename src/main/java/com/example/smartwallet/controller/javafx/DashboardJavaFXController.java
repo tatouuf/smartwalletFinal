@@ -7,6 +7,7 @@ import com.example.smartwallet.TabManager;
 import com.example.smartwallet.model.Budget;
 import com.example.smartwallet.model.Depense;
 import com.example.smartwallet.model.Planning;
+import com.example.smartwallet.service.ExpensePredictionService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -43,6 +44,8 @@ public class DashboardJavaFXController {
     @FXML
     private Label budgetUtiliseLabel;
     @FXML
+    private Label predictionDepensesLabel;
+    @FXML
     private PieChart depensesCategorieChart;
     @FXML
     private BarChart<String, Number> depensesParMoisChart;
@@ -52,6 +55,7 @@ public class DashboardJavaFXController {
     private DepenseDAO depenseDAO = new DepenseDAO();
     private BudgetDAO budgetDAO = new BudgetDAO();
     private PlanningDAO planningDAO = new PlanningDAO();
+    private ExpensePredictionService predictionService = new ExpensePredictionService();
     private int userId = 1; // ID du user connecté
 
     @FXML
@@ -78,6 +82,10 @@ public class DashboardJavaFXController {
         List<Budget> budgetsMois = budgetDAO.obtenirBudgetsMois(userId, now.getMonthValue(), now.getYear());
         double montantBudgetUtilise = budgetsMois.stream().mapToDouble(Budget::getMontantActuel).sum();
         budgetUtiliseLabel.setText(String.format("%.2f DT", montantBudgetUtilise));
+
+        // Charger la prédiction IA
+        double prediction = predictionService.predictNextMonthExpenses(userId);
+        predictionDepensesLabel.setText(String.format("%.2f DT", prediction));
 
         // Graphique des dépenses par catégorie (Pie Chart)
         chargerGraphiquePieChart();
