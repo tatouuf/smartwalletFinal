@@ -1,9 +1,9 @@
 package com.example.smartwallet.controller.javafx;
 
+import com.example.smartwallet.util.ThemeManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 
 public class SettingsJavaFXController {
 
@@ -26,8 +26,14 @@ public class SettingsJavaFXController {
         currencyCombo.setItems(FXCollections.observableArrayList("TND (Dinar Tunisien)", "EUR (Euro)", "USD (Dollar)"));
         currencyCombo.setValue("TND (Dinar Tunisien)");
 
-        themeCombo.setItems(FXCollections.observableArrayList("Clair (Défaut)", "Sombre", "Contraste Élevé"));
-        themeCombo.setValue("Clair (Défaut)");
+        themeCombo.setItems(FXCollections.observableArrayList("Clair (Défaut)", "Sombre"));
+        
+        // Définir la valeur actuelle du thème
+        if (ThemeManager.isDarkMode()) {
+            themeCombo.setValue("Sombre");
+        } else {
+            themeCombo.setValue("Clair (Défaut)");
+        }
 
         // Gestion du slider de taille de texte
         fontSizeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -44,9 +50,15 @@ public class SettingsJavaFXController {
         boolean animations = animationsCheckbox.isSelected();
         double fontSize = fontSizeSlider.getValue();
 
-        // Ici, on pourrait sauvegarder dans un fichier properties ou une base de données
-        // Pour l'instant, on simule la sauvegarde
+        // Gestion du Thème Sombre
+        boolean enableDarkMode = "Sombre".equals(theme);
+        ThemeManager.setDarkMode(enableDarkMode);
         
+        // Appliquer immédiatement à la scène actuelle
+        if (saveButton.getScene() != null) {
+            ThemeManager.applyTheme(saveButton.getScene());
+        }
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Préférences enregistrées");
         alert.setHeaderText("Vos préférences ont été mises à jour");
@@ -55,11 +67,5 @@ public class SettingsJavaFXController {
             currency, theme, (animations ? "Activées" : "Désactivées"), fontSize
         ));
         alert.showAndWait();
-        
-        // Appliquer le thème (simulation)
-        if (theme.contains("Sombre")) {
-            // Logique pour changer le CSS global
-            System.out.println("Application du thème sombre...");
-        }
     }
 }

@@ -1,0 +1,101 @@
+/* Thème Sombre pour SmartWallet */
+
+.root {
+    -fx-background-color: #212121;
+    -fx-base: #212121;
+    -fx-control-inner-background: #212121;
+    -fx-control-inner-background-alt: #424242;
+    -fx-faint-focus-color: transparent;
+    -fx-text-base-color: white;
+    -fx-text-fill: white;
+}
+
+/* Labels et Textes */
+.label, .text {
+    -fx-text-fill: white;
+}
+
+/* Boutons */
+.button {
+    -fx-background-color: #6A1B9A;
+    -fx-text-fill: white;
+}
+.button:hover {
+    -fx-background-color: #E91E63;
+}
+
+/* Champs de saisie (TextField, TextArea, ComboBox) */
+.text-field, .text-area, .combo-box {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #BDBDBD;
+    -fx-border-color: #616161;
+    -fx-border-radius: 3;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+}
+
+/* Tableaux et Listes */
+.table-view, .list-view, .tree-table-view {
+    -fx-background-color: #212121;
+}
+.table-view .column-header-background {
+    -fx-background-color: #424242;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: #424242;
+    -fx-border-color: #212121;
+}
+.table-row-cell {
+    -fx-background-color: #212121;
+    -fx-text-fill: white;
+}
+.table-row-cell:odd {
+    -fx-background-color: #2C2C2C;
+}
+.list-cell {
+    -fx-background-color: #212121;
+    -fx-text-fill: white;
+}
+.list-cell:odd {
+    -fx-background-color: #2C2C2C;
+}
+.list-cell:filled:selected:focused, .list-cell:filled:selected, .table-row-cell:filled:selected {
+    -fx-background-color: #6A1B9A;
+    -fx-text-fill: white;
+}
+
+/* ScrollPane et Panneaux */
+.scroll-pane, .scroll-pane > .viewport {
+    -fx-background-color: #212121;
+}
+.titled-pane {
+    -fx-text-fill: white;
+}
+.titled-pane > .title {
+    -fx-background-color: #424242;
+}
+.titled-pane > .content {
+    -fx-background-color: #212121;
+    -fx-border-color: #424242;
+}
+
+/* Sidebar (VBox spécifique) */
+.sidebar {
+    -fx-background-color: #424242;
+    -fx-border-color: #616161;
+}
+
+/* MenuBar */
+.menu-bar {
+    -fx-background-color: #424242;
+}
+.menu-item .label {
+    -fx-text-fill: white;
+}
+.context-menu {
+    -fx-background-color: #424242;
+}

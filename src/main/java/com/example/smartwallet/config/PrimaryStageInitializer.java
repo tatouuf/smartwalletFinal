@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import com.example.smartwallet.TabManager;
+import com.example.smartwallet.util.ThemeManager;
 
 import java.io.IOException;
 
@@ -38,6 +39,9 @@ public class PrimaryStageInitializer {
             Parent welcomeRoot = loader.load();
             
             Scene scene = new Scene(welcomeRoot, 1000, 700);
+            
+            // Appliquer le thème (même sur la page de bienvenue si nécessaire)
+            ThemeManager.applyTheme(scene);
             
             primaryStage.setScene(scene);
             primaryStage.setTitle("SmartWallet - Accueil");
@@ -88,6 +92,10 @@ public class PrimaryStageInitializer {
             Scene scene = new Scene(root, 1000, 700);
             primaryStage.setScene(scene);
         }
+        
+        // Appliquer le thème à la scène active
+        ThemeManager.applyTheme(primaryStage.getScene());
+        
         primaryStage.setTitle("SmartWallet - Tableau de Bord");
         
         // Naviguer vers la destination demandée
@@ -136,12 +144,14 @@ public class PrimaryStageInitializer {
 
     private ScrollPane createSidebar() {
         VBox sidebarContent = new VBox();
-        sidebarContent.setStyle("-fx-padding: 10px; -fx-background-color: #f5f5f5;");
+        sidebarContent.getStyleClass().add("sidebar"); // Classe CSS pour le thème
+        sidebarContent.setStyle("-fx-padding: 10px; -fx-background-color: #f5f5f5;"); // Style par défaut (sera surchargé par CSS)
         sidebarContent.setSpacing(10);
         sidebarContent.setPrefWidth(150);
 
         Label titleLabel = new Label("SmartWallet");
         titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        titleLabel.getStyleClass().add("title-label");
 
         Button dashboardBtn = createNavButton("tableau", "📊 Tableau de Bord");
         Button budgetBtn = createNavButton("budgets", "💰 Budgets");
@@ -172,7 +182,9 @@ public class PrimaryStageInitializer {
         ScrollPane scrollPane = new ScrollPane(sidebarContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        // Retirer le style inline pour laisser le CSS agir si nécessaire, ou utiliser une classe
         scrollPane.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #eeeeee;");
+        scrollPane.getStyleClass().add("sidebar-scroll");
         
         return scrollPane;
     }
