@@ -1,57 +1,49 @@
 package com.example.smartwallet.controller.javafx;
 
-import com.example.smartwallet.service.FinancialAdvisorService;
+import com.example.smartwallet.service.QuestionParserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 
 public class AdvisorJavaFXController {
 
     @FXML
-    private TextField purchaseAmountField;
+    private TextField questionField;
     @FXML
-    private Button analyzeButton;
+    private Button askButton;
     @FXML
-    private TextArea adviceTextArea;
-    @FXML
-    private Label resultLabel;
+    private TextArea answerArea;
 
-    private final FinancialAdvisorService advisorService = new FinancialAdvisorService();
+    private QuestionParserService questionParser;
     private final int userId = 1; // Hardcoded user ID
 
     @FXML
     public void initialize() {
-        analyzeButton.setOnAction(e -> analyzePurchase());
+        // Initialiser le "cerveau" de l'IA avec l'ID de l'utilisateur
+        this.questionParser = new QuestionParserService(userId);
+        
+        askButton.setOnAction(e -> askQuestion());
+        
+        // Afficher un message de bienvenue
+        answerArea.setText("Bonjour ! Posez-moi une question sur vos finances.\n\n" +
+                           "Par exemple :\n" +
+                           "- 'Puis-je acheter une voiture à 25000 TND ?'\n" +
+                           "- 'Quelle a été ma plus grosse dépense ce mois-ci ?'\n" +
+                           "- 'Combien ai-je dépensé en loisirs ce mois-ci ?'");
     }
 
-    private void analyzePurchase() {
-        String amountText = purchaseAmountField.getText();
-        if (amountText.isEmpty()) {
-            resultLabel.setText("Veuillez entrer un montant.");
-            resultLabel.setTextFill(Color.RED);
+    private void askQuestion() {
+        String question = questionField.getText();
+        if (question == null || question.trim().isEmpty()) {
+            answerArea.setText("Veuillez d'abord poser une question dans le champ de texte.");
             return;
         }
 
-        try {
-            double purchaseAmount = Double.parseDouble(amountText);
-            FinancialAdvisorService.FinancialAdvice advice = advisorService.getPurchaseAdvice(userId, purchaseAmount);
+        // Obtenir la réponse du service d'IA
+        String answer = questionParser.answerQuestion(question);
 
-            adviceTextArea.setText(advice.advice);
-
-            if (advice.canAfford) {
-                resultLabel.setText("ACHAT RECOMMANDÉ");
-                resultLabel.setTextFill(Color.GREEN);
-            } else {
-                resultLabel.setText("ACHAT NON RECOMMANDÉ POUR L'INSTANT");
-                resultLabel.setTextFill(Color.RED);
-            }
-
-        } catch (NumberFormatException e) {
-            resultLabel.setText("Le montant doit être un nombre valide.");
-            resultLabel.setTextFill(Color.RED);
-        }
+        // Afficher la réponse
+        answerArea.setText(answer);
     }
 }

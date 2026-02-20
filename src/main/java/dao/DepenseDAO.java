@@ -163,6 +163,33 @@ public class DepenseDAO {
         return 0.0;
     }
 
+    public Depense getLargestExpenseForMonth(int userId, int mois, int annee) {
+        String sql = "SELECT * FROM depenses WHERE user_id = ? AND MONTH(date_depense) = ? AND YEAR(date_depense) = ? ORDER BY montant DESC LIMIT 1";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setInt(2, mois);
+            ps.setInt(3, annee);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Depense depense = new Depense(
+                    rs.getInt("id"),
+                    rs.getDouble("montant"),
+                    rs.getString("description"),
+                    rs.getDate("date_depense").toLocalDate(),
+                    rs.getString("categorie")
+                );
+                depense.setUserId(userId);
+                return depense;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void supprimerDepense(int depenseId) {
         String sql = "DELETE FROM depenses WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
