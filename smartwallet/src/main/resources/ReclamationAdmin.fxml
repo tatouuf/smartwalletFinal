@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="650" prefWidth="800"
+            stylesheets="@css/reclamation.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.ReclamationController">
+
+    <VBox spacing="15"
+          AnchorPane.topAnchor="10"
+          AnchorPane.bottomAnchor="10"
+          AnchorPane.leftAnchor="15"
+          AnchorPane.rightAnchor="15">
+
+        <!-- HEADER -->
+        <HBox alignment="CENTER_LEFT">
+            <Label styleClass="header-label"
+                   text="Reclamations"
+                   HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnBack"
+                    onAction="#backToDashboard"
+                    styleClass="primary-button"
+                    text="← Back"/>
+        </HBox>
+
+        <!-- USER SECTION: Send new reclamation -->
+        <VBox spacing="8" styleClass="section-box">
+            <Label styleClass="section-title" text="New Reclamation"/>
+            <TextArea fx:id="txtMessage"
+                      prefHeight="80"
+                      prefRowCount="3"
+                      promptText="Describe your issue here..."
+                      styleClass="input-area"/>
+            <HBox alignment="CENTER_RIGHT">
+                <Button fx:id="btnSend"
+                        onAction="#sendReclamation"
+                        styleClass="primary-button"
+                        text="📨 Send"/>
+            </HBox>
+        </VBox>
+
+        <!-- TABLE -->
+        <VBox spacing="8" styleClass="section-box" VBox.vgrow="ALWAYS">
+            <Label styleClass="section-title" text="Reclamations"/>
+
+            <TableView fx:id="tableReclamations" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId"       prefWidth="50"  text="ID"/>
+                    <TableColumn fx:id="colMessage"  prefWidth="200" text="Message"/>
+                    <TableColumn fx:id="colStatut"   prefWidth="100" text="Status"/>
+                    <TableColumn fx:id="colReponse"  prefWidth="200" text="Response"/>
+                    <TableColumn fx:id="colDateEnvoi" prefWidth="120" text="Date Sent"/>
+                </columns>
+                <placeholder>
+                    <Label text="No reclamations found."/>
+                </placeholder>
+            </TableView>
+
+            <!-- ADMIN REPLY SECTION -->
+            <VBox spacing="8">
+                <Label styleClass="section-title" text="Reply to Selected"/>
+                <TextArea fx:id="txtReply"
+                          prefHeight="70"
+                          promptText="Type your reply here..."
+                          styleClass="input-area"/>
+                <HBox alignment="CENTER_RIGHT" spacing="10">
+                    <Button fx:id="btnReply"
+                            onAction="#replyReclamation"
+                            styleClass="primary-button"
+                            text="💬 Reply (IN_PROGRESS)"/>
+                    <Button fx:id="btnResolve"
+                            onAction="#resolveReclamation"
+                            styleClass="success-button"
+                            text="✔ Mark Resolved"
+                            disable="true"/>
+                    <Button fx:id="btnDelete"
+                            onAction="#deleteReclamation"
+                            styleClass="danger-button"
+                            text="🗑 Delete"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </VBox>
+
+</AnchorPane>

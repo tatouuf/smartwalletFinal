@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.AmitieController">
+
+    <!-- ================= TOP ================= -->
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <HBox spacing="10">
+                <Label text="Search User ID:"/>
+                <TextField fx:id="txtSearchUserId" prefWidth="150"/>
+                <Button text="Search"
+                        onAction="#searchAmitie"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ================= CENTER ================= -->
+    <center>
+        <TableView fx:id="tableAmitie">
+
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="colUser1" text="User 1" prefWidth="150"/>
+                <TableColumn fx:id="colUser2" text="User 2" prefWidth="150"/>
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+            </columns>
+
+        </TableView>
+    </center>
+
+    <!-- ================= BOTTOM ================= -->
+    <bottom>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <HBox spacing="10">
+                <Label text="User 1 ID:"/>
+                <TextField fx:id="txtUser1"/>
+
+                <Label text="User 2 ID:"/>
+                <TextField fx:id="txtUser2"/>
+            </HBox>
+
+            <HBox spacing="10">
+                <Button text="Add"
+                        onAction="#addAmitie"/>
+
+                <Button text="Accept"
+                        onAction="#acceptAmitie"/>
+
+                <Button text="Delete"
+                        onAction="#deleteAmitie"/>
+            </HBox>
+
+        </VBox>
+    </bottom>
+
+</BorderPane>
+
+

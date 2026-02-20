@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.SignUpController">
+
+    <children>
+
+        <!-- LEFT PANEL -->
+        <Pane prefWidth="450.0" prefHeight="600.0"
+              style="-fx-background-color: linear-gradient(to bottom right,#1E88E5,#1565C0);">
+            <children>
+                <Label text="Join SmartWallet"
+                       layoutX="120"
+                       layoutY="260"
+                       style="-fx-text-fill:white; -fx-font-size:28px; -fx-font-weight:bold;"/>
+            </children>
+        </Pane>
+
+        <!-- RIGHT PANEL (SIGN UP FORM) -->
+        <VBox layoutX="450" prefWidth="450" prefHeight="600"
+              alignment="CENTER" spacing="15">
+
+            <padding>
+                <Insets left="40" right="40"/>
+            </padding>
+
+            <Label text="Sign Up"
+                   style="-fx-font-size:22px; -fx-font-weight:bold;"/>
+
+            <TextField fx:id="nomField" promptText="Nom" prefWidth="250"/>
+            <TextField fx:id="prenomField" promptText="Prenom" prefWidth="250"/>
+            <TextField fx:id="telephoneField" promptText="Telephone" prefWidth="250"/>
+            <TextField fx:id="emailField" promptText="Email Address" prefWidth="250"/>
+            <PasswordField fx:id="passwordField" promptText="Password" prefWidth="250"/>
+
+            <Button text="Sign Up" fx:id="btnSignUp" onAction="#handleSignUp" prefWidth="250"
+                    style="-fx-background-color:#1E88E5,#1565C0; -fx-text-fill:white;"/>
+
+            <Hyperlink text="Already have an account? Sign In" onAction="#handleLogin"/>
+        </VBox>
+
+    </children>
+</AnchorPane>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.SignInController">
+
+    <children>
+
+        <!-- LEFT PANEL -->
+        <Pane prefWidth="450.0" prefHeight="600.0"
+              style="-fx-background-color: linear-gradient(to bottom right,#1E88E5,#1565C0);">
+            <children>
+                <Label text="Welcome Back"
+                       layoutX="120"
+                       layoutY="260"
+                       style="-fx-text-fill:white; -fx-font-size:28px; -fx-font-weight:bold;"/>
+            </children>
+        </Pane>
+
+        <!-- RIGHT PANEL (LOGIN FORM) -->
+        <VBox layoutX="450" prefWidth="450" prefHeight="600"
+              alignment="CENTER" spacing="15">
+
+            <padding>
+                <Insets left="40" right="40"/>
+            </padding>
+
+            <Label text="Sign In"
+                   style="-fx-font-size:22px; -fx-font-weight:bold;"/>
+
+            <TextField fx:id="emailField"
+                       promptText="Email Address"
+                       prefWidth="250"/>
+
+            <PasswordField fx:id="passwordField"
+                           promptText="Password"
+                           prefWidth="250"/>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <CheckBox fx:id="rememberCheck" text="Remember Me"/>
+                <Hyperlink fx:id="forgotLink" text="Forgot Password?" onAction="#handleForgotPassword"/>
+            </HBox>
+
+            <Button text="Sign In"
+                    fx:id="btnLogin"
+                    onAction="#handleLogin"
+                    prefWidth="250"
+                    style="-fx-background-color:#1E88E5; -fx-text-fill:white;"/>
+
+            <Hyperlink text="Sign Up"
+                       fx:id="btnSignup"
+                       onAction="#handleSignup"/>
+
+            <!-- RESET PASSWORD FIELDS (Hidden by default) -->
+            <Label fx:id="lblReset" text="Reset Password"
+                   style="-fx-font-size:20px; -fx-font-weight:bold;" visible="false"/>
+
+            <PasswordField fx:id="newPasswordField"
+                           promptText="New Password"
+                           prefWidth="250" visible="false"/>
+
+            <PasswordField fx:id="confirmPasswordField"
+                           promptText="Confirm Password"
+                           prefWidth="250" visible="false"/>
+
+            <Button text="Reset Password"
+                    fx:id="btnReset"
+                    onAction="#handleResetPassword"
+                    prefWidth="200" visible="false"/>
+
+        </VBox>
+
+    </children>
+</AnchorPane>
