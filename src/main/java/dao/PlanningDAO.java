@@ -16,7 +16,7 @@ public class PlanningDAO {
         String sql = "INSERT INTO plannings (nom, description, type, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         System.out.println("--- DÉBUT AJOUT PLANNING ---");
-        
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -37,7 +37,7 @@ public class PlanningDAO {
             ps.setInt(10, planning.getUserId());
 
             int rowsAffected = ps.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
@@ -162,21 +162,21 @@ public class PlanningDAO {
 
     public boolean supprimerPlusieursPlannings(List<Integer> ids) {
         if (ids == null || ids.isEmpty()) return false;
-        
+
         StringBuilder sql = new StringBuilder("DELETE FROM plannings WHERE id IN (");
         for (int i = 0; i < ids.size(); i++) {
             sql.append("?");
             if (i < ids.size() - 1) sql.append(",");
         }
         sql.append(")");
-        
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-            
+
             for (int i = 0; i < ids.size(); i++) {
                 ps.setInt(i + 1, ids.get(i));
             }
-            
+
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {
@@ -200,7 +200,7 @@ public class PlanningDAO {
             ps.setInt(6, planning.getPourcentageEpargne());
             ps.setString(7, planning.getStatut());
             ps.setInt(8, planning.getId());
-            
+
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {

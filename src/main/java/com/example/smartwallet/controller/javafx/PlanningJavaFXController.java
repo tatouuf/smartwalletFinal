@@ -58,11 +58,11 @@ public class PlanningJavaFXController {
         setupListView();
         setupComboBoxes();
         loadPlannings();
-        
+
         ajouterBtn.setOnAction(e -> ajouterPlanning());
         modifierBtn.setOnAction(e -> modifierPlanning());
         supprimerBtn.setOnAction(e -> supprimerPlanning());
-        
+
         planningsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectPlanning(newVal));
     }
 
@@ -85,7 +85,7 @@ public class PlanningJavaFXController {
                 } else {
                     // Convertir le statut SQL en texte lisible pour l'affichage
                     String statutAffichage = mapStatutToUI(planning.getStatut());
-                    
+
                     String text = String.format("%s (%s) - %d/%d - Revenu: %.2f DT - Épargne: %.2f DT - %s",
                             planning.getNom(),
                             planning.getType(),
@@ -153,22 +153,22 @@ public class PlanningJavaFXController {
             planning.setRevenuPrevu(Double.parseDouble(revenuPrevuField.getText()));
             planning.setEpargnePrevue(Double.parseDouble(epargnePrevueField.getText()));
             planning.setPourcentageEpargne(Integer.parseInt(pourcentageEpargneField.getText()));
-            
+
             // Conversion UI -> SQL
             String statutSQL = mapStatutToSQL(statutCombo.getValue());
             planning.setStatut(statutSQL);
-            
+
             planning.setUserId(userId);
 
             // Appel au DAO qui retourne l'ID généré
             int newId = planningDAO.ajouterPlanning(planning);
-            
+
             if (newId > 0) {
                 // Succès : on met à jour l'ID et on ajoute à la liste locale
                 planning.setId(newId);
                 planningsData.add(0, planning); // Ajouter au début de la liste
                 mettreAJourTotalPlannings();
-                
+
                 clearForm();
                 afficherAlerte("Succès", "Planning ajouté avec succès");
             } else {
@@ -187,13 +187,13 @@ public class PlanningJavaFXController {
             planningActuel.setRevenuPrevu(Double.parseDouble(revenuPrevuField.getText()));
             planningActuel.setEpargnePrevue(Double.parseDouble(epargnePrevueField.getText()));
             planningActuel.setPourcentageEpargne(Integer.parseInt(pourcentageEpargneField.getText()));
-            
+
             // Conversion UI -> SQL
             String statutSQL = mapStatutToSQL(statutCombo.getValue());
             planningActuel.setStatut(statutSQL);
 
             boolean succes = planningDAO.modifierPlanning(planningActuel);
-            
+
             if (succes) {
                 planningsList.refresh(); // Rafraîchir l'affichage
                 clearForm();
@@ -216,13 +216,13 @@ public class PlanningJavaFXController {
             if (alert.showAndWait().get() == ButtonType.OK) {
                 List<Integer> idsToDelete = new ArrayList<>(idsSelectionnes);
                 boolean succes = planningDAO.supprimerPlusieursPlannings(idsToDelete);
-                
+
                 if (succes) {
                     // Supprimer de la liste locale
                     planningsData.removeIf(p -> idsToDelete.contains(p.getId()));
                     idsSelectionnes.clear();
                     mettreAJourTotalPlannings();
-                    
+
                     clearForm();
                     afficherAlerte("Succès", idsToDelete.size() + " planning(s) ont été supprimé(s).");
                 } else {
@@ -235,7 +235,7 @@ public class PlanningJavaFXController {
             alert.setContentText("Supprimer le planning sélectionné : " + planningActuel.getNom() + " ?");
             if (alert.showAndWait().get() == ButtonType.OK) {
                 boolean succes = planningDAO.supprimerPlanning(planningActuel.getId());
-                
+
                 if (succes) {
                     planningsData.remove(planningActuel);
                     mettreAJourTotalPlannings();
@@ -261,7 +261,7 @@ public class PlanningJavaFXController {
             pourcentageEpargneField.setText(String.valueOf(planning.getPourcentageEpargne()));
             moisCombo.setValue(planning.getMois());
             anneeCombo.setValue(planning.getAnnee());
-            
+
             // Conversion SQL -> UI pour le formulaire
             statutCombo.setValue(mapStatutToUI(planning.getStatut()));
         }
@@ -282,12 +282,12 @@ public class PlanningJavaFXController {
             Double.parseDouble(revenuPrevuField.getText());
             Double.parseDouble(epargnePrevueField.getText());
             int pourcentage = Integer.parseInt(pourcentageEpargneField.getText());
-            
+
             if (pourcentage < 0 || pourcentage > 100) {
                 afficherAlerte("Erreur", "Le taux d'épargne doit être compris entre 0 et 100.");
                 return false;
             }
-            
+
         } catch (NumberFormatException e) {
             afficherAlerte("Erreur", "Veuillez entrer des nombres valides");
             return false;
@@ -315,7 +315,7 @@ public class PlanningJavaFXController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
+
     // --- Méthodes de conversion Statut ---
 
     private String mapStatutToSQL(String uiStatut) {
