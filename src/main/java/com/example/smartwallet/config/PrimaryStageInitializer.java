@@ -21,13 +21,46 @@ import java.io.IOException;
 @Component
 public class PrimaryStageInitializer {
 
-    // Stocker la racine pour permettre la navigation depuis la sidebar
+    private static PrimaryStageInitializer instance;
+    private Stage primaryStage;
     private BorderPane root;
 
+    public PrimaryStageInitializer() {
+        instance = this;
+    }
+
     public void initStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        
+        try {
+            // Charger la page de bienvenue au démarrage
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/welcome-view.fxml"));
+            Parent welcomeRoot = loader.load();
+            
+            Scene scene = new Scene(welcomeRoot, 1000, 700);
+            // Appliquer le style global si nécessaire
+            // scene.getStylesheets().add(getClass().getResource("/com/example/smartwallet/styles.css").toExternalForm());
+            
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("SmartWallet - Accueil");
+            primaryStage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            // En cas d'erreur, charger l'écran principal directement
+            loadMainScreen();
+        }
+    }
+
+    public static void switchToMainScreen() {
+        if (instance != null) {
+            instance.loadMainScreen();
+        }
+    }
+
+    private void loadMainScreen() {
         // Créer la scène principale
-        BorderPane root = new BorderPane();
-        this.root = root;
+        root = new BorderPane();
         // Enregistrer le root dans TabManager
         TabManager.setRoot(root);
         root.setStyle("-fx-font-family: 'Segoe UI'; -fx-font-size: 12px;");
@@ -49,9 +82,14 @@ public class PrimaryStageInitializer {
         statusBar.setStyle("-fx-border-color: #cccccc; -fx-padding: 5px;");
         root.setBottom(statusBar);
 
-        // Créer la scène
-        Scene scene = new Scene(root, 1000, 700);
-        primaryStage.setScene(scene);
+        // Mettre à jour la scène existante ou en créer une nouvelle
+        if (primaryStage.getScene() != null) {
+            primaryStage.getScene().setRoot(root);
+        } else {
+            Scene scene = new Scene(root, 1000, 700);
+            primaryStage.setScene(scene);
+        }
+        primaryStage.setTitle("SmartWallet - Tableau de Bord");
     }
 
     private MenuBar createMenuBar() {
@@ -93,7 +131,6 @@ public class PrimaryStageInitializer {
     }
 
     private ScrollPane createSidebar() {
-        System.out.println("Creating Sidebar...");
         VBox sidebarContent = new VBox();
         sidebarContent.setStyle("-fx-padding: 10px; -fx-background-color: #f5f5f5;");
         sidebarContent.setSpacing(10);
@@ -112,7 +149,6 @@ public class PrimaryStageInitializer {
         Button settingsBtn = createNavButton("settings", "⚙️ Paramètres");
 
         dashboardBtn.setStyle(dashboardBtn.getStyle() + "; -fx-font-weight: bold; -fx-text-fill: #2980b9;");
-        // Updated style to ensure visibility
         advisorBtn.setStyle("-fx-padding: 10px; -fx-alignment: CENTER_LEFT; -fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-background-color: #E8F5E9; -fx-border-color: #4CAF50; -fx-border-radius: 3;");
 
         sidebarContent.getChildren().addAll(
@@ -147,104 +183,46 @@ public class PrimaryStageInitializer {
     }
 
     private void handleNavigation(String key) {
-        // TRACE: afficher ce qui est demandé
         System.out.println("handleNavigation called with key: '" + key + "'");
-        // Utiliser d'abord TabManager pour un comportement centralisé
         try {
             if ("budgets".equals(key)) {
                 boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/budget-view.fxml", "Budgets");
-                if (ok) {
-                    System.out.println("handleNavigation: TabManager showed Budgets view");
-                    return;
-                }
+                if (ok) return;
             } else if ("tableau".equals(key)) {
                 boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/dashboard-view.fxml", "Tableau de Bord");
-                if (ok) {
-                    System.out.println("handleNavigation: TabManager showed Dashboard view");
-                    return;
-                }
+                if (ok) return;
             } else if ("depenses".equals(key)) {
                 boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/depense-view.fxml", "Dépenses");
-                if (ok) {
-                    System.out.println("handleNavigation: TabManager showed Depenses view");
-                    return;
-                }
+                if (ok) return;
             } else if ("plannings".equals(key)) {
                 boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/planning-view.fxml", "Plannings");
-                if (ok) {
-                    System.out.println("handleNavigation: TabManager showed Plannings view");
-                    return;
-                }
+                if (ok) return;
             } else if ("notifications".equals(key)) {
                 boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/notification-view.fxml", "Notifications");
-                if (ok) {
-                    System.out.println("handleNavigation: TabManager showed Notifications view");
-                    return;
-                }
+                if (ok) return;
             } else if ("advisor".equals(key)) {
                 boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/advisor-view.fxml", "Conseiller IA");
-                if (ok) {
-                    System.out.println("handleNavigation: TabManager showed Advisor view");
-                    return;
-                }
+                if (ok) return;
             }
 
-            // Fallback: charger le FXML directement et le placer au centre selon la clé
-            if ("budgets".equals(key)) {
-                System.out.println("handleNavigation: fallback loading Budgets FXML");
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/budget-view.fxml"));
+            // Fallback: charger le FXML directement
+            String fxmlPath = null;
+            if ("budgets".equals(key)) fxmlPath = "/com/example/smartwallet/budget-view.fxml";
+            else if ("tableau".equals(key)) fxmlPath = "/com/example/smartwallet/dashboard-view.fxml";
+            else if ("depenses".equals(key)) fxmlPath = "/com/example/smartwallet/depense-view.fxml";
+            else if ("plannings".equals(key)) fxmlPath = "/com/example/smartwallet/planning-view.fxml";
+            else if ("notifications".equals(key)) fxmlPath = "/com/example/smartwallet/notification-view.fxml";
+            else if ("advisor".equals(key)) fxmlPath = "/com/example/smartwallet/advisor-view.fxml";
+
+            if (fxmlPath != null) {
+                System.out.println("handleNavigation: fallback loading " + fxmlPath);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
                 Parent content = loader.load();
                 root.setCenter(content);
                 root.requestLayout();
                 return;
             }
 
-            if ("tableau".equals(key)) {
-                System.out.println("handleNavigation: fallback loading Dashboard FXML");
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/dashboard-view.fxml"));
-                Parent content = loader.load();
-                root.setCenter(content);
-                root.requestLayout();
-                return;
-            }
-
-            if ("depenses".equals(key)) {
-                System.out.println("handleNavigation: fallback loading Depenses FXML");
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/depense-view.fxml"));
-                Parent content = loader.load();
-                root.setCenter(content);
-                root.requestLayout();
-                return;
-            }
-
-            if ("plannings".equals(key)) {
-                System.out.println("handleNavigation: fallback loading Plannings FXML");
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/planning-view.fxml"));
-                Parent content = loader.load();
-                root.setCenter(content);
-                root.requestLayout();
-                return;
-            }
-
-            if ("notifications".equals(key)) {
-                System.out.println("handleNavigation: fallback loading Notifications FXML");
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/notification-view.fxml"));
-                Parent content = loader.load();
-                root.setCenter(content);
-                root.requestLayout();
-                return;
-            }
-
-            if ("advisor".equals(key)) {
-                System.out.println("handleNavigation: fallback loading Advisor FXML");
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/advisor-view.fxml"));
-                Parent content = loader.load();
-                root.setCenter(content);
-                root.requestLayout();
-                return;
-            }
-
-            // Pour les autres boutons, on affiche un message temporaire dans le centre
             Label label = new Label("Section: " + key);
             label.setStyle("-fx-padding: 20px; -fx-font-size: 16px;");
             root.setCenter(new VBox(label));
@@ -259,20 +237,12 @@ public class PrimaryStageInitializer {
         center.setSpacing(15);
         center.setStyle("-fx-background-color: #ffffff;");
 
-        // Titre
         Label titleLabel = new Label("Tableau de Bord");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
-        // Grille d'informations
         HBox statsBox = createStatsBox();
-
-        // Section budgets
         VBox budgetsSection = createBudgetsSection();
-
-        // Section dépenses récentes
         VBox expensesSection = createExpensesSection();
-
-        // Barre de recherche et filtres
         HBox filterBox = createFilterBox();
 
         ScrollPane scrollPane = new ScrollPane();
@@ -362,7 +332,6 @@ public class PrimaryStageInitializer {
 
         table.getColumns().addAll(categoryCol, amountCol, usedCol, remainCol);
 
-        // Ajouter des données d'exemple
         table.getItems().addAll(
             new BudgetItem("Alimentation", "500€", "320€", "180€"),
             new BudgetItem("Transport", "200€", "150€", "50€"),
@@ -414,7 +383,6 @@ public class PrimaryStageInitializer {
 
         table.getColumns().addAll(dateCol, categoryCol, descriptionCol, amountCol);
 
-        // Ajouter des données d'exemple
         table.getItems().addAll(
             new ExpenseItem("14/02/2026", "Alimentation", "Supermarché", "65.50€"),
             new ExpenseItem("13/02/2026", "Transport", "Essence", "50.00€"),
@@ -469,7 +437,6 @@ public class PrimaryStageInitializer {
         alert.showAndWait();
     }
 
-    // Classes internes pour les données
     public static class BudgetItem {
         private String category;
         private String amount;
