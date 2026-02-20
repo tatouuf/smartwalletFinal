@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/plannings")
-public class PlanningCtrl {
-    private static final Logger LOGGER = Logger.getLogger(PlanningCtrl.class.getName());
+public class PlanningController {
+    private static final Logger LOGGER = Logger.getLogger(PlanningController.class.getName());
 
     @Autowired
     private PlanningService planningService;
@@ -179,4 +179,3 @@ public class PlanningCtrl {
         }
     }
 }
-

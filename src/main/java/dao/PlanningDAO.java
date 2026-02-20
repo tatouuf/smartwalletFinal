@@ -11,45 +11,61 @@ import java.util.logging.Logger;
 public class PlanningDAO {
     private static final Logger LOGGER = Logger.getLogger(PlanningDAO.class.getName());
 
-    public void ajouterPlanning(Planning planning) {
+    // Retourne l'ID généré si succès, -1 sinon
+    public int ajouterPlanning(Planning planning) {
         String sql = "INSERT INTO plannings (nom, description, type, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+        System.out.println("--- DÉBUT AJOUT PLANNING ---");
+        
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             if (conn == null) {
-                LOGGER.log(Level.SEVERE, "Impossible d'établir la connexion à la base de données");
-                return;
+                System.err.println("ERREUR : La connexion à la base de données est NULL !");
+                return -1;
             }
 
             ps.setString(1, planning.getNom());
             ps.setString(2, planning.getDescription());
-            ps.setString(3, planning.getType()); // doit correspondre à l'enum MySQL exactement
+            ps.setString(3, planning.getType());
             ps.setInt(4, planning.getMois());
             ps.setInt(5, planning.getAnnee());
             ps.setDouble(6, planning.getRevenuPrevu());
             ps.setDouble(7, planning.getEpargnePrevue());
             ps.setInt(8, planning.getPourcentageEpargne());
-            ps.setString(9, planning.getStatut()); // idem enum exact
+            ps.setString(9, planning.getStatut());
             ps.setInt(10, planning.getUserId());
 
-            ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int newId = generatedKeys.getInt(1);
+                        System.out.println("SUCCÈS : Planning ajouté avec ID = " + newId);
+                        return newId;
+                    }
+                }
+            }
+            return -1;
+
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Erreur lors de l'ajout d'un planning", e);
+            System.err.println("!!! ERREUR SQL CRITIQUE !!!");
+            System.err.println("Message : " + e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
     }
 
     public List<Planning> obtenirTousPlannings(int userId) {
         List<Planning> plannings = new ArrayList<>();
-        String sql = "SELECT id, nom, description, type, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut FROM plannings WHERE user_id = ? ORDER BY date_creation DESC";
+        // CORRECTION ICI : created_at au lieu de date_creation
+        String sql = "SELECT id, nom, description, type, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut FROM plannings WHERE user_id = ? ORDER BY created_at DESC";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            if (conn == null) {
-                LOGGER.log(Level.SEVERE, "Impossible de établir la connexion à la base de données");
-                return plannings;
-            }
+            if (conn == null) return plannings;
 
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
@@ -82,10 +98,7 @@ public class PlanningDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            if (conn == null) {
-                LOGGER.log(Level.SEVERE, "Impossible de établir la connexion à la base de données");
-                return plannings;
-            }
+            if (conn == null) return plannings;
 
             ps.setInt(1, userId);
             ps.setInt(2, mois);
@@ -118,10 +131,7 @@ public class PlanningDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            if (conn == null) {
-                LOGGER.log(Level.SEVERE, "Impossible de établir la connexion à la base de données");
-                return 0;
-            }
+            if (conn == null) return 0;
 
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
@@ -134,25 +144,24 @@ public class PlanningDAO {
         return 0;
     }
 
-    public void supprimerPlanning(int planningId) {
+    public boolean supprimerPlanning(int planningId) {
         String sql = "DELETE FROM plannings WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            if (conn == null) {
-                LOGGER.log(Level.SEVERE, "Impossible de établir la connexion à la base de données");
-                return;
-            }
+            if (conn == null) return false;
 
             ps.setInt(1, planningId);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            return rows > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erreur lors de la suppression du planning", e);
+            return false;
         }
     }
 
-    public void supprimerPlusieursPlannings(List<Integer> ids) {
-        if (ids == null || ids.isEmpty()) return;
+    public boolean supprimerPlusieursPlannings(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) return false;
         
         StringBuilder sql = new StringBuilder("DELETE FROM plannings WHERE id IN (");
         for (int i = 0; i < ids.size(); i++) {
@@ -168,21 +177,20 @@ public class PlanningDAO {
                 ps.setInt(i + 1, ids.get(i));
             }
             
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            return rows > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erreur lors de la suppression multiple de plannings", e);
+            return false;
         }
     }
 
-    public void modifierPlanning(Planning planning) {
+    public boolean modifierPlanning(Planning planning) {
         String sql = "UPDATE plannings SET nom = ?, description = ?, type = ?, revenu_prevu = ?, epargne_prevue = ?, pourcentage_epargne = ?, statut = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            if (conn == null) {
-                LOGGER.log(Level.SEVERE, "Impossible de établir la connexion à la base de données");
-                return;
-            }
+            if (conn == null) return false;
 
             ps.setString(1, planning.getNom());
             ps.setString(2, planning.getDescription());
@@ -192,9 +200,12 @@ public class PlanningDAO {
             ps.setInt(6, planning.getPourcentageEpargne());
             ps.setString(7, planning.getStatut());
             ps.setInt(8, planning.getId());
-            ps.executeUpdate();
+            
+            int rows = ps.executeUpdate();
+            return rows > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erreur lors de la modification du planning", e);
+            return false;
         }
     }
 
