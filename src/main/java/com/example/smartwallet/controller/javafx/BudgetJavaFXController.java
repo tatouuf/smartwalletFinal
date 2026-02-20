@@ -10,13 +10,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BudgetJavaFXController {
 
@@ -36,35 +40,34 @@ public class BudgetJavaFXController {
     private Button modifierBtn;
     @FXML
     private Button supprimerBtn;
-
-    // Remplacement de TableView par ListView
     @FXML
     private ListView<Budget> budgetsList;
-
     @FXML
     private Label totalBudgetsLabel;
     @FXML
     private ProgressBar budgetProgressBar;
     @FXML
-    private Button retourBtn; // bouton Retour
+    private Button retourBtn;
 
     private BudgetDAO budgetDAO = new BudgetDAO();
     private ObservableList<Budget> budgetsData = FXCollections.observableArrayList();
     private int userId = 1; // Utilisateur connecté
     private Budget budgetActuel = null;
 
+    // Stocker les IDs des budgets cochés
+    private Set<Integer> idsSelectionnes = new HashSet<>();
+
     @FXML
     public void initialize() {
-        setupListView();           // Configuration du ListView
-        setupCategories();         // Remplissage des catégories
-        setupMonthsYears();        // Remplissage mois/année
-        loadBudgets();             // Chargement initial
+        setupListView();
+        setupCategories();
+        setupMonthsYears();
+        loadBudgets();
 
         ajouterBtn.setOnAction(e -> ajouterBudget());
         modifierBtn.setOnAction(e -> modifierBudget());
         supprimerBtn.setOnAction(e -> supprimerBudget());
 
-        // Écoute de la sélection dans le ListView
         budgetsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectBudget(newVal));
 
         if (retourBtn != null) {
@@ -73,21 +76,41 @@ public class BudgetJavaFXController {
     }
 
     private void setupListView() {
-        // Définition de l'affichage de chaque budget
         budgetsList.setCellFactory(lv -> new ListCell<Budget>() {
+            private final CheckBox checkBox = new CheckBox();
+            private final Label label = new Label();
+            private final HBox layout = new HBox(10);
+
+            {
+                layout.getChildren().addAll(checkBox, label);
+            }
+
             @Override
             protected void updateItem(Budget budget, boolean empty) {
                 super.updateItem(budget, empty);
                 if (empty || budget == null) {
+                    setGraphic(null);
                     setText(null);
                 } else {
-                    // Affichage formaté : Catégorie - Max: X DT / Actuel: Y DT (Mois/Année)
-                    setText(String.format("%s - Max: %.2f DT / Actuel: %.2f DT (%d/%d)",
+                    String text = String.format("%s - Max: %.2f DT / Actuel: %.2f DT (%d/%d)",
                             budget.getCategorie(),
                             budget.getMontantMax(),
                             budget.getMontantActuel(),
                             budget.getMois(),
-                            budget.getAnnee()));
+                            budget.getAnnee());
+                    label.setText(text);
+
+                    checkBox.setOnAction(null);
+                    checkBox.setSelected(idsSelectionnes.contains(budget.getId()));
+                    checkBox.setOnAction(e -> {
+                        if (checkBox.isSelected()) {
+                            idsSelectionnes.add(budget.getId());
+                        } else {
+                            idsSelectionnes.remove(budget.getId());
+                        }
+                    });
+
+                    setGraphic(layout);
                 }
             }
         });
@@ -114,6 +137,7 @@ public class BudgetJavaFXController {
     }
 
     private void loadBudgets() {
+        idsSelectionnes.clear();
         budgetsData.clear();
         List<Budget> budgets = budgetDAO.obtenirTousBudgets(userId);
         budgetsData.addAll(budgets);
@@ -132,10 +156,7 @@ public class BudgetJavaFXController {
             budget.setUserId(userId);
             budget.setDateCreation(LocalDate.now());
 
-            // Ajout en base
             budgetDAO.ajouterBudget(budget);
-
-            // Ajout dans la liste observable (le ListView se met à jour automatiquement)
             budgetsData.add(budget);
             mettreAJourTotalBudgets();
             clearForm();
@@ -145,39 +166,48 @@ public class BudgetJavaFXController {
 
     private void modifierBudget() {
         if (budgetActuel != null && validationFormulaire()) {
-            // Modifier l'objet sélectionné
             budgetActuel.setCategorie(categorieCombo.getValue());
             budgetActuel.setMontantMax(Double.parseDouble(montantMaxField.getText()));
             budgetActuel.setDescription(descriptionField.getText());
             budgetActuel.setMois(moisCombo.getValue());
             budgetActuel.setAnnee(anneeCombo.getValue());
 
-            // Mise à jour en base
             budgetDAO.modifierBudget(budgetActuel);
-
-            // Rafraîchir l'affichage de l'élément modifié (JavaFX 8u60+)
             budgetsList.refresh();
-
-            // Alternative si refresh() n'est pas disponible :
-            // int index = budgetsData.indexOf(budgetActuel);
-            // if (index >= 0) budgetsData.set(index, budgetActuel);
-
             mettreAJourTotalBudgets();
             clearForm();
             afficherAlerte("Succès", "Budget modifié avec succès");
         } else {
-            afficherAlerte("Erreur", "Veuillez sélectionner un budget à modifier");
+            afficherAlerte("Erreur", "Veuillez sélectionner un budget à modifier (cliquez sur le texte)");
         }
     }
 
     private void supprimerBudget() {
-        if (budgetActuel != null) {
-            budgetDAO.supprimerBudget(budgetActuel.getId());
-            loadBudgets(); // Recharge la liste depuis la base
-            clearForm();
-            afficherAlerte("Succès", "Budget supprimé avec succès");
+        if (!idsSelectionnes.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation de Suppression");
+            alert.setHeaderText("Supprimer les éléments cochés ?");
+            alert.setContentText("Vous allez supprimer " + idsSelectionnes.size() + " budget(s). Cette action est irréversible.");
+
+            if (alert.showAndWait().get() == ButtonType.OK) {
+                List<Integer> idsToDelete = new ArrayList<>(idsSelectionnes);
+                budgetDAO.supprimerPlusieursBudgets(idsToDelete);
+                loadBudgets();
+                clearForm();
+                afficherAlerte("Succès", idsToDelete.size() + " budget(s) ont été supprimé(s).");
+            }
+        } else if (budgetActuel != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setContentText("Supprimer le budget sélectionné : " + budgetActuel.getCategorie() + " ?");
+            if (alert.showAndWait().get() == ButtonType.OK) {
+                budgetDAO.supprimerBudget(budgetActuel.getId());
+                loadBudgets();
+                clearForm();
+                afficherAlerte("Succès", "Budget supprimé avec succès");
+            }
         } else {
-            afficherAlerte("Erreur", "Veuillez sélectionner un budget à supprimer");
+            afficherAlerte("Info", "Veuillez cocher les budgets à supprimer.");
         }
     }
 
@@ -190,7 +220,6 @@ public class BudgetJavaFXController {
             moisCombo.setValue(budget.getMois());
             anneeCombo.setValue(budget.getAnnee());
 
-            // Afficher la progression
             double pourcentage = (budget.getMontantActuel() / budget.getMontantMax()) * 100;
             budgetProgressBar.setProgress(Math.min(pourcentage / 100, 1.0));
         }
@@ -239,7 +268,6 @@ public class BudgetJavaFXController {
         boolean ok = TabManager.showView("/com/example/smartwallet/dashboard-view.fxml", "Tableau de Bord");
         if (ok) return;
 
-        // Fallback
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/smartwallet/dashboard-view.fxml"));
             Parent content = loader.load();

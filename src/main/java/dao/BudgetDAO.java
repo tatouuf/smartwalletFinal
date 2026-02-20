@@ -149,6 +149,29 @@ public class BudgetDAO {
         }
     }
 
+    public void supprimerPlusieursBudgets(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) return;
+        
+        StringBuilder sql = new StringBuilder("DELETE FROM budgets WHERE id IN (");
+        for (int i = 0; i < ids.size(); i++) {
+            sql.append("?");
+            if (i < ids.size() - 1) sql.append(",");
+        }
+        sql.append(")");
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            
+            for (int i = 0; i < ids.size(); i++) {
+                ps.setInt(i + 1, ids.get(i));
+            }
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void modifierBudget(Budget budget) {
         String sql = "UPDATE budgets SET categorie = ?, montant_max = ?, montant_actuel = ?, description = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();

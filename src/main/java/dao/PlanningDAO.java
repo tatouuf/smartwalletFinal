@@ -151,6 +151,29 @@ public class PlanningDAO {
         }
     }
 
+    public void supprimerPlusieursPlannings(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) return;
+        
+        StringBuilder sql = new StringBuilder("DELETE FROM plannings WHERE id IN (");
+        for (int i = 0; i < ids.size(); i++) {
+            sql.append("?");
+            if (i < ids.size() - 1) sql.append(",");
+        }
+        sql.append(")");
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            
+            for (int i = 0; i < ids.size(); i++) {
+                ps.setInt(i + 1, ids.get(i));
+            }
+            
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erreur lors de la suppression multiple de plannings", e);
+        }
+    }
+
     public void modifierPlanning(Planning planning) {
         String sql = "UPDATE plannings SET nom = ?, description = ?, type = ?, revenu_prevu = ?, epargne_prevue = ?, pourcentage_epargne = ?, statut = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
