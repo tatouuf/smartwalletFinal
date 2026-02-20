@@ -174,6 +174,29 @@ public class DepenseDAO {
             e.printStackTrace();
         }
     }
+    
+    public void supprimerPlusieursDepenses(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) return;
+        
+        StringBuilder sql = new StringBuilder("DELETE FROM depenses WHERE id IN (");
+        for (int i = 0; i < ids.size(); i++) {
+            sql.append("?");
+            if (i < ids.size() - 1) sql.append(",");
+        }
+        sql.append(")");
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            
+            for (int i = 0; i < ids.size(); i++) {
+                ps.setInt(i + 1, ids.get(i));
+            }
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void modifierDepense(Depense depense) {
         String sql = "UPDATE depenses SET montant = ?, description = ?, date_depense = ?, categorie = ? WHERE id = ?";
