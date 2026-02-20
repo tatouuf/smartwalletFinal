@@ -157,8 +157,10 @@ public class BudgetJavaFXController {
             budget.setDateCreation(LocalDate.now());
 
             budgetDAO.ajouterBudget(budget);
-            budgetsData.add(budget);
-            mettreAJourTotalBudgets();
+            
+            // Recharger pour avoir l'ID correct
+            loadBudgets();
+            
             clearForm();
             afficherAlerte("Succès", "Budget ajouté avec succès");
         }
@@ -166,19 +168,39 @@ public class BudgetJavaFXController {
 
     private void modifierBudget() {
         if (budgetActuel != null && validationFormulaire()) {
-            budgetActuel.setCategorie(categorieCombo.getValue());
-            budgetActuel.setMontantMax(Double.parseDouble(montantMaxField.getText()));
-            budgetActuel.setDescription(descriptionField.getText());
-            budgetActuel.setMois(moisCombo.getValue());
-            budgetActuel.setAnnee(anneeCombo.getValue());
+            // Créer un objet temporaire
+            Budget budgetModifie = new Budget();
+            budgetModifie.setId(budgetActuel.getId());
+            budgetModifie.setUserId(budgetActuel.getUserId());
+            budgetModifie.setMontantActuel(budgetActuel.getMontantActuel());
+            budgetModifie.setDateCreation(budgetActuel.getDateCreation());
+            
+            budgetModifie.setCategorie(categorieCombo.getValue());
+            budgetModifie.setMontantMax(Double.parseDouble(montantMaxField.getText()));
+            budgetModifie.setDescription(descriptionField.getText());
+            budgetModifie.setMois(moisCombo.getValue());
+            budgetModifie.setAnnee(anneeCombo.getValue());
 
-            budgetDAO.modifierBudget(budgetActuel);
-            budgetsList.refresh();
-            mettreAJourTotalBudgets();
-            clearForm();
-            afficherAlerte("Succès", "Budget modifié avec succès");
+            // Tenter la mise à jour SQL
+            boolean succes = budgetDAO.modifierBudget(budgetModifie);
+
+            if (succes) {
+                // Mettre à jour l'objet en mémoire seulement si succès SQL
+                budgetActuel.setCategorie(budgetModifie.getCategorie());
+                budgetActuel.setMontantMax(budgetModifie.getMontantMax());
+                budgetActuel.setDescription(budgetModifie.getDescription());
+                budgetActuel.setMois(budgetModifie.getMois());
+                budgetActuel.setAnnee(budgetModifie.getAnnee());
+                
+                budgetsList.refresh();
+                mettreAJourTotalBudgets();
+                clearForm();
+                afficherAlerte("Succès", "Budget modifié avec succès");
+            } else {
+                afficherAlerte("Erreur", "Impossible de modifier le budget en base de données.");
+            }
         } else {
-            afficherAlerte("Erreur", "Veuillez sélectionner un budget à modifier (cliquez sur le texte)");
+            afficherAlerte("Erreur", "Veuillez sélectionner un budget à modifier");
         }
     }
 

@@ -165,15 +165,21 @@ public class BudgetDAO {
             for (int i = 0; i < ids.size(); i++) {
                 ps.setInt(i + 1, ids.get(i));
             }
-
+            
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void modifierBudget(Budget budget) {
-        String sql = "UPDATE budgets SET categorie = ?, montant_max = ?, montant_actuel = ?, description = ? WHERE id = ?";
+    // MODIFICATION ICI : Retourne boolean et ajoute des logs
+    public boolean modifierBudget(Budget budget) {
+        String sql = "UPDATE budgets SET categorie = ?, montant_max = ?, montant_actuel = ?, description = ?, mois = ?, annee = ? WHERE id = ?";
+        
+        System.out.println("--- MODIFICATION BUDGET ---");
+        System.out.println("ID: " + budget.getId());
+        System.out.println("Catégorie: " + budget.getCategorie());
+        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -181,10 +187,18 @@ public class BudgetDAO {
             ps.setDouble(2, budget.getMontantMax());
             ps.setDouble(3, budget.getMontantActuel());
             ps.setString(4, budget.getDescription());
-            ps.setInt(5, budget.getId());
-            ps.executeUpdate();
+            ps.setInt(5, budget.getMois());
+            ps.setInt(6, budget.getAnnee());
+            ps.setInt(7, budget.getId());
+            
+            int rows = ps.executeUpdate();
+            System.out.println("Lignes modifiées: " + rows);
+            return rows > 0;
+            
         } catch (SQLException e) {
+            System.err.println("ERREUR SQL BUDGET UPDATE: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
 

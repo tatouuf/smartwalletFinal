@@ -207,6 +207,9 @@ public class PrimaryStageInitializer {
             } else if ("advisor".equals(key)) {
                 boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/advisor-view.fxml", "Conseiller IA");
                 if (ok) return;
+            } else if ("settings".equals(key)) {
+                boolean ok = com.example.smartwallet.TabManager.showView("/com/example/smartwallet/settings-view.fxml", "Paramètres");
+                if (ok) return;
             }
 
             // Fallback: charger le FXML directement
@@ -217,6 +220,7 @@ public class PrimaryStageInitializer {
             else if ("plannings".equals(key)) fxmlPath = "/com/example/smartwallet/planning-view.fxml";
             else if ("notifications".equals(key)) fxmlPath = "/com/example/smartwallet/notification-view.fxml";
             else if ("advisor".equals(key)) fxmlPath = "/com/example/smartwallet/advisor-view.fxml";
+            else if ("settings".equals(key)) fxmlPath = "/com/example/smartwallet/settings-view.fxml";
 
             if (fxmlPath != null) {
                 System.out.println("handleNavigation: fallback loading " + fxmlPath);
