@@ -38,8 +38,6 @@ public class PrimaryStageInitializer {
             Parent welcomeRoot = loader.load();
             
             Scene scene = new Scene(welcomeRoot, 1000, 700);
-            // Appliquer le style global si nécessaire
-            // scene.getStylesheets().add(getClass().getResource("/com/example/smartwallet/styles.css").toExternalForm());
             
             primaryStage.setScene(scene);
             primaryStage.setTitle("SmartWallet - Accueil");
@@ -47,18 +45,19 @@ public class PrimaryStageInitializer {
             
         } catch (IOException e) {
             e.printStackTrace();
-            // En cas d'erreur, charger l'écran principal directement
-            loadMainScreen();
+            // En cas d'erreur, charger l'écran principal par défaut
+            loadMainScreen("tableau");
         }
     }
 
-    public static void switchToMainScreen() {
+    // Nouvelle signature acceptant une destination
+    public static void switchToMainScreen(String destination) {
         if (instance != null) {
-            instance.loadMainScreen();
+            instance.loadMainScreen(destination);
         }
     }
 
-    private void loadMainScreen() {
+    private void loadMainScreen(String destination) {
         // Créer la scène principale
         root = new BorderPane();
         // Enregistrer le root dans TabManager
@@ -90,6 +89,11 @@ public class PrimaryStageInitializer {
             primaryStage.setScene(scene);
         }
         primaryStage.setTitle("SmartWallet - Tableau de Bord");
+        
+        // Naviguer vers la destination demandée
+        if (destination != null && !destination.isEmpty()) {
+            handleNavigation(destination);
+        }
     }
 
     private MenuBar createMenuBar() {

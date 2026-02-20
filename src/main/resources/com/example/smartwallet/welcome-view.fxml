@@ -3,67 +3,70 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
 
-<VBox alignment="CENTER" spacing="20"
-      xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.smartwallet.controller.javafx.WelcomeController"
-      style="-fx-background-color: linear-gradient(to bottom, #14002b, #3d2c5a, #e6e6e6);">
-
+<VBox alignment="CENTER" spacing="40" style="-fx-background-color: #424242;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.smartwallet.controller.javafx.WelcomeController">
     <padding>
-        <Insets top="70" bottom="70" left="40" right="40"/>
+        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
     </padding>
 
-    <!-- Logo avec ombre -->
-    <ImageView fitHeight="160" preserveRatio="true">
-        <image>
-            <Image url="@/images/logo.png"/>
-        </image>
-        <effect>
-            <DropShadow radius="20" color="#00000088"/>
-        </effect>
-    </ImageView>
+    <VBox alignment="CENTER" spacing="10">
+        <Label text="Bienvenue dans SmartWallet" textFill="WHITE">
+            <font>
+                <Font name="Segoe UI Bold" size="36.0" />
+            </font>
+        </Label>
+        <Label text="Votre Assistant pour le Département Dépenses et Budget" textFill="#E0E0E0">
+            <font>
+                <Font name="Segoe UI" size="18.0" />
+            </font>
+        </Label>
+    </VBox>
 
-    <!-- Titre -->
-    <Label text="Bienvenue dans SmartWallet" textFill="BLACK">
-        <font>
-            <Font name="Segoe UI Bold" size="42"/>
-        </font>
-    </Label>
+    <HBox spacing="30" alignment="CENTER">
+        <!-- Carte Dépenses -->
+        <Button fx:id="btnDepenses" prefWidth="220" prefHeight="150" style="-fx-background-color: #6A1B9A; -fx-background-radius: 10; -fx-cursor: hand;">
+            <graphic>
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="💳" textFill="WHITE" style="-fx-font-size: 40px;"/>
+                    <Label text="Gestion des Dépenses" textFill="WHITE" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <Label text="Suivez vos achats" textFill="#E1BEE7" style="-fx-font-size: 12px;"/>
+                </VBox>
+            </graphic>
+            <effect>
+                <DropShadow color="#00000066" radius="10" spread="0.1" />
+            </effect>
+        </Button>
 
-    <!-- Département -->
-    <Label text="Département Dépenses et Budget" textFill="#444444">
-        <font>
-            <Font name="Segoe UI Semibold" size="20"/>
-        </font>
-    </Label>
+        <!-- Carte Budgets -->
+        <Button fx:id="btnBudgets" prefWidth="220" prefHeight="150" style="-fx-background-color: #E91E63; -fx-background-radius: 10; -fx-cursor: hand;">
+            <graphic>
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="💰" textFill="WHITE" style="-fx-font-size: 40px;"/>
+                    <Label text="Gestion des Budgets" textFill="WHITE" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <Label text="Contrôlez vos limites" textFill="#F8BBD0" style="-fx-font-size: 12px;"/>
+                </VBox>
+            </graphic>
+            <effect>
+                <DropShadow color="#00000066" radius="10" spread="0.1" />
+            </effect>
+        </Button>
 
-    <!-- Description -->
-    <Label text="Gérez intelligemment vos dépenses, budgets et finances avec simplicité et efficacité."
-           wrapText="true"
-           maxWidth="500"
-           textFill="#666666">
-        <font>
-            <Font name="Segoe UI" size="15"/>
-        </font>
-    </Label>
-
-    <!-- Bouton -->
-    <Button fx:id="startButton"
-            text="Commencer"
-            style="
-                -fx-background-color: linear-gradient(to right, #7b2ff7, #f107a3);
-                -fx-text-fill: white;
-                -fx-font-size: 17px;
-                -fx-padding: 14 40;
-                -fx-background-radius: 25;
-                -fx-cursor: hand;
-            "/>
-
+        <!-- Carte Plannings -->
+        <Button fx:id="btnPlannings" prefWidth="220" prefHeight="150" style="-fx-background-color: #7B1FA2; -fx-background-radius: 10; -fx-cursor: hand;">
+            <graphic>
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="📅" textFill="WHITE" style="-fx-font-size: 40px;"/>
+                    <Label text="Gestion des Plannings" textFill="WHITE" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <Label text="Prévoyez l'avenir" textFill="#E1BEE7" style="-fx-font-size: 12px;"/>
+                </VBox>
+            </graphic>
+            <effect>
+                <DropShadow color="#00000066" radius="10" spread="0.1" />
+            </effect>
+        </Button>
+    </HBox>
 </VBox>

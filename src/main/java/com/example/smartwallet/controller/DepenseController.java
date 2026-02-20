@@ -1,58 +1,97 @@
 package com.example.smartwallet.controller;
 
 import com.example.smartwallet.model.Depense;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableView;
+import com.example.smartwallet.service.DepenseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
+@RestController
+@RequestMapping("/api/depenses")
 public class DepenseController {
 
-    @FXML
-    private TableView<Depense> tableDepenses;
+    @Autowired
+    private DepenseService depenseService;
 
-    @FXML
-    public void initialize() {
-        // Activer sélection multiple
-        tableDepenses.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    /**
+     * Ajouter une nouvelle dépense
+     * @param depense La dépense à ajouter
+     */
+    @PostMapping
+    public void add(@RequestBody Depense depense) {
+        depenseService.save(depense);
     }
 
     /**
-     * Méthode liée à un bouton (ex: Supprimer plusieurs dépenses)
+     * Récupérer toutes les dépenses d'un utilisateur
+     * @param userId L'ID de l'utilisateur
+     * @return Liste des dépenses
      */
-    @FXML
-    private void actionSurSelection() {
+    @GetMapping("/user/{userId}")
+    public List<Depense> getByUser(@PathVariable int userId) {
+        return depenseService.all(userId);
+    }
 
-        ObservableList<Depense> selection =
-                tableDepenses.getSelectionModel().getSelectedItems();
+    /**
+     * Récupérer les dépenses par catégorie
+     * @param userId L'ID de l'utilisateur
+     * @param categorie La catégorie
+     * @return Liste des dépenses de la catégorie
+     */
+    @GetMapping("/user/{userId}/categorie/{categorie}")
+    public List<Depense> getByCategory(@PathVariable int userId, @PathVariable String categorie) {
+        return depenseService.getByCategory(userId, categorie);
+    }
 
-        if (selection == null || selection.isEmpty()) {
+    /**
+     * Récupérer les dépenses d'un mois
+     * @param userId L'ID de l'utilisateur
+     * @param mois Le mois
+     * @param annee L'année
+     * @return Liste des dépenses du mois
+     */
+    @GetMapping("/user/{userId}/mois/{mois}/annee/{annee}")
+    public List<Depense> getByMonth(@PathVariable int userId, @PathVariable int mois, @PathVariable int annee) {
+        return depenseService.getByMonth(userId, mois, annee);
+    }
 
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aucune sélection");
-            alert.setHeaderText(null);
-            alert.setContentText("Veuillez sélectionner au moins une dépense.");
-            alert.showAndWait();
+    /**
+     * Obtenir le total des dépenses
+     * @param userId L'ID de l'utilisateur
+     * @return Le total des dépenses
+     */
+    @GetMapping("/user/{userId}/total")
+    public double getTotalAmount(@PathVariable int userId) {
+        return depenseService.getTotalAmount(userId);
+    }
 
-            return;
-        }
+    /**
+     * Obtenir le total des dépenses d'un mois
+     * @param userId L'ID de l'utilisateur
+     * @param mois Le mois
+     * @param annee L'année
+     * @return Le total du mois
+     */
+    @GetMapping("/user/{userId}/total/mois/{mois}/annee/{annee}")
+    public double getTotalByMonth(@PathVariable int userId, @PathVariable int mois, @PathVariable int annee) {
+        return depenseService.getTotalByMonth(userId, mois, annee);
+    }
 
-        // Exemple traitement
-        for (Depense d : selection) {
-            System.out.println("ID: " + d.getId() + " | Montant: " + d.getMontant());
+    /**
+     * Modifier une dépense
+     * @param depense La dépense à modifier
+     */
+    @PutMapping
+    public void update(@RequestBody Depense depense) {
+        depenseService.update(depense);
+    }
 
-            // 👉 Ici tu peux appeler ton DAO
-            // depenseDAO.supprimer(d.getId());
-        }
-
-        // Rafraîchir la table après traitement
-        tableDepenses.refresh();
-
-        Alert success = new Alert(Alert.AlertType.INFORMATION);
-        success.setTitle("Succès");
-        success.setHeaderText(null);
-        success.setContentText("Action effectuée sur les dépenses sélectionnées.");
-        success.showAndWait();
+    /**
+     * Supprimer une dépense
+     * @param depenseId L'ID de la dépense à supprimer
+     */
+    @DeleteMapping("/{depenseId}")
+    public void delete(@PathVariable int depenseId) {
+        depenseService.delete(depenseId);
     }
 }
