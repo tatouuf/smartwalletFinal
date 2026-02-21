@@ -1,75 +1,49 @@
 package com.example.smartwallet.controller;
 
+import com.example.smartwallet.model.Notification;
+import dao.NotificationDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import java.time.LocalDateTime;
+import java.util.List;
 
 public class NotificationController {
 
-    private static final ObservableList<NotificationLog> notificationHistory = FXCollections.observableArrayList();
+    private static final NotificationDAO notificationDAO = new NotificationDAO();
+    private static final int USER_ID = 1; // Hardcoded user ID for now
 
     public static void showInformation(String title, String message) {
-        addNotification("INFO", title, message);
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        saveAndShowAlert("INFO", title, message, AlertType.INFORMATION);
     }
 
     public static void showError(String title, String message) {
-        addNotification("ERROR", title, message);
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        saveAndShowAlert("ERROR", title, message, AlertType.ERROR);
     }
 
     public static void showWarning(String title, String message) {
-        addNotification("WARNING", title, message);
-        Alert alert = new Alert(AlertType.WARNING);
+        saveAndShowAlert("WARNING", title, message, AlertType.WARNING);
+    }
+
+    private static void saveAndShowAlert(String type, String title, String message, AlertType alertType) {
+        // 1. Save to database (notifidepbud table via DAO)
+        Notification notification = new Notification(USER_ID, title, message, type);
+        notificationDAO.addNotification(notification);
+
+        // 2. Show UI alert
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-    private static void addNotification(String type, String title, String message) {
-        notificationHistory.add(0, new NotificationLog(type, title, message, LocalDateTime.now()));
-    }
-
-    public static ObservableList<NotificationLog> getNotificationHistory() {
-        return notificationHistory;
+    public static ObservableList<Notification> getNotificationHistory() {
+        List<Notification> history = notificationDAO.getAllNotifications(USER_ID);
+        return FXCollections.observableArrayList(history);
     }
 
     public static void clearHistory() {
-        notificationHistory.clear();
-    }
-
-    public static class NotificationLog {
-        private final String type;
-        private final String title;
-        private final String message;
-        private final LocalDateTime timestamp;
-
-        public NotificationLog(String type, String title, String message, LocalDateTime timestamp) {
-            this.type = type;
-            this.title = title;
-            this.message = message;
-            this.timestamp = timestamp;
-        }
-
-        public String getType() { return type; }
-        public String getTitle() { return title; }
-        public String getMessage() { return message; }
-        public LocalDateTime getTimestamp() { return timestamp; }
-
-        @Override
-        public String toString() {
-            return String.format("[%s] %s: %s", type, title, message);
-        }
+        notificationDAO.clearAllNotifications(USER_ID);
     }
 }

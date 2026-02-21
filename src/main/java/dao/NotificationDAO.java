@@ -9,7 +9,8 @@ import java.util.List;
 public class NotificationDAO {
 
     public void addNotification(Notification notification) {
-        String sql = "INSERT INTO notifications (user_id, title, message, type, status, created_at, recurring_id, reminder_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        // Changement de table : notifications -> notifidepbud
+        String sql = "INSERT INTO notifidepbud (user_id, title, message, type, status, created_at, recurring_id, reminder_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -45,7 +46,8 @@ public class NotificationDAO {
 
     public List<Notification> getAllNotifications(int userId) {
         List<Notification> notifications = new ArrayList<>();
-        String sql = "SELECT id, user_id, title, message, type, status, created_at, recurring_id, reminder_id FROM notifications WHERE user_id = ? ORDER BY created_at DESC";
+        // Changement de table : notifications -> notifidepbud
+        String sql = "SELECT id, user_id, title, message, type, status, created_at, recurring_id, reminder_id FROM notifidepbud WHERE user_id = ? ORDER BY created_at DESC";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -80,7 +82,8 @@ public class NotificationDAO {
     }
     
     public void clearAllNotifications(int userId) {
-        String sql = "DELETE FROM notifications WHERE user_id = ?";
+        // Changement de table : notifications -> notifidepbud
+        String sql = "DELETE FROM notifidepbud WHERE user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);

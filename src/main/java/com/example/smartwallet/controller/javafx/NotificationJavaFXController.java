@@ -1,7 +1,7 @@
 package com.example.smartwallet.controller.javafx;
 
 import com.example.smartwallet.controller.NotificationController;
-import com.example.smartwallet.controller.NotificationController.NotificationLog;
+import com.example.smartwallet.model.Notification;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -10,15 +10,15 @@ import java.time.format.DateTimeFormatter;
 public class NotificationJavaFXController {
 
     @FXML
-    private ListView<NotificationLog> notificationList;
+    private ListView<Notification> notificationList;
 
     @FXML
     public void initialize() {
-        notificationList.setItems(NotificationController.getNotificationHistory());
+        refreshNotificationList();
 
-        notificationList.setCellFactory(param -> new ListCell<NotificationLog>() {
+        notificationList.setCellFactory(param -> new ListCell<Notification>() {
             @Override
-            protected void updateItem(NotificationLog item, boolean empty) {
+            protected void updateItem(Notification item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
@@ -26,7 +26,7 @@ public class NotificationJavaFXController {
                 } else {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                     setText(String.format("[%s] %s: %s - %s",
-                            item.getTimestamp().format(formatter),
+                            item.getCreatedAt().format(formatter),
                             item.getType(),
                             item.getTitle(),
                             item.getMessage()));
@@ -47,5 +47,11 @@ public class NotificationJavaFXController {
     @FXML
     private void clearNotifications() {
         NotificationController.clearHistory();
+        refreshNotificationList();
+    }
+    
+    private void refreshNotificationList() {
+        notificationList.setItems(NotificationController.getNotificationHistory());
+        notificationList.refresh();
     }
 }
