@@ -1,7 +1,8 @@
 package esprit.tn.souha_pi.services;
 
 import esprit.tn.souha_pi.entities.LoanPayment;
- import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class LoanPaymentService  {
 
-    Connection cnx= Mydatabase.getInstance().getConnection();
+    Connection cnx= MyDataBase.getInstance().getConnection();
 
 
     public void add(LoanPayment p) throws SQLException{

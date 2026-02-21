@@ -1,105 +1,83 @@
 package esprit.tn.souha_pi.controllers;
 
 import esprit.tn.souha_pi.entities.BankCard;
-import esprit.tn.souha_pi.entities.Wallet;
 import esprit.tn.souha_pi.services.BankCardService;
 import esprit.tn.souha_pi.services.WalletService;
+import esprit.tn.souha_pi.utils.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 public class CardItemController {
 
+    @FXML private VBox rootCard;
+    @FXML private Label typeLabel;
     @FXML private Label numberLabel;
+    @FXML private Label ribLabel;  // NOUVEAU
+    @FXML private Label balanceLabel;
     @FXML private Label holderLabel;
     @FXML private Label expiryLabel;
-    @FXML private Label typeLabel;
-    @FXML private Label balanceLabel;
-    @FXML private VBox rootCard;
+    @FXML private Button eyeBtn;
 
     private BankCard card;
-    private final BankCardService service = new BankCardService();
-    private final WalletService walletService = new WalletService();
+    private boolean isNumberVisible = true;
+    private BankCardService cardService = new BankCardService();
+    private WalletService walletService = new WalletService();
 
-    private CardListController parentController;
+    public void setCard(BankCard card) {
+        this.card = card;
+        typeLabel.setText(card.getCardType());
+        holderLabel.setText(card.getCardHolder());
+        expiryLabel.setText(card.getExpiryDate());
 
-    // 0 = masked, 1 = show number, 2 = show balance
-    private int viewState = 0;
-
-    public void setParentController(CardListController parent){
-        this.parentController = parent;
-    }
-
-    public void setData(BankCard c){
-        card = c;
-
-        numberLabel.setText(format(c.getCardNumber()));
-        holderLabel.setText(c.getCardHolder());
-        expiryLabel.setText(c.getExpiryDate());
-        typeLabel.setText(c.getCardType());
-
-        // withdraw when clicking card
-        rootCard.setOnMouseClicked(e -> {
-            parentController.withdrawFromCard(card);
-        });
-    }
-
-    private String format(String num){
-        return "**** **** **** " + num.substring(num.length()-4);
-    }
-
-    // 👁️ EYE BUTTON LOGIC
-    @FXML
-    private void toggleCardView(){
-
-        // state 0 -> show full card number
-        if(viewState == 0){
-            numberLabel.setText(formatFull(card.getCardNumber()));
-            balanceLabel.setVisible(false);
-            viewState = 1;
-            return;
+        // Afficher le RIB
+        if (ribLabel != null) {
+            ribLabel.setText("RIB: " + card.getRib());
         }
 
-        // state 1 -> show balance
-        if(viewState == 1){
-            Wallet w = walletService.getWallet();
-            balanceLabel.setText("Balance : " + String.format("%.2f TND", w.getBalance()));
-            balanceLabel.setVisible(true);
-            numberLabel.setText("•••• •••• •••• ••••");
-            viewState = 2;
-            return;
-        }
+        updateNumberVisibility();
 
-        // state 2 -> back to masked
-        if(viewState == 2){
-            numberLabel.setText(format(card.getCardNumber()));
-            balanceLabel.setVisible(false);
-            viewState = 0;
+        try {
+            double balance = walletService.getByUserId(card.getUserId()).getBalance();
+            balanceLabel.setText(String.format("%.2f TND", balance));
+        } catch (Exception e) {
+            balanceLabel.setText("0.00 TND");
         }
     }
-
-    private String formatFull(String num){
-
-        if(num == null || num.length() != 16){
-            return "Invalid Card";
-        }
-
-        return num.substring(0,4)+" "+
-                num.substring(4,8)+" "+
-                num.substring(8,12)+" "+
-                num.substring(12,16);
-    }
-
 
     @FXML
-    private void topUp(){
-        TopUpController.selectedCard = card;
+    private void toggleCardView() {
+        isNumberVisible = !isNumberVisible;
+        updateNumberVisibility();
+    }
+
+    private void updateNumberVisibility() {
+        if (isNumberVisible) {
+            String numero = card.getCardNumber();
+            String numeroMasque = "**** **** **** " + numero.substring(numero.length() - 4);
+            numberLabel.setText(numeroMasque);
+            eyeBtn.setText("👁");
+        } else {
+            numberLabel.setText(card.getCardNumber());
+            eyeBtn.setText("🔒");
+        }
+    }
+
+    @FXML
+    private void topUp() {
+        // Ouvrir la page de rechargement
+        TopUpController.setSelectedCard(card);
         WalletLayoutController.instance.loadPage("wallet/topup.fxml");
     }
 
     @FXML
-    private void delete(){
-        service.delete(card.getId());
-        WalletLayoutController.instance.loadPage("wallet/cards.fxml");
+    private void delete() {
+        if (DialogUtil.confirm("Confirmation", "Voulez-vous vraiment supprimer cette carte ?")) {
+            cardService.delete(card.getId());
+            DialogUtil.success("Succès", "Carte supprimée");
+            // Retourner à la liste des cartes
+            WalletLayoutController.instance.goCards();
+        }
     }
 }

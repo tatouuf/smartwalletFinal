@@ -2,51 +2,95 @@ package esprit.tn.souha_pi.controllers;
 
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.entities.Transaction;
-import esprit.tn.souha_pi.services.TransactionService;
+import esprit.tn.souha_pi.entities.User;
 import esprit.tn.souha_pi.services.WalletService;
+import esprit.tn.souha_pi.services.TransactionService;
+import esprit.tn.souha_pi.utils.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 public class TopUpController {
 
-    public static BankCard selectedCard;
-
     @FXML private Label cardLabel;
     @FXML private TextField amountField;
 
-    private final WalletService walletService = new WalletService();
-    private final TransactionService transactionService = new TransactionService();
+    private WalletService walletService = new WalletService();
+    private TransactionService transactionService = new TransactionService();
+
+    private static BankCard selectedCard;  // Carte sélectionnée
+    private User currentUser;
 
     @FXML
-    public void initialize(){
-        cardLabel.setText("Card : **** **** **** " +
-                selectedCard.getCardNumber().substring(12));
+    public void initialize() {
+        currentUser = WalletLayoutController.instance.getCurrentUser();
+
+        if (selectedCard != null) {
+            cardLabel.setText("Carte: " + selectedCard.getCardType() + " - " +
+                    selectedCard.getCardNumber().substring(12));
+        } else {
+            cardLabel.setText("Aucune carte sélectionnée");
+        }
+    }
+
+    // Méthode statique pour définir la carte sélectionnée
+    public static void setSelectedCard(BankCard card) {
+        selectedCard = card;
     }
 
     @FXML
-    private void confirm(){
+    private void confirm() {
+        if (currentUser == null) {
+            DialogUtil.error("Erreur", "Vous devez être connecté");
+            return;
+        }
 
-        double amount = Double.parseDouble(amountField.getText());
+        if (selectedCard == null) {
+            DialogUtil.error("Erreur", "Aucune carte sélectionnée");
+            return;
+        }
 
-        // 1️⃣ update wallet balance
-        walletService.addBalance(1, amount);
+        String amountStr = amountField.getText().trim();
 
-        // 2️⃣ save transaction history
-        transactionService.add(
-                new Transaction(
-                        1,
-                        "DEPOSIT",
-                        amount,
-                        "CARD "+selectedCard.getCardNumber().substring(12)
-                )
-        );
+        if (amountStr.isEmpty()) {
+            DialogUtil.error("Erreur", "Veuillez saisir un montant");
+            return;
+        }
 
-        WalletLayoutController.instance.loadPage("wallet/dashboard.fxml");
+        try {
+            double amount = Double.parseDouble(amountStr);
+
+            if (amount <= 0) {
+                DialogUtil.error("Erreur", "Le montant doit être positif");
+                return;
+            }
+
+            // Ajouter le montant au wallet
+            walletService.addBalance(currentUser.getId(), amount);
+
+            // Enregistrer la transaction
+            transactionService.add(new Transaction(
+                    currentUser.getId(),
+                    "TOP_UP",
+                    amount,
+                    "Rechargement via carte " + selectedCard.getCardType()
+            ));
+
+            DialogUtil.success("Succès", String.format("✅ %.2f TND ajoutés à votre wallet", amount));
+
+            // Retour au dashboard
+            cancel();
+
+        } catch (NumberFormatException e) {
+            DialogUtil.error("Erreur", "Montant invalide");
+        } catch (Exception e) {
+            DialogUtil.error("Erreur", e.getMessage());
+        }
     }
 
     @FXML
-    private void cancel(){
-        WalletLayoutController.instance.loadPage("wallet/cards.fxml");
+    private void cancel() {
+        selectedCard = null;  // Réinitialiser la carte sélectionnée
+        WalletLayoutController.instance.goDashboard();
     }
 }

@@ -1,7 +1,7 @@
 
 import esprit.tn.souha_pi.entities.LoanPayment;
 import esprit.tn.souha_pi.services.LoanPaymentService;
-import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -22,7 +22,7 @@ public class LoanPaymentServiceTest {
     static void setup() throws Exception {
 
         service = new LoanPaymentService();
-        cnx = Mydatabase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getConnection();
 
         /* ---------- CREATE TEST LOAN ---------- */
 

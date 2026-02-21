@@ -1,11 +1,10 @@
 import esprit.tn.souha_pi.entities.Wallet;
 import esprit.tn.souha_pi.services.WalletService;
-import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +25,7 @@ public class WalletServiceTest {
     static void setup() throws Exception {
 
         walletService = new WalletService();
-        cnx = Mydatabase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getConnection();
 
         // clean old test wallets
         PreparedStatement clean = cnx.prepareStatement(

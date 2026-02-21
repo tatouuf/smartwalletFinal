@@ -4,44 +4,54 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="esprit.tn.souha_pi.controllers.WalletLayoutController">
+            fx:controller="esprit.tn.souha_pi.controllers.WalletLayoutController"
+            styleClass="page-bg">
 
-    <!-- SIDEBAR -->
+    <!-- Sidebar gauche -->
     <left>
-        <VBox spacing="18" styleClass="sidebar">
+        <VBox styleClass="sidebar" spacing="10" prefWidth="250">
             <padding>
-                <Insets top="25" right="15" bottom="25" left="15"/>
+                <Insets top="20" right="10" bottom="20" left="10"/>
             </padding>
-            <Label text="👛 My Wallet" styleClass="sidebar-title"/>
 
-            <Button text="🏠 Dashboard" onAction="#goDashboard" styleClass="sidebar-btn"/>
-
-            <Button text="💳 My Cards" onAction="#goCards" styleClass="sidebar-btn"/>
-
-            <Button text="📤 Send Money" onAction="#goSend" styleClass="sidebar-btn"/>
-
-            <Button text="📥 Receive Money" onAction="#goReceive" styleClass="sidebar-btn"/>
-
-            <Button text="🧾 Transactions History" onAction="#goHistory" styleClass="sidebar-btn"/>
+            <Label text=" Souha Wallet" styleClass="sidebar-title"/>
 
             <Separator/>
 
-            <Label text="🤝 Loans" styleClass="sidebar-title"/>
+            <Button text=" Dashboard" styleClass="sidebar-btn" onAction="#goDashboard"/>
+            <Button text=" Mes Cartes" styleClass="sidebar-btn" onAction="#goCards"/>
+            <Button text=" Envoyer" styleClass="sidebar-btn" onAction="#goSend"/>
+            <Button text=" Recevoir" styleClass="sidebar-btn" onAction="#goReceive"/>
+            <Button text=" Historique" styleClass="sidebar-btn" onAction="#goHistory"/>
+            <Button text="🔔 Notifications" styleClass="sidebar-btn" onAction="#showNotifications"/>
+            <Label fx:id="notifBadge" text="0" styleClass="notification-badge" visible="false"/>
 
-            <Button text="📨 Loan Requests" styleClass="sidebar-btn" onAction="#goLoanRequests"/>
+            <Separator/>
 
-            <Button text="🤝 Request a Loan" onAction="#goRequestLoan" styleClass="sidebar-btn"/>
+            <Button text=" Demander prêt" styleClass="sidebar-btn" onAction="#goRequestLoan"/>
+            <Button text=" Demandes reçues" styleClass="sidebar-btn" onAction="#goLoanRequests"/>
+            <Button text=" Mes prêts" styleClass="sidebar-btn" onAction="#goMyLoans"/>
 
-            <Button text="📑 My Active Loans" onAction="#goMyLoans" styleClass="sidebar-btn"/>
+            <Separator/>
+
+            <Button text=" Créer un compte" styleClass="sidebar-btn-highlight" onAction="#openInscription"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Button text=" Déconnexion" styleClass="sidebar-btn" onAction="#logout"/>
+            <Button text=" Test Admin" styleClass="sidebar-btn" onAction="#goAdminDashboard"/>
+
 
         </VBox>
     </left>
 
-    <!-- CONTENT -->
+    <!-- Zone de contenu centrale -->
     <center>
-        <StackPane fx:id="contentArea"/>
+        <StackPane fx:id="contentArea" styleClass="content-area"/>
     </center>
+
+
 
 </BorderPane>

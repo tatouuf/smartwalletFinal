@@ -19,6 +19,13 @@ public class DialogUtil {
         a.showAndWait();
     }
 
+    public static void info(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.showAndWait();
+    }
+
     public static boolean confirm(String title, String msg) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, msg, ButtonType.OK, ButtonType.CANCEL);
         a.setTitle(title);

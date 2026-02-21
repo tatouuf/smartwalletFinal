@@ -22,7 +22,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(fxml);
         Scene scene = new Scene(loader.load(), 1100, 700);
-        
+
         // Load CSS
         URL css = getClass().getResource("/css/theme.css");
         if (css != null) {

@@ -7,7 +7,7 @@
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="esprit.tn.souha_pi.controllers.loan.RequestLoanController">
 
-    <VBox alignment="CENTER">
+    <VBox alignment="CENTER" spacing="20">
 
         <!-- CARD -->
         <VBox spacing="16" maxWidth="420"
@@ -43,6 +43,20 @@
                           promptText="Explain why you need the loan..."/>
             </VBox>
 
+            <!-- IA ANALYSIS BOX - Dans la carte -->
+            <VBox fx:id="iaAnalysisBox" spacing="10"
+                  style="-fx-background-color: #e8f5e9; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #c8e6c9; -fx-border-radius: 10;"
+                  visible="false" managed="false">
+                <Label text="🤖 ANALYSE IA" style="-fx-font-weight: bold; -fx-text-fill: #2e7d32; -fx-font-size: 14px;"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label fx:id="iaProbabilityLabel" text="Probabilité: -" style="-fx-font-weight: bold;"/>
+                    <ProgressBar fx:id="iaProbabilityBar" prefWidth="150" progress="0"/>
+                </HBox>
+                <Label fx:id="iaRecommendationLabel" text="Niveau: -"/>
+                <Label fx:id="iaSuggestionLabel" text="💡 " wrapText="true"/>
+                <CheckBox fx:id="iaOptimizeCheckbox" text="Optimiser avec IA" style="-fx-text-fill: #2e7d32;"/>
+            </VBox>
+
             <!-- BUTTON -->
             <Button text="🤝 Send Loan Request"
                     prefHeight="42"
@@ -55,6 +69,14 @@
             <Label fx:id="statusLabel"
                    style="-fx-text-fill:#2c3e50; -fx-font-size:13px;"/>
 
+        </VBox>
+
+        <!-- IA INSIGHTS CONTAINER - En bas avec marge -->
+        <VBox fx:id="iaInsightsContainer" spacing="10"
+              style="-fx-background-color: #f3e5f5; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #ce93d8; -fx-border-radius: 10;"
+              maxWidth="420">
+            <Label text="📊 STATISTIQUES IA" style="-fx-font-weight: bold; -fx-text-fill: #8e24aa; -fx-font-size: 14px;"/>
+            <Label fx:id="iaSummaryLabel" text="Analyse globale en cours..." style="-fx-text-fill: #555;"/>
         </VBox>
 
     </VBox>

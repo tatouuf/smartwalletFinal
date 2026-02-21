@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface IBankCardService {
 
-     void add(BankCard card);
+    void add(BankCard card);
 
-     List<BankCard> getAllByUser(int userId);
+    List<BankCard> getAllByUser(int userId);
 
-     void delete(int id);
+    void delete(int id);
 }

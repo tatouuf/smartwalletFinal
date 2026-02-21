@@ -2,11 +2,11 @@ package esprit.tn.souha_pi.controllers;
 
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.services.BankCardService;
+import esprit.tn.souha_pi.utils.DialogUtil;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
+import java.util.UUID;
 
 public class CardAddController {
 
@@ -16,136 +16,78 @@ public class CardAddController {
     @FXML private TextField cvvField;
     @FXML private ChoiceBox<String> typeChoice;
 
-    private final BankCardService service = new BankCardService();
+    private BankCardService cardService = new BankCardService();
 
     @FXML
-    public void initialize(){
-
-        typeChoice.getItems().addAll("VISA","MASTERCARD");
-
-        // 🔹 HOLDER : lettres seulement
-        holderField.textProperty().addListener((obs,oldVal,newVal)->{
-            if(!newVal.matches("[a-zA-Z ]*")){
-                holderField.setText(oldVal);
-            }
-        });
-// ===== CREDIT CARD EXPIRY FORMATTER (MM/YY) =====
-        expiryField.setTextFormatter(new TextFormatter<>(change -> {
-
-            // text after the user action
-            String newText = change.getControlNewText();
-
-            // allow empty
-            if (newText.isEmpty())
-                return change;
-
-            // allow only digits and slash
-            if (!newText.matches("[0-9/]*"))
-                return null;
-
-            // auto insert slash after month
-            if (newText.length() == 2 && !newText.contains("/")) {
-                change.setText(change.getText() + "/");
-                change.setCaretPosition(3);
-                change.setAnchor(3);
-            }
-
-            // prevent more than MM/YY
-            if (newText.length() > 5)
-                return null;
-
-            return change;
-        }));
-
-        // 🔹 CARD NUMBER : 16 chiffres max
-        numberField.textProperty().addListener((obs,oldVal,newVal)->{
-            if(!newVal.matches("\\d*") || newVal.length()>16){
-                numberField.setText(oldVal);
-            }
-        });
-
-        // 🔹 CVV : 3 chiffres max
-        cvvField.textProperty().addListener((obs,oldVal,newVal)->{
-            if(!newVal.matches("\\d*") || newVal.length()>3){
-                cvvField.setText(oldVal);
-            }
-        });
-
-        // 🔹 EXPIRY AUTO FORMAT MM/YY
-
+    public void initialize() {
+        typeChoice.getItems().addAll("Visa", "Mastercard", "Visa Electron", "Maestro");
+        typeChoice.setValue("Visa");
     }
 
     @FXML
-    private void save(){
+    private void save() {
+        String holder = holderField.getText().trim();
+        String number = numberField.getText().trim().replace(" ", "");
+        String expiry = expiryField.getText().trim();
+        String cvv = cvvField.getText().trim();
+        String type = typeChoice.getValue();
 
-        // 🔴 VALIDATION AVANT INSERT
-        String error = validate();
-
-        if(error != null){
-            showError(error);
+        // Validations
+        if (holder.isEmpty() || number.isEmpty() || expiry.isEmpty() || cvv.isEmpty()) {
+            DialogUtil.error("Erreur", "Tous les champs sont obligatoires");
             return;
         }
 
-        BankCard c = new BankCard(
-                1,
-                holderField.getText(),
-                numberField.getText(),
-                expiryField.getText(),
-                cvvField.getText(),
-                typeChoice.getValue()
-        );
-
-        service.add(c);
-
-        Alert a = new Alert(Alert.AlertType.INFORMATION,"Card added successfully");
-        a.showAndWait();
-
-        // reset form
-        holderField.clear();
-        numberField.clear();
-        expiryField.clear();
-        cvvField.clear();
-        typeChoice.setValue(null);
-    }
-
-    // 🔥 VALIDATION COMPLETE
-    private String validate(){
-
-        // HOLDER
-        if(holderField.getText().isEmpty())
-            return "Card holder is required";
-
-        // CARD NUMBER
-        if(numberField.getText().length()!=16)
-            return "Card number must contain 16 digits";
-
-        // CVV
-        if(cvvField.getText().length()!=3)
-            return "CVV must be 3 digits";
-
-        // TYPE
-        if(typeChoice.getValue()==null)
-            return "Select card type";
-
-        // EXPIRY FORMAT
-        try{
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
-            YearMonth expiry = YearMonth.parse(expiryField.getText(), formatter);
-
-            if(expiry.isBefore(YearMonth.now()))
-                return "Card expired";
-
-        }catch(Exception e){
-            return "Invalid expiry date (MM/YY)";
+        if (number.length() != 16 || !number.matches("\\d+")) {
+            DialogUtil.error("Erreur", "Le numéro de carte doit contenir 16 chiffres");
+            return;
         }
 
-        return null;
+        if (cvv.length() != 3 || !cvv.matches("\\d+")) {
+            DialogUtil.error("Erreur", "Le CVV doit contenir 3 chiffres");
+            return;
+        }
+
+        // Générer un RIB unique
+        String rib = genererRIB();
+
+        // Récupérer l'utilisateur connecté
+        int currentUserId = WalletLayoutController.instance.getCurrentUser().getId();
+
+        BankCard card = new BankCard(
+                currentUserId,
+                holder,
+                number,
+                expiry,
+                cvv,
+                type,
+                rib
+        );
+
+        try {
+            cardService.add(card);
+            DialogUtil.success("Succès", "Carte ajoutée avec succès\nRIB: " + rib);
+            annuler();
+        } catch (RuntimeException e) {
+            DialogUtil.error("Erreur", e.getMessage());
+        }
     }
 
-    private void showError(String msg){
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setHeaderText("Invalid Card");
-        a.setContentText(msg);
-        a.showAndWait();
+    private String genererRIB() {
+        // Format RIB Tunisien: TN59 + 20 chiffres
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String chiffres = timestamp.replaceAll("[^0-9]", "");
+        while (chiffres.length() < 20) {
+            chiffres = "0" + chiffres;
+        }
+        if (chiffres.length() > 20) {
+            chiffres = chiffres.substring(0, 20);
+        }
+        return "TN59" + chiffres;
+    }
+
+    @FXML
+    private void annuler() {
+        WalletLayoutController.instance.goCards();
     }
 }

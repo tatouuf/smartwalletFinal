@@ -1,6 +1,6 @@
 import esprit.tn.souha_pi.entities.Transaction;
 import esprit.tn.souha_pi.services.TransactionService;
-import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -24,7 +24,7 @@ public class TransactionServiceTest {
     static void setup() throws Exception {
 
         service = new TransactionService();
-        cnx = Mydatabase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getConnection();
 
         // Clean table to avoid old data affecting tests
         cnx.prepareStatement("DELETE FROM transaction").executeUpdate();

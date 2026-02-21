@@ -1,7 +1,7 @@
 package esprit.tn.souha_pi.services;
 
 import esprit.tn.souha_pi.entities.*;
-import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class LoanRequestService  {
 
-    Connection cnx= Mydatabase.getInstance().getConnection();
+    Connection cnx= MyDataBase.getInstance().getConnection();
 
     WalletService walletService = new WalletService();
     TransactionService transactionService = new TransactionService();
@@ -85,12 +85,12 @@ public class LoanRequestService  {
 
                 // destroy singleton
                 java.lang.reflect.Field instance =
-                        Mydatabase.class.getDeclaredField("instance");
+                        MyDataBase.class.getDeclaredField("instance");
                 instance.setAccessible(true);
                 instance.set(null, null);
 
                 // recreate connection
-                cnx = Mydatabase.getInstance().getConnection();
+                cnx = MyDataBase.getInstance().getConnection();
             }
 
         } catch (Exception e) {

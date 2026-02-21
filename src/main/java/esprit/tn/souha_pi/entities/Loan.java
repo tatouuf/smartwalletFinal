@@ -46,4 +46,6 @@ public class Loan {
     public void setStatus(String status){ this.status=status; }
     public void setStartDate(Timestamp startDate){ this.startDate=startDate; }
     public void setEndDate(Timestamp endDate){ this.endDate=endDate; }
+
+
 }

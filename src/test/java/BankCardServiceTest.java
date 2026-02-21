@@ -1,7 +1,7 @@
 
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.services.BankCardService;
-import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -19,7 +19,7 @@ public class BankCardServiceTest {
     @BeforeAll
     static void setup() throws Exception {
         service = new BankCardService();
-        cnx = Mydatabase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getConnection();
 
         // nettoyer table avant tests
         PreparedStatement ps = cnx.prepareStatement("DELETE FROM bank_card WHERE user_id=1");

@@ -1,7 +1,7 @@
 package esprit.tn.souha_pi.services;
 
 import esprit.tn.souha_pi.entities.*;
-import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class LoanService  {
 
-    Connection cnx = Mydatabase.getInstance().getConnection();
+    Connection cnx = MyDataBase.getInstance().getConnection();
 
     WalletService walletService = new WalletService();
     TransactionService transactionService = new TransactionService();
@@ -34,6 +34,11 @@ public class LoanService  {
             l.setPrincipalAmount(rs.getDouble("principal_amount"));
             l.setRemainingAmount(rs.getDouble("remaining_amount"));
             l.setStatus(rs.getString("status"));
+
+            // Timestamp direct - pas de conversion nécessaire
+            l.setStartDate(rs.getTimestamp("start_date"));
+            l.setEndDate(rs.getTimestamp("end_date"));
+
             return l;
         }
 
@@ -69,6 +74,11 @@ public class LoanService  {
                 l.setPrincipalAmount(rs.getDouble("principal_amount"));
                 l.setRemainingAmount(rs.getDouble("remaining_amount"));
                 l.setStatus(rs.getString("status"));
+
+                // Timestamp direct
+                l.setStartDate(rs.getTimestamp("start_date"));
+                l.setEndDate(rs.getTimestamp("end_date"));
+
                 list.add(l);
             }
 
@@ -77,6 +87,69 @@ public class LoanService  {
         }
 
         return list;
+    }
+
+    /* ===================================================== */
+    /* ================= GET LOANS BETWEEN USERS =========== */
+    /* ===================================================== */
+
+    public List<Loan> getLoansBetweenUsers(int userId1, int userId2) {
+        List<Loan> list = new ArrayList<>();
+
+        String sql = """
+            SELECT * FROM loan 
+            WHERE (lender_id = ? AND borrower_id = ?) 
+               OR (lender_id = ? AND borrower_id = ?)
+            ORDER BY id DESC
+            """;
+
+        try {
+            PreparedStatement ps = cnx.prepareStatement(sql);
+            ps.setInt(1, userId1);
+            ps.setInt(2, userId2);
+            ps.setInt(3, userId2);
+            ps.setInt(4, userId1);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                Loan l = new Loan();
+                l.setId(rs.getInt("id"));
+                l.setLenderId(rs.getInt("lender_id"));
+                l.setBorrowerId(rs.getInt("borrower_id"));
+                l.setPrincipalAmount(rs.getDouble("principal_amount"));
+                l.setRemainingAmount(rs.getDouble("remaining_amount"));
+                l.setStatus(rs.getString("status"));
+
+                // Timestamp direct
+                l.setStartDate(rs.getTimestamp("start_date"));
+                l.setEndDate(rs.getTimestamp("end_date"));
+
+                list.add(l);
+            }
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    /* ================= GET LOANS BY USER ID ================= */
+
+    public List<Loan> getLoansByUserId(int userId) {
+        return getLoansForUser(userId);
+    }
+
+    /* ================= IS LOAN REPAID ================= */
+
+    public boolean isLoanRepaid(int loanId) {
+        try {
+            Loan loan = getById(loanId);
+            return "PAID".equals(loan.getStatus());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /* ===================================================== */
@@ -132,19 +205,30 @@ public class LoanService  {
             if(newRemaining <= 0){
                 newRemaining = 0;
                 status = "PAID";
-            }
 
-            String sql = """
+                // Mettre à jour la date de remboursement
+                String updateSql = """
+                    UPDATE loan
+                    SET remaining_amount=?, status=?, repaid_date=NOW()
+                    WHERE id=?
+                    """;
+                PreparedStatement ps = cnx.prepareStatement(updateSql);
+                ps.setDouble(1, newRemaining);
+                ps.setString(2, status);
+                ps.setInt(3, loanId);
+                ps.executeUpdate();
+            } else {
+                String updateSql = """
                     UPDATE loan
                     SET remaining_amount=?, status=?
                     WHERE id=?
                     """;
-
-            PreparedStatement ps = cnx.prepareStatement(sql);
-            ps.setDouble(1,newRemaining);
-            ps.setString(2,status);
-            ps.setInt(3,loanId);
-            ps.executeUpdate();
+                PreparedStatement ps = cnx.prepareStatement(updateSql);
+                ps.setDouble(1, newRemaining);
+                ps.setString(2, status);
+                ps.setInt(3, loanId);
+                ps.executeUpdate();
+            }
 
             /* ---------- TRANSACTIONS ---------- */
 

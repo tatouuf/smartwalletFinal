@@ -1,7 +1,7 @@
 import esprit.tn.souha_pi.entities.Wallet;
 import esprit.tn.souha_pi.services.LoanRequestService;
 import esprit.tn.souha_pi.services.WalletService;
-import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -28,7 +28,7 @@ public class LoanRequestServiceTest {
 
         service = new LoanRequestService();
         walletService = new WalletService();
-        cnx = Mydatabase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getConnection();
 
         // ---- CLEAN TABLES (VERY IMPORTANT) ----
         cnx.prepareStatement("DELETE FROM loan_payment").executeUpdate();

@@ -4,26 +4,51 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<ScrollPane fitToWidth="true"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="esprit.tn.souha_pi.controllers.loan.LoanRequestsController">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.souha_pi.controllers.loan.LoanRequestsController"
+            styleClass="page-bg">
 
-    <content>
-        <VBox spacing="18">
-
+    <top>
+        <VBox spacing="15">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
-            <Label text="Loan Requests"
-                   style="-fx-font-size:24px; -fx-font-weight:bold;"/>
+            <!-- Header -->
+            <Label text="📋 Loan Requests"
+                   style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:#2c3e50;"/>
 
-            <!-- cards container -->
-            <VBox fx:id="requestsContainer" spacing="14"/>
+            <!-- IA Insights Section -->
+            <VBox fx:id="iaInsightsContainer" spacing="10"
+                  style="-fx-background-color: #f3e5f5;
+                         -fx-padding: 15;
+                         -fx-background-radius: 10;
+                         -fx-border-color: #ce93d8;
+                         -fx-border-radius: 10;">
 
-            <Label fx:id="statusLabel" style="-fx-text-fill:green;"/>
+                <Label text="🤖 ANALYSE IA DES DEMANDES"
+                       style="-fx-font-size:16px; -fx-font-weight:bold; -fx-text-fill:#9b59b6;"/>
+
+                <Label fx:id="iaSummaryLabel"
+                       text="Analyse en cours..."
+                       style="-fx-text-fill:#555;"/>
+
+            </VBox>
+
+            <Label fx:id="statusLabel"
+                   style="-fx-text-fill:#2c3e50; -fx-font-size:13px;"/>
 
         </VBox>
-    </content>
+    </top>
 
-</ScrollPane>
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background: transparent;">
+            <VBox fx:id="requestsContainer" spacing="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

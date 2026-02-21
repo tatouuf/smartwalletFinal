@@ -195,3 +195,150 @@
     -fx-font-size:16px;
     -fx-font-weight:bold;
 }
+/* Bouton sidebar mis en évidence */
+.sidebar-btn-highlight{
+    -fx-background-color: #6c5ce7;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 10 15;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn-highlight:hover{
+    -fx-background-color: #5a4de0;
+    -fx-effect: dropshadow(gaussian, rgba(108,92,231,0.4), 10, 0, 0, 3);
+}
+
+/* Content area */
+.content-area {
+    -fx-background-color: transparent;
+    -fx-padding: 20;
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: #111827;
+    -fx-padding: 20 10;
+}
+
+.sidebar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.sidebar-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 14px;
+    -fx-padding: 10 15;
+    -fx-background-radius: 8;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: #6c5ce7;
+    -fx-text-fill: white;
+}
+
+.sidebar-btn-highlight {
+    -fx-background-color: #6c5ce7;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 15;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn-highlight:hover {
+    -fx-background-color: #5a4de0;
+}
+
+ /* Styles pour la page de connexion */
+ .link-btn {
+     -fx-background-color: transparent;
+     -fx-text-fill: #3b82f6;
+     -fx-font-weight: bold;
+     -fx-cursor: hand;
+     -fx-underline: true;
+ }
+
+ .link-btn:hover {
+     -fx-text-fill: #2563eb;
+ }
+
+ .input {
+     -fx-background-radius: 8;
+     -fx-border-radius: 8;
+     -fx-border-color: #d1d5db;
+     -fx-padding: 8 12;
+     -fx-font-size: 14px;
+ }
+
+ .input:focused {
+     -fx-border-color: #3b82f6;
+     -fx-border-width: 2;
+ }
+
+ .primary-btn {
+     -fx-background-color: #3b82f6;
+     -fx-text-fill: white;
+     -fx-font-weight: bold;
+     -fx-background-radius: 8;
+     -fx-padding: 8 16;
+     -fx-cursor: hand;
+ }
+
+ .primary-btn:hover {
+     -fx-background-color: #2563eb;
+ }
+
+ .card {
+     -fx-background-color: white;
+     -fx-background-radius: 16;
+     -fx-padding: 30;
+     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 5);
+ }
+ /* Style pour le RIB */
+ .card-rib {
+     -fx-text-fill: rgba(255,255,255,0.9);
+     -fx-font-size: 12px;
+     -fx-font-family: 'Courier New';
+     -fx-background-color: rgba(0,0,0,0.2);
+     -fx-padding: 5 10;
+     -fx-background-radius: 5;
+ }
+
+
+
+ /* Notifications */
+ .notification-badge {
+     -fx-background-color: #ef4444;
+     -fx-text-fill: white;
+     -fx-font-size: 10px;
+     -fx-font-weight: bold;
+     -fx-min-width: 18px;
+     -fx-min-height: 18px;
+     -fx-max-width: 18px;
+     -fx-max-height: 18px;
+     -fx-background-radius: 9;
+     -fx-alignment: center;
+     -fx-padding: 0;
+     -fx-translate-x: -10;
+     -fx-translate-y: -5;
+ }
+
+ .notification-btn {
+     -fx-background-color: transparent;
+     -fx-font-size: 18px;
+     -fx-cursor: hand;
+ }
+
+ .notification-btn:hover {
+     -fx-opacity: 0.8;
+ }

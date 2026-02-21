@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ILoanPaymentService {
 
-     void add(LoanPayment payment) throws SQLException;
+    void add(LoanPayment payment) throws SQLException;
 
-     List<LoanPayment> getByLoan(int loanId);
+    List<LoanPayment> getByLoan(int loanId);
 }

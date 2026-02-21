@@ -4,6 +4,8 @@ import esprit.tn.souha_pi.entities.LoanRequest;
 import esprit.tn.souha_pi.entities.User;
 import esprit.tn.souha_pi.services.LoanRequestService;
 import esprit.tn.souha_pi.services.UserService;
+import esprit.tn.souha_pi.services.ia.ICreditScoringService;
+import esprit.tn.souha_pi.services.ia.impl.CreditScoringService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,8 +23,18 @@ public class LoanRequestsController {
     @FXML
     private Label statusLabel;
 
+    // IA Components
+    @FXML
+    private VBox iaInsightsContainer;
+
+    @FXML
+    private Label iaSummaryLabel;
+
     private LoanRequestService requestService = new LoanRequestService();
     private UserService userService = new UserService();
+
+    // IA Service
+    private ICreditScoringService creditScoringService = new CreditScoringService();
 
     // ⚠️ remplacer par user connecté plus tard
     private int currentUserId = 1;
@@ -30,12 +42,12 @@ public class LoanRequestsController {
     @FXML
     public void initialize(){
         loadRequests();
+        loadIAInsights();
     }
 
     /* ================= LOAD ================= */
 
     private void loadRequests(){
-
         requestsContainer.getChildren().clear();
 
         List<LoanRequest> list = requestService.getRequestsForLender(currentUserId);
@@ -51,6 +63,121 @@ public class LoanRequestsController {
             VBox card = createRequestCard(request);
             requestsContainer.getChildren().add(card);
         }
+    }
+
+    /* ================= IA INSIGHTS ================= */
+
+    private void loadIAInsights() {
+        if (iaInsightsContainer == null) return;
+
+        iaInsightsContainer.getChildren().clear();
+
+        List<LoanRequest> list = requestService.getRequestsForLender(currentUserId);
+
+        if (list.isEmpty()) {
+            return;
+        }
+
+        Label title = new Label("🤖 ANALYSE IA DES DEMANDES");
+        title.setStyle("-fx-font-size:16px; -fx-font-weight:bold; -fx-text-fill:#9b59b6;");
+        iaInsightsContainer.getChildren().add(title);
+
+        int totalRequests = list.size();
+        double totalAmount = 0;
+        for (LoanRequest r : list) {
+            totalAmount += r.getAmount();
+        }
+
+        Label stats = new Label(String.format(
+                "📊 %d demandes • %.2f TND",
+                totalRequests, totalAmount
+        ));
+        stats.setStyle("-fx-text-fill:#555; -fx-padding: 0 0 10 0;");
+        iaInsightsContainer.getChildren().add(stats);
+
+        // Analyser chaque demande avec IA
+        for (LoanRequest request : list) {
+            try {
+                User borrower = userService.getById(request.getBorrowerId());
+
+                // Calculer score de confiance
+                ICreditScoringService.TrustScore score =
+                        creditScoringService.calculateTrustScore(
+                                request.getBorrowerId(),
+                                currentUserId
+                        );
+
+                HBox insightRow = new HBox(10);
+                insightRow.setStyle("-fx-padding: 8; -fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-border-radius: 5;");
+
+                Label nameLabel = new Label(borrower.getFullname() + ":");
+                nameLabel.setStyle("-fx-font-weight:bold; -fx-min-width: 100;");
+
+                Label scoreLabel = new Label(String.format("%.0f/100", score.getScore()));
+                scoreLabel.setStyle("-fx-font-weight:bold; -fx-min-width: 60;");
+
+                // Color by score
+                if (score.getScore() >= 70) {
+                    scoreLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight:bold; -fx-min-width: 60;");
+                } else if (score.getScore() >= 50) {
+                    scoreLabel.setStyle("-fx-text-fill: #f39c12; -fx-font-weight:bold; -fx-min-width: 60;");
+                } else {
+                    scoreLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight:bold; -fx-min-width: 60;");
+                }
+
+                Label levelLabel = new Label("(" + score.getLevel() + ")");
+                levelLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-min-width: 80;");
+
+                Button analyzeBtn = new Button("🔍 Détails");
+                analyzeBtn.setStyle("-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 5 10;");
+
+                LoanRequest finalRequest = request;
+                analyzeBtn.setOnAction(e -> showIADetails(finalRequest, score));
+
+                insightRow.getChildren().addAll(nameLabel, scoreLabel, levelLabel, analyzeBtn);
+                iaInsightsContainer.getChildren().add(insightRow);
+
+            } catch (Exception e) {
+                // Ignorer les erreurs pour une demande
+                System.err.println("Erreur analyse IA: " + e.getMessage());
+            }
+        }
+    }
+
+    private void showIADetails(LoanRequest request, ICreditScoringService.TrustScore score) {
+        User borrower = userService.getById(request.getBorrowerId());
+
+        StringBuilder details = new StringBuilder();
+        details.append("=== ANALYSE IA POUR ").append(borrower.getFullname()).append(" ===\n\n");
+        details.append("Score de confiance: ").append(String.format("%.1f/100", score.getScore())).append("\n");
+        details.append("Niveau: ").append(score.getLevel()).append("\n\n");
+
+        details.append("Facteurs analysés:\n");
+        for (var entry : score.getFactors().entrySet()) {
+            details.append("• ").append(entry.getKey()).append(": ")
+                    .append(String.format("%.0f%%", entry.getValue() * 100)).append("\n");
+        }
+
+        details.append("\n✅ Forces:\n");
+        if (score.getStrengths().isEmpty()) {
+            details.append("• Aucune force particulière\n");
+        } else {
+            for (String s : score.getStrengths()) {
+                details.append("• ").append(s).append("\n");
+            }
+        }
+
+        details.append("\n⚠️ Points d'attention:\n");
+        if (score.getWeaknesses().isEmpty()) {
+            details.append("• Aucun point faible\n");
+        } else {
+            for (String w : score.getWeaknesses()) {
+                details.append("• ").append(w).append("\n");
+            }
+        }
+
+        // Utiliser DialogUtil.confirm pour afficher (car info n'existe pas)
+        DialogUtil.confirm("Analyse IA Détail", details.toString());
     }
 
     /* ================= CARD ================= */
@@ -82,10 +209,27 @@ public class LoanRequestsController {
         Button reject = new Button("❌ Reject");
         reject.setStyle("-fx-background-color:#e74c3c; -fx-text-fill:white; -fx-font-weight:bold;");
 
+        // IA Button
+        Button analyzeBtn = new Button("🤖 IA");
+        analyzeBtn.setStyle("-fx-background-color:#9b59b6; -fx-text-fill:white; -fx-font-weight:bold;");
+
         accept.setOnAction(e -> acceptRequest(request));
         reject.setOnAction(e -> rejectRequest(request));
 
-        HBox actions = new HBox(10, accept, reject);
+        analyzeBtn.setOnAction(e -> {
+            try {
+                ICreditScoringService.TrustScore score =
+                        creditScoringService.calculateTrustScore(
+                                request.getBorrowerId(),
+                                currentUserId
+                        );
+                showIADetails(request, score);
+            } catch (Exception ex) {
+                DialogUtil.confirm("Erreur IA", ex.getMessage());
+            }
+        });
+
+        HBox actions = new HBox(10, accept, reject, analyzeBtn);
 
         /* ---- card ---- */
 
@@ -128,6 +272,7 @@ public class LoanRequestsController {
             );
 
             loadRequests();
+            loadIAInsights();
 
         }catch(Exception e){
             e.printStackTrace();
@@ -157,6 +302,7 @@ public class LoanRequestsController {
             );
 
             loadRequests();
+            loadIAInsights();
 
         }catch(Exception e){
             e.printStackTrace();

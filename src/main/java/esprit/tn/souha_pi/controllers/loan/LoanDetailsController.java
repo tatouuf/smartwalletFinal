@@ -170,7 +170,7 @@ public class LoanDetailsController {
 
     /* ================= PAY LOAN ================= */
 
-     @FXML
+    @FXML
     private void payLoan(){
 
         try{

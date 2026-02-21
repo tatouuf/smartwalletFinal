@@ -1,18 +1,51 @@
 package esprit.tn.souha_pi.services;
 
 import esprit.tn.souha_pi.entities.Wallet;
-import esprit.tn.souha_pi.utils.Mydatabase;
+import esprit.tn.souha_pi.utils.MyDataBase;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class WalletService  {
+public class WalletService {
 
-    Connection cnx = Mydatabase.getInstance().getConnection();
+    Connection cnx = MyDataBase.getInstance().getConnection();
 
-    /* ================= GET WALLET ================= */
+    // Dans WalletService.java
+    public List<Wallet> getAll() {
+        List<Wallet> list = new ArrayList<>();
+        String sql = "SELECT * FROM wallet";
 
+        try {
+            PreparedStatement ps = cnx.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Wallet w = new Wallet(
+                        rs.getInt("id"),
+                        rs.getInt("user_id"),
+                        rs.getDouble("balance")
+                );
+                list.add(w);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Dans WalletService.java
+    public boolean aUnWallet(int userId) {
+        try {
+            getByUserId(userId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /* ================= GET WALLET BY USER ID ================= */
     public Wallet getByUserId(int userId) throws Exception {
-
         String sql = "SELECT * FROM wallet WHERE user_id=?";
 
         cnx = fixConnection();
@@ -27,14 +60,43 @@ public class WalletService  {
                     rs.getDouble("balance")
             );
         }
-
         throw new Exception("Wallet not found for user " + userId);
     }
 
+    /* ================= CRÉER UN NOUVEAU WALLET ================= */
+    public void creerWallet(int userId, double depotInitial) throws SQLException {
+        String sql = "INSERT INTO wallet (user_id, balance) VALUES (?, ?)";
+
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setDouble(2, depotInitial);
+            ps.executeUpdate();
+
+            System.out.println("✅ Wallet créé pour l'utilisateur ID: " + userId);
+        }
+    }
+
+    /* ================= GET WALLET (pour user_id=1 par défaut) ================= */
+    public Wallet getWallet() {
+        try {
+            PreparedStatement ps = cnx.prepareStatement("SELECT * FROM wallet WHERE user_id=1");
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Wallet(
+                        rs.getInt("id"),
+                        rs.getInt("user_id"),
+                        rs.getDouble("balance")
+                );
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     /* ================= CREDIT ================= */
-
     public void credit(int userId, double amount) throws Exception {
-
         String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id=?";
 
         cnx = fixConnection();
@@ -45,13 +107,12 @@ public class WalletService  {
     }
 
     /* ================= DEBIT ================= */
-
     public void debit(int userId, double amount) throws Exception {
-
         Wallet w = getByUserId(userId);
 
-        if (w.getBalance() < amount)
-            throw new Exception("Insufficient balance");
+        if (w.getBalance() < amount) {
+            throw new Exception("Solde insuffisant");
+        }
 
         String sql = "UPDATE wallet SET balance = balance - ? WHERE user_id=?";
 
@@ -63,73 +124,73 @@ public class WalletService  {
     }
 
     /* ================= TRANSFER ================= */
-    // used for LOAN and SEND MONEY
-
     public void transfer(int senderId, int receiverId, double amount) throws Exception {
-
-        // DO NOT TOUCH AUTOCOMMIT HERE
-
-        // debit sender
         debit(senderId, amount);
-
-        // credit receiver
         credit(receiverId, amount);
     }
-     private Connection fixConnection() {
 
+    /* ================= SEND (pour user_id=1) ================= */
+    public boolean send(double amount) {
+        Wallet w = getWallet();
+        if (w.getBalance() < amount) return false;
         try {
-            if (cnx == null || cnx.isClosed() || !cnx.isValid(2)) {
-
-                System.out.println("⚠ Database connection lost... reconnecting");
-
-                // destroy old singleton instance
-                java.lang.reflect.Field instance =
-                        Mydatabase.class.getDeclaredField("instance");
-                instance.setAccessible(true);
-                instance.set(null, null);
-
-                // recreate connection
-                cnx = Mydatabase.getInstance().getConnection();
-            }
-
+            PreparedStatement ps = cnx.prepareStatement(
+                    "UPDATE wallet SET balance = balance - ? WHERE user_id=1"
+            );
+            ps.setDouble(1, amount);
+            ps.executeUpdate();
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return cnx;
     }
 
-    public Wallet getWallet(){
+    /* ================= ADD BALANCE ================= */
+    public void addBalance(int userId, double amount) {
+        String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
+        try (var ps = cnx.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        try{
-            PreparedStatement ps=cnx.prepareStatement("SELECT * FROM wallet WHERE user_id=1");
-            ResultSet rs=ps.executeQuery();
+    public void addBalance(double amount) {
+        addBalance(1, amount);
+    }
 
-            if(rs.next()){
-                return new Wallet(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getDouble("balance")
-                );
-            }
-        }catch(Exception e){throw new RuntimeException(e);}
-
-        return null;
-    }public boolean send(double amount){ Wallet w=getWallet(); if(w.getBalance()<amount) return false; try{ PreparedStatement ps=cnx.prepareStatement( "UPDATE wallet SET balance = balance - ? WHERE user_id=1" ); ps.setDouble(1,amount); ps.executeUpdate(); return true; }catch(Exception e){throw new RuntimeException(e);} }
-    public void addBalance(int userId,double amount){ String sql=" UPDATE wallet SET balance = balance + ? WHERE user_id = ? "; try(var ps=cnx.prepareStatement(sql)){ ps.setDouble(1,amount); ps.setInt(2,userId); ps.executeUpdate(); }catch(Exception e){ throw new RuntimeException(e); } }
-    public void updateWallet(Wallet wallet){
+    /* ================= UPDATE WALLET ================= */
+    public void updateWallet(Wallet wallet) {
         String sql = "UPDATE wallet SET balance=? WHERE id=?";
-
-        try(PreparedStatement ps=cnx.prepareStatement(sql)){
-
-
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setDouble(1, wallet.getBalance());
             ps.setInt(2, wallet.getId());
             ps.executeUpdate();
-
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void addBalance(double amount){ try{ PreparedStatement ps=cnx.prepareStatement( "UPDATE wallet SET balance = balance + ? WHERE user_id=1" ); ps.setDouble(1,amount); ps.executeUpdate(); }catch(Exception e){throw new RuntimeException(e);} }
+
+    /* ================= FIX CONNECTION ================= */
+    private Connection fixConnection() {
+        try {
+            if (cnx == null || cnx.isClosed() || !cnx.isValid(2)) {
+                System.out.println("⚠ Database connection lost... reconnecting");
+
+                java.lang.reflect.Field instance =
+                        MyDataBase.class.getDeclaredField("instance");
+                instance.setAccessible(true);
+                instance.set(null, null);
+
+                cnx = MyDataBase.getInstance().getConnection();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cnx;
+    }
+
+
 }

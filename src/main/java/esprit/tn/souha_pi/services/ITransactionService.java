@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface ITransactionService {
 
-     void add(Transaction t);
+    void add(Transaction t);
 
-     List<Transaction> getAll(int userId);
+    List<Transaction> getAll(int userId);
 
 }
