@@ -10,5 +10,6 @@ public interface IServiceServices {
     void modifierServices (Services S) throws SQLException;
     void supprimerServices (Services S) throws SQLException;
     List<Services> recupererServices() throws SQLException;
+    void modifierServiceStatut(Services s) throws SQLException;
 }
 

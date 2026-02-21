@@ -1,7 +1,7 @@
 package tests.services;
 
 import entities.service.Services;
-import entities.service.Statut;       // Statut pour Services
+import entities.service.Statut;
 import entities.service.TypeService;
 
 import entities.assurances.Assurances;
@@ -16,6 +16,10 @@ import services.service.ServiceServices;
 import services.assurances.ServiceAssurances;
 import services.credit.ServiceCredit;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,13 +27,15 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static final GeometryFactory GF = new GeometryFactory();
+
     public static void main(String[] args) {
         ServiceServices serviceServices = new ServiceServices();
         ServiceAssurances serviceAssurances = new ServiceAssurances();
         ServiceCredit serviceCredit = new ServiceCredit();
         Scanner sc = new Scanner(System.in);
 
-        // Utilisateur par défaut
+        // ✅ Utilisateur par défaut
         User u1 = new User(1, "Tattou", "Itaf", "itaf@example.com");
 
         boolean exit = false;
@@ -66,9 +72,11 @@ public class Main {
     }
 
     // ===================== AJOUTER =====================
-    private static void ajouter(Scanner sc, ServiceServices serviceServices,
+    private static void ajouter(Scanner sc,
+                                ServiceServices serviceServices,
                                 ServiceAssurances serviceAssurances,
-                                ServiceCredit serviceCredit, User u1) throws SQLException {
+                                ServiceCredit serviceCredit,
+                                User u1) throws SQLException {
 
         System.out.println("\n--- AJOUTER ---");
         System.out.println("1. Location Voiture");
@@ -85,14 +93,18 @@ public class Main {
                 String desc = sc.nextLine();
                 System.out.print("Type : ");
                 String type = sc.nextLine();
+
                 Statut statutService = readStatutService(sc);
-                System.out.print("Localisation (lat,lon) : ");
-                String loc = sc.nextLine();
+
+                // ✅ localisation en Point (JTS)
+                Point loc = readLocationPoint(sc);
+                if (loc == null) return;
+
                 System.out.print("Adresse : ");
                 String adresse = sc.nextLine();
+
                 TypeService typeService = readTypeService(sc);
 
-                // ====== AJOUT IMAGE ======
                 System.out.print("Chemin de l'image : ");
                 String imagePath = sc.nextLine();
 
@@ -100,6 +112,7 @@ public class Main {
                 serviceServices.ajouterServices(s);
                 System.out.println("Service ajouté avec succès !");
             }
+
             case 3 -> {
                 System.out.print("Nom assurance : ");
                 String nom = sc.nextLine();
@@ -116,6 +129,7 @@ public class Main {
                 serviceAssurances.ajouterAssurance(a);
                 System.out.println("Assurance ajoutée avec succès !");
             }
+
             case 4 -> {
                 System.out.print("Nom client : ");
                 String nomClient = sc.nextLine();
@@ -129,14 +143,17 @@ public class Main {
                 serviceCredit.ajouterCredit(c);
                 System.out.println("Crédit ajouté avec succès !");
             }
+
             default -> System.out.println("Option invalide !");
         }
     }
 
     // ===================== MODIFIER =====================
-    private static void modifier(Scanner sc, ServiceServices serviceServices,
+    private static void modifier(Scanner sc,
+                                 ServiceServices serviceServices,
                                  ServiceAssurances serviceAssurances,
-                                 ServiceCredit serviceCredit, User u1) throws SQLException {
+                                 ServiceCredit serviceCredit,
+                                 User u1) throws SQLException {
 
         System.out.println("\n--- MODIFIER ---");
         System.out.println("1. Location Voiture/Maison");
@@ -153,14 +170,18 @@ public class Main {
                 String desc = sc.nextLine();
                 System.out.print("Type : ");
                 String type = sc.nextLine();
+
                 Statut statutService = readStatutService(sc);
-                System.out.print("Localisation (lat,lon) : ");
-                String loc = sc.nextLine();
+
+                // ✅ localisation en Point (JTS)
+                Point loc = readLocationPoint(sc);
+                if (loc == null) return;
+
                 System.out.print("Adresse : ");
                 String adresse = sc.nextLine();
+
                 TypeService typeService = readTypeService(sc);
 
-                // ====== AJOUT IMAGE ======
                 System.out.print("Chemin de l'image : ");
                 String imagePath = sc.nextLine();
 
@@ -168,6 +189,7 @@ public class Main {
                 serviceServices.modifierServices(s);
                 System.out.println("Service modifié avec succès !");
             }
+
             case 2 -> {
                 int id = readInt(sc, "ID de l'assurance : ");
                 System.out.print("Nom assurance : ");
@@ -186,6 +208,7 @@ public class Main {
                 serviceAssurances.modifierAssurance(a);
                 System.out.println("Assurance modifiée avec succès !");
             }
+
             case 3 -> {
                 int id = readInt(sc, "ID du crédit : ");
                 System.out.print("Nom client : ");
@@ -201,12 +224,14 @@ public class Main {
                 serviceCredit.modifierCredit(c);
                 System.out.println("Crédit modifié avec succès !");
             }
+
             default -> System.out.println("Option invalide !");
         }
     }
 
     // ===================== SUPPRIMER =====================
-    private static void supprimer(Scanner sc, ServiceServices serviceServices,
+    private static void supprimer(Scanner sc,
+                                  ServiceServices serviceServices,
                                   ServiceAssurances serviceAssurances,
                                   ServiceCredit serviceCredit) throws SQLException {
 
@@ -244,7 +269,8 @@ public class Main {
     }
 
     // ===================== AFFICHER =====================
-    private static void afficher(Scanner sc, ServiceServices serviceServices,
+    private static void afficher(Scanner sc,
+                                 ServiceServices serviceServices,
                                  ServiceAssurances serviceAssurances,
                                  ServiceCredit serviceCredit) throws SQLException {
 
@@ -281,7 +307,9 @@ public class Main {
             try {
                 System.out.print(msg);
                 return Integer.parseInt(sc.nextLine());
-            } catch (Exception e) { System.out.println("Veuillez entrer un entier valide."); }
+            } catch (Exception e) {
+                System.out.println("Veuillez entrer un entier valide.");
+            }
         }
     }
 
@@ -290,7 +318,9 @@ public class Main {
             try {
                 System.out.print(msg);
                 return Float.parseFloat(sc.nextLine());
-            } catch (Exception e) { System.out.println("Veuillez entrer un nombre valide."); }
+            } catch (Exception e) {
+                System.out.println("Veuillez entrer un nombre valide.");
+            }
         }
     }
 
@@ -299,7 +329,9 @@ public class Main {
             try {
                 System.out.print("Date (YYYY-MM-DD) : ");
                 return LocalDate.parse(sc.nextLine());
-            } catch (Exception e) { System.out.println("Format invalide. Exemple : 2026-02-10"); }
+            } catch (Exception e) {
+                System.out.println("Format invalide. Exemple : 2026-02-10");
+            }
         }
     }
 
@@ -307,8 +339,11 @@ public class Main {
         while (true) {
             System.out.print("Statut service (DISPONIBLE/NON_DISPONIBLE) : ");
             String input = sc.nextLine().toUpperCase();
-            try { return Statut.valueOf(input); }
-            catch (Exception e) { System.out.println("Statut invalide."); }
+            try {
+                return Statut.valueOf(input);
+            } catch (Exception e) {
+                System.out.println("Statut invalide.");
+            }
         }
     }
 
@@ -316,8 +351,11 @@ public class Main {
         while (true) {
             System.out.print("Statut assurance (ACTIVE/INACTIVE) : ");
             String input = sc.nextLine().toUpperCase();
-            try { return entities.assurances.Statut.valueOf(input); }
-            catch (Exception e) { System.out.println("Statut invalide."); }
+            try {
+                return entities.assurances.Statut.valueOf(input);
+            } catch (Exception e) {
+                System.out.println("Statut invalide.");
+            }
         }
     }
 
@@ -325,17 +363,24 @@ public class Main {
         while (true) {
             System.out.print("Statut crédit (REMBOURSE/NON_REMBOURSE/PARTIELLEMENT_REMBOURSE) : ");
             String input = sc.nextLine().toUpperCase();
-            try { return StatutCredit.valueOf(input); }
-            catch (Exception e) { System.out.println("Statut invalide."); }
+            try {
+                return StatutCredit.valueOf(input);
+            } catch (Exception e) {
+                System.out.println("Statut invalide.");
+            }
         }
     }
 
+    // ✅ ici on met UPPERCASE pour matcher l'enum
     private static TypeService readTypeService(Scanner sc) {
         while (true) {
-            System.out.print("Type service (voiture/maison) : ");
-            String input = sc.nextLine().toLowerCase();
-            try { return TypeService.valueOf(input); }
-            catch (Exception e) { System.out.println("Type invalide."); }
+            System.out.print("Type service (VOITURE/MAISON) : ");
+            String input = sc.nextLine().toUpperCase();
+            try {
+                return TypeService.valueOf(input);
+            } catch (Exception e) {
+                System.out.println("Type invalide.");
+            }
         }
     }
 
@@ -343,8 +388,40 @@ public class Main {
         while (true) {
             System.out.print("Type assurance (AUTO/SANTE/MAISON/VIE/HABITATION/AUTRE) : ");
             String input = sc.nextLine().toUpperCase();
-            try { return TypeAssurance.valueOf(input); }
-            catch (Exception e) { System.out.println("Type invalide."); }
+            try {
+                return TypeAssurance.valueOf(input);
+            } catch (Exception e) {
+                System.out.println("Type invalide.");
+            }
+        }
+    }
+
+    // ===================== LOCALISATION (Point JTS) =====================
+    private static Point readLocationPoint(Scanner sc) {
+        System.out.print("Localisation (lat,lon) ex: 36.8065,10.1815 : ");
+        String txt = sc.nextLine();
+
+        Point p = parseLatLngToPoint(txt);
+        if (p == null) {
+            System.out.println("Localisation invalide !");
+        }
+        return p;
+    }
+
+    private static Point parseLatLngToPoint(String text) {
+        try {
+            String[] parts = text.trim().split("\\s*,\\s*");
+            if (parts.length != 2) return null;
+
+            double lat = Double.parseDouble(parts[0]);
+            double lng = Double.parseDouble(parts[1]);
+
+            if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+
+            // ✅ JTS: x = longitude, y = latitude
+            return GF.createPoint(new Coordinate(lng, lat));
+        } catch (Exception e) {
+            return null;
         }
     }
 }

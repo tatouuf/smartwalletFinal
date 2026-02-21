@@ -1,5 +1,6 @@
 package controller.acceuilservice;
 
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 
 import java.util.Objects;
 
@@ -110,4 +112,5 @@ public class AcceuilService {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 }

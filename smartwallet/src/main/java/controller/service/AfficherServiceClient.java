@@ -36,18 +36,22 @@ public class AfficherServiceClient {
 
     private final ServiceServices ss = new ServiceServices();
 
-    // Garde une trace des services ajoutés pour pouvoir annuler
+    // garde trace des services ajoutés
     private final Map<Integer, Services> addedServices = new HashMap<>();
 
     // ================= RETOUR =================
     @FXML
     private void retourMain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/acceuilservices/AcceuilServiceClient.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/acceuilservices/AcceuilServiceClient.fxml")
+            );
             Parent root = loader.load();
+
             Stage stage = (Stage) retouritafser.getScene().getWindow();
             stage.setScene(new Scene(root, 900, 500));
             stage.setTitle("Main ALC");
+
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to load main screen!");
@@ -57,22 +61,39 @@ public class AfficherServiceClient {
     // ================= INITIALIZE =================
     @FXML
     public void initialize() {
-        if (imgLogoList != null) {
-            imgLogoList.setImage(new Image(getClass().getResourceAsStream("/icons/logoservices.png")));
-            imgLogoList.setClip(new Circle(40, 40, 40));
+
+        // sécuriser logo
+        try {
+            if (imgLogoList != null) {
+                Image img = new Image(
+                        getClass().getResourceAsStream("/icons/logoservices.png")
+                );
+                imgLogoList.setImage(img);
+                imgLogoList.setClip(new Circle(40, 40, 40));
+            }
+        } catch (Exception e) {
+            System.out.println("Logo not found");
         }
+
         loadAvailableServices();
     }
 
-    // ================= AFFICHER SERVICES DISPONIBLES =================
+    // ================= LOAD SERVICES =================
     private void loadAvailableServices() {
         try {
             List<Services> services = ss.recupererServices();
+
+            if (cardaffserv == null) return;
+
             cardaffserv.getChildren().clear();
 
             for (Services s : services) {
-                // Affiche uniquement les services DISPONIBLES ou ceux ajoutés (pour pouvoir Cancel)
-                if (s.getStatut() != Statut.DISPONIBLE && !addedServices.containsKey(s.getId())) continue;
+
+                // afficher seulement DISPONIBLE ou déjà ajouté
+                if (s.getStatut() != Statut.DISPONIBLE
+                        && !addedServices.containsKey(s.getId())) {
+                    continue;
+                }
 
                 VBox card = createServiceCard(s);
                 cardaffserv.getChildren().add(card);
@@ -84,8 +105,9 @@ public class AfficherServiceClient {
         }
     }
 
-    // ================= CREATE SERVICE CARD =================
+    // ================= CREATE CARD =================
     private VBox createServiceCard(Services s) {
+
         VBox card = new VBox();
         card.setPrefWidth(250);
         card.setSpacing(8);
@@ -103,14 +125,9 @@ public class AfficherServiceClient {
         imageView.setFitHeight(130);
         imageView.setPreserveRatio(true);
 
-        if (s.getImage() != null && !s.getImage().isBlank()) {
-            File file = new File(s.getImage());
-            if (file.exists()) {
-                imageView.setImage(new Image(file.toURI().toString()));
-            }
-        }
+        loadServiceImage(imageView, s.getImage());
 
-        // ===== TEXT INFOS =====
+        // ===== TEXT =====
         Text id = new Text("Code: " + s.getId());
         Text prix = new Text("Price: " + s.getPrix());
         Text type = new Text("Type: " + s.getType());
@@ -123,44 +140,43 @@ public class AfficherServiceClient {
         Button btnAdd = new Button("Add");
         Button btnCancel = new Button("Cancel");
 
-        btnAdd.setStyle(
-                "-fx-background-color: #ff96db;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 8;"
-        );
+        styleButtons(btnAdd, btnCancel);
 
-        btnCancel.setStyle(
-                "-fx-background-color: #888888;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 8;"
-        );
-
-        // Action Add : change statut, garde dans addedServices, mais ne supprime pas la carte
+        // ---------- ADD ----------
         btnAdd.setOnAction(event -> {
             try {
                 s.setStatut(Statut.NON_DISPONIBLE);
                 ss.modifierServiceStatut(s);
-                addedServices.put(s.getId(), s); // marque comme ajouté
+
+                addedServices.put(s.getId(), s);
                 statutText.setText("Status: " + s.getStatutString());
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Service added! You can Cancel if needed.");
+
+                showAlert(Alert.AlertType.INFORMATION,
+                        "Success",
+                        "Service added! You can Cancel if needed.");
+
             } catch (SQLException e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to add service!");
             }
         });
 
-        // Action Cancel : revient à DISPONIBLE si le service avait été ajouté
+        // ---------- CANCEL ----------
         btnCancel.setOnAction(event -> {
             try {
                 if (addedServices.containsKey(s.getId())) {
+
                     s.setStatut(Statut.DISPONIBLE);
                     ss.modifierServiceStatut(s);
+
                     addedServices.remove(s.getId());
                     statutText.setText("Status: " + s.getStatutString());
-                    showAlert(Alert.AlertType.INFORMATION, "Cancelled", "Service addition cancelled!");
+
+                    showAlert(Alert.AlertType.INFORMATION,
+                            "Cancelled",
+                            "Service addition cancelled!");
                 }
+
             } catch (SQLException e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to cancel service!");
@@ -168,11 +184,51 @@ public class AfficherServiceClient {
         });
 
         HBox buttonBox = new HBox(10, btnAdd, btnCancel);
+
         card.getChildren().addAll(
-                imageView, id, prix, type, statutText, localisation, adresse, typeService, buttonBox
+                imageView,
+                id,
+                prix,
+                type,
+                statutText,
+                localisation,
+                adresse,
+                typeService,
+                buttonBox
         );
 
         return card;
+    }
+
+    // ================= IMAGE SAFE LOAD =================
+    private void loadServiceImage(ImageView imageView, String path) {
+        try {
+            if (path != null && !path.isBlank()) {
+                File file = new File(path);
+                if (file.exists()) {
+                    imageView.setImage(new Image(file.toURI().toString()));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Image not loaded: " + path);
+        }
+    }
+
+    // ================= STYLE BUTTONS =================
+    private void styleButtons(Button add, Button cancel) {
+        add.setStyle(
+                "-fx-background-color: #ff96db;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 8;"
+        );
+
+        cancel.setStyle(
+                "-fx-background-color: #888888;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 8;"
+        );
     }
 
     // ================= ALERT =================

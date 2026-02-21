@@ -3,189 +3,251 @@ package controller.service;
 import entities.service.Services;
 import entities.service.Statut;
 import entities.service.TypeService;
+import javafx.application.Platform;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
+import org.json.JSONObject;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import services.service.ServiceServices;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class ModifierService {
 
-    @FXML
-    private TextField txtPrix;
+    @FXML private TextField txtPrix;
+    @FXML private ComboBox<TypeService> txtTypeServiceCategory;
+    @FXML private TextField txtType;
+    @FXML private ComboBox<Statut> txtStatut;
+    @FXML private TextField txtLocalisation;
+    @FXML private TextField txtAdresse;
+    @FXML private TextField txtDescription;
+    @FXML private TextField txtImage;
+    @FXML private Button btnSave;
+    @FXML private ImageView imgLogoModifier;
+    @FXML private WebView mapView;
 
-    @FXML
-    private ComboBox<TypeService> txtTypeServiceCategory;
-
-    @FXML
-    private TextField txtType;
-
-    @FXML
-    private ComboBox<Statut> txtStatut;
-
-    @FXML
-    private TextField txtLocalisation;
-
-    @FXML
-    private TextField txtAdresse;
-
-    @FXML
-    private TextField txtDescription;
-
-    @FXML
-    private TextField txtImage;
-
-    @FXML
-    private Button retouritafmod;
-
-    @FXML
-    private Button btnSave;
-
-    @FXML
-    private ImageView imgLogoModifier;
-
+    private WebEngine webEngine;
     private Services currentService;
-    private File selectedFile;
 
+    private double selectedLatitude = 36.8065;
+    private double selectedLongitude = 10.1815;
+
+    private final GeometryFactory geometryFactory = new GeometryFactory();
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+
+    // ================= INIT =================
     @FXML
     public void initialize() {
-        // Charger le logo
-        if (imgLogoModifier != null) {
+
+        // ✅ logo safe
+        try {
             imgLogoModifier.setImage(
                     new Image(getClass().getResourceAsStream("/icons/logoservices.png"))
             );
-            Circle clip = new Circle(150, 150, 150);
-            imgLogoModifier.setClip(clip);
-        }
+            imgLogoModifier.setClip(new Circle(100, 100, 100));
+        } catch (Exception ignored) {}
 
-        // Initialiser les ComboBox
-        txtTypeServiceCategory.getItems().addAll(TypeService.values());
-        txtStatut.getItems().addAll(Statut.values());
-    }
-    @FXML
-    private void retourMain() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/services/AfficherService.fxml"));
-            Parent root = loader.load();
+        // ✅ combos
+        txtTypeServiceCategory.getItems().setAll(TypeService.values());
+        txtStatut.getItems().setAll(Statut.values());
 
-            Stage stage = (Stage) retouritafmod.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Main ALC");
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au menu principal !");
-        }
+        // ✅ important pour WebView
+        mapView.setContextMenuEnabled(false);
+
+        webEngine = mapView.getEngine();
+
+        // ✅ attendre chargement complet
+        webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                try {
+                    JSObject window = (JSObject) webEngine.executeScript("window");
+                    window.setMember("javaApp", new JavaApp());
+                } catch (Exception e) {
+                    System.out.println("JS bridge error");
+                }
+            }
+        });
+
+        // ✅ charger map après init
+        Platform.runLater(() ->
+                loadMap(selectedLatitude, selectedLongitude)
+        );
     }
-    // Méthode pour remplir les champs avec un service existant
+
+    // ================= SET SERVICE =================
     public void setService(Services s) {
+        if (s == null) return;
+
         this.currentService = s;
 
         txtPrix.setText(String.valueOf(s.getPrix()));
         txtType.setText(s.getType());
-        txtLocalisation.setText(s.getLocalisation());
         txtAdresse.setText(s.getAdresse());
         txtDescription.setText(s.getDescription());
         txtImage.setText(s.getImage());
-
         txtTypeServiceCategory.setValue(s.getTypeService());
         txtStatut.setValue(s.getStatut());
-    }
 
-    // Bouton Browse pour choisir une image
-    @FXML
-    private void choisirImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Image");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
-        );
+        if (s.getLocalisation() != null) {
+            selectedLongitude = s.getLocalisation().getX();
+            selectedLatitude = s.getLocalisation().getY();
+            txtLocalisation.setText(selectedLatitude + "," + selectedLongitude);
 
-        Stage stage = (Stage) txtImage.getScene().getWindow();
-        selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            try {
-                File destDir = new File("D:\\imageprojet");
-                if (!destDir.exists()) destDir.mkdirs();
-
-                File dest = new File(destDir, selectedFile.getName());
-                Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                txtImage.setText(dest.getAbsolutePath());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Error copying image!");
-                alert.show();
-            }
+            Platform.runLater(() ->
+                    loadMap(selectedLatitude, selectedLongitude)
+            );
         }
     }
 
-    // Bouton Save pour enregistrer les modifications
+    // ================= MAP =================
+    private void loadMap(double lat, double lng) {
+
+        String html = String.format("""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8"/>
+                    <link rel="stylesheet"
+                     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+                    <style>
+                        html, body { margin:0; height:100%%; }
+                        #map { height:100%%; width:100%%; }
+                    </style>
+                </head>
+                <body>
+                <div id="map"></div>
+
+                <script>
+                    var map = L.map('map').setView([%f, %f], 13);
+
+                    L.tileLayer(
+                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        { maxZoom:19 }
+                    ).addTo(map);
+
+                    var marker = L.marker([%f, %f], {draggable:true}).addTo(map);
+
+                    function sendToJava(lat,lng){
+                        try{
+                            if(window.javaApp){
+                                window.javaApp.sendCoordinates(lat,lng);
+                            }
+                        }catch(e){}
+                    }
+
+                    marker.on('dragend', function(e){
+                        var p = e.target.getLatLng();
+                        sendToJava(p.lat, p.lng);
+                    });
+
+                    map.on('click', function(e){
+                        marker.setLatLng(e.latlng);
+                        sendToJava(e.latlng.lat, e.latlng.lng);
+                    });
+                </script>
+                </body>
+                </html>
+                """, lat, lng, lat, lng);
+
+        webEngine.loadContent(html);
+    }
+
+    // ================= JAVA ↔ JS =================
+    public class JavaApp {
+        public void sendCoordinates(double lat, double lng) {
+            Platform.runLater(() -> {
+                selectedLatitude = lat;
+                selectedLongitude = lng;
+                txtLocalisation.setText(lat + "," + lng);
+
+                // ✅ IMPORTANT : ne pas bloquer UI
+                new Thread(() -> reverseGeocode(lat, lng)).start();
+            });
+        }
+    }
+
+    // ================= REVERSE GEOCODE =================
+    private void reverseGeocode(double lat, double lng) {
+        try {
+            String url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="
+                    + lat + "&lon=" + lng;
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("User-Agent", "JavaFXApp")
+                    .build();
+
+            HttpResponse<String> response =
+                    httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            JSONObject json = new JSONObject(response.body());
+            String address = json.optString("display_name", "");
+
+            Platform.runLater(() -> txtAdresse.setText(address));
+
+        } catch (Exception e) {
+            System.out.println("Geocode failed");
+        }
+    }
+
+    // ================= SAVE =================
     @FXML
     private void enregistrerModifications() {
         try {
-            if (txtPrix.getText().isEmpty() || txtType.getText().isEmpty() ||
-                    txtLocalisation.getText().isEmpty() || txtAdresse.getText().isEmpty() ||
-                    txtTypeServiceCategory.getValue() == null || txtStatut.getValue() == null) {
 
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setContentText("Please fill all mandatory fields!");
-                alert.show();
-                return;
+            if (currentService == null) {
+                throw new RuntimeException("Service null");
             }
 
             float prix = Float.parseFloat(txtPrix.getText());
-
-            String cheminImage = txtImage.getText();
+            Point loc = parseLatLngToPoint(txtLocalisation.getText());
 
             currentService.setPrix(prix);
             currentService.setType(txtType.getText());
-            currentService.setLocalisation(txtLocalisation.getText());
+            currentService.setLocalisation(loc);
             currentService.setAdresse(txtAdresse.getText());
             currentService.setDescription(txtDescription.getText());
-            currentService.setImage(cheminImage);
+            currentService.setImage(txtImage.getText());
             currentService.setTypeService(txtTypeServiceCategory.getValue());
             currentService.setStatut(txtStatut.getValue());
 
-            ServiceServices ss = new ServiceServices();
-            ss.modifierServices(currentService);
+            new ServiceServices().modifierServices(currentService);
 
-            Alert success = new Alert(Alert.AlertType.INFORMATION);
-            success.setContentText("Service updated successfully!");
-            success.showAndWait();
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Service updated successfully").showAndWait();
 
-            // Fermer la fenêtre après sauvegarde
-            Stage stage = (Stage) btnSave.getScene().getWindow();
-            stage.close();
+            ((Stage) btnSave.getScene().getWindow()).close();
 
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Price must be a valid number!");
-            alert.show();
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Error updating the service!");
-            alert.show();
+            new Alert(Alert.AlertType.ERROR,
+                    "Error updating service").showAndWait();
         }
     }
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
+
+    // ================= PARSE =================
+    private Point parseLatLngToPoint(String text) {
+        try {
+            String[] parts = text.trim().split("\\s*,\\s*");
+            double lat = Double.parseDouble(parts[0]);
+            double lng = Double.parseDouble(parts[1]);
+            return geometryFactory.createPoint(new Coordinate(lng, lat));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

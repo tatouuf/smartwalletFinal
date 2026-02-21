@@ -2,5 +2,5 @@ package entities.service;
 
 public enum TypeService {
     voiture,
-    maison
+    standard, maison
 }

@@ -47,7 +47,7 @@
          </content>
 
       </ScrollPane>
-      <Button fx:id="atoufa"
+      <Button fx:id="btnAjouterserrr"
               layoutX="762.0"
               layoutY="460.0"
               mnemonicParsing="false"
