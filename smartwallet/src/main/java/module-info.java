@@ -1,15 +1,14 @@
-module com.example.smartwallet {
+module esprit.tn.chayma {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    requires jdk.jsobject;
-    requires javafx.web;
-    requires java.desktop;
-    requires org.locationtech.jts;
+    requires mysql.connector.j;
+    requires java.mail;
     requires java.net.http;
-    requires org.json;
+    requires com.google.gson;
 
-    // Ouvre les packages contenant les FXML controllers et entités
-    opens com.example.smartwallet to javafx.fxml, javafx.graphics;
-    opens tests.services to javafx.fxml, javafx.graphics;
+    opens esprit.tn.chayma to javafx.fxml;
+    opens esprit.tn.chayma.controllers to javafx.fxml;
+
+    exports esprit.tn.chayma;
 }

@@ -1,4 +1,4 @@
-package tests.services;
+package esprit.tn.chayma;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,12 +6,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // FXML principal (chemin exact dans resources)
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/dashboarddepens.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/wallet/deplayoutLayout.fxml"));
+
         // Crée la scène
         Scene scene = new Scene(root, 1200, 900);
 
