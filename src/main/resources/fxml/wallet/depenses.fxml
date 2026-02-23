@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.DepensesController"
+           styleClass="page-bg">
+
+    <VBox alignment="TOP_CENTER" spacing="25" maxWidth="800">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <Label text="Mes Dépenses" styleClass="page-header"/>
+
+        <Label text="Fonctionnalité en cours de développement..." style="-fx-font-size: 18px; -fx-text-fill: #64748b;"/>
+
+    </VBox>
+</StackPane>

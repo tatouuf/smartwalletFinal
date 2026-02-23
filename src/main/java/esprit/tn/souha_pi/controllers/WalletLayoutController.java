@@ -19,29 +19,26 @@ public class WalletLayoutController {
 
     @FXML private StackPane contentArea;
     @FXML private Button adminDashboardBtn;
-    @FXML private Label notifBadge;  // Ajouté
+    @FXML private Label notifBadge;
 
     public static WalletLayoutController instance;
 
     private User currentUser;
-    private NotificationService notificationService = new NotificationService(); // Ajouté
+    private NotificationService notificationService = new NotificationService();
 
     @FXML
     public void initialize(){
         instance = this;
 
-        // Cacher le bouton admin par défaut
         if (adminDashboardBtn != null) {
             adminDashboardBtn.setVisible(false);
             adminDashboardBtn.setManaged(false);
         }
 
-        // Cacher le badge de notifications par défaut
         if (notifBadge != null) {
             notifBadge.setVisible(false);
         }
 
-        // Charger la page de connexion au démarrage
         javafx.application.Platform.runLater(() -> {
             loadPage("login.fxml");
         });
@@ -50,7 +47,7 @@ public class WalletLayoutController {
     public void setCurrentUser(User user) {
         this.currentUser = user;
         updateMenuVisibility();
-        mettreAJourBadgeNotifications(); // Mettre à jour les notifications après connexion
+        mettreAJourBadgeNotifications();
     }
 
     public User getCurrentUser() {
@@ -131,18 +128,15 @@ public class WalletLayoutController {
                 return;
             }
 
-            // Créer un dialogue personnalisé
             Dialog<Void> dialog = new Dialog<>();
             dialog.setTitle("🔔 Mes notifications");
             dialog.setHeaderText("Historique des notifications");
 
-            // Créer le contenu
             VBox content = new VBox(10);
             content.setPadding(new Insets(20));
             content.setPrefWidth(500);
             content.setPrefHeight(400);
 
-            // Ajouter un ScrollPane
             ScrollPane scrollPane = new ScrollPane();
             scrollPane.setFitToWidth(true);
             scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
@@ -160,7 +154,6 @@ public class WalletLayoutController {
                                 "-fx-border-radius: 10;"
                 );
 
-                // En-tête avec type et date
                 HBox header = new HBox(10);
                 header.setAlignment(Pos.CENTER_LEFT);
 
@@ -176,16 +169,13 @@ public class WalletLayoutController {
 
                 header.getChildren().addAll(typeLabel, spacer, dateLabel);
 
-                // Titre
                 Label titleLabel = new Label(n.getTitle());
                 titleLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0f172a;");
 
-                // Message
                 Label msgLabel = new Label(n.getMessage());
                 msgLabel.setWrapText(true);
                 msgLabel.setStyle("-fx-text-fill: #334155; -fx-font-size: 12px;");
 
-                // Statut
                 Label statusLabel = new Label("● " + n.getStatus());
                 statusLabel.setStyle(getStatusStyle(n.getStatus()));
 
@@ -196,7 +186,6 @@ public class WalletLayoutController {
             scrollPane.setContent(notifsBox);
             content.getChildren().add(scrollPane);
 
-            // Bouton Fermer
             ButtonType fermer = new ButtonType("Fermer", ButtonBar.ButtonData.OK_DONE);
             dialog.getDialogPane().getButtonTypes().add(fermer);
             dialog.getDialogPane().setContent(content);
@@ -300,5 +289,10 @@ public class WalletLayoutController {
 
     public void goHistory(){
         loadPage("wallet/history.fxml");
+    }
+
+    @FXML
+    public void goDepenses(){
+        loadPage("wallet/depenses.fxml");
     }
 }
