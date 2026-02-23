@@ -10,6 +10,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // FXML principal (chemin exact dans resources)
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/wallet/deplayoutLayout.fxml"));
 
         // Crée la scène
