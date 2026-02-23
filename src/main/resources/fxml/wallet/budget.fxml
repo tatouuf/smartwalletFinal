@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="esprit.tn.souha_pi.controllers.BudgetController"
+            fx:controller="esprit.tn.chayma.controllers.BudgetController"
             prefHeight="700" prefWidth="1000">
     <top>
         <VBox style="-fx-background-color: #7B1FA2; -fx-padding: 15;">

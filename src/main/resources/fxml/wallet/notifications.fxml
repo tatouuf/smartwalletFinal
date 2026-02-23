@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.chayma.controllers.NotificationsController" prefWidth="800" prefHeight="600">
+    <top>
+        <VBox style="-fx-background-color: #4CAF50; -fx-padding: 15;">
+            <Label text="Notifications" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="10" style="-fx-padding: 15;">
+            <ListView fx:id="notificationsList" prefHeight="400" />
+            <HBox spacing="10">
+                <Button fx:id="markReadBtn" text="Marquer comme lu" />
+                <Button fx:id="refreshBtn" text="Rafraîchir" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

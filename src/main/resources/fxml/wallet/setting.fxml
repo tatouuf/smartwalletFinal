@@ -5,16 +5,27 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.souha_pi.controllers.SettingController" prefHeight="700" prefWidth="1000">
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.chayma.controllers.SettingController" prefHeight="700" prefWidth="1000">
     <top>
         <VBox style="-fx-background-color: #6A1B9A; -fx-padding: 15;">
-            <Label text="Paramètres &amp; Préférences" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+            <Label text="Paramètres &amp; Préférences / Settings / الإعدادات" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
         </VBox>
     </top>
 
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
             <VBox spacing="25" style="-fx-padding: 30;">
+
+                <!-- Section Langue -->
+                <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+                    <Label text="Langue / Language / اللغة" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #6A1B9A;"/>
+                    <Separator/>
+                    <HBox spacing="20">
+                        <RadioButton fx:id="frenchRadio" text="🇫🇷 Français" toggleGroup="$languageGroup" selected="true" onAction="#onLanguageChange"/>
+                        <RadioButton fx:id="englishRadio" text="🇬🇧 English" toggleGroup="$languageGroup" onAction="#onLanguageChange"/>
+                        <RadioButton fx:id="arabicRadio" text="🇸🇦 العربية" toggleGroup="$languageGroup" onAction="#onLanguageChange"/>
+                    </HBox>
+                </VBox>
 
                 <!-- Section Générale -->
                 <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
@@ -24,20 +35,20 @@
                     <GridPane hgap="20" vgap="15">
                         <Label text="Devise principale :" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
                         <ComboBox fx:id="currencyCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-                        <Label text="Langue :" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
-                        <ComboBox promptText="Français" disable="true" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                     </GridPane>
                 </VBox>
 
                 <!-- Section Apparence -->
                 <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
-                    <Label text="Apparence" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #E91E63;"/>
+                    <Label text="Apparence / Appearance / المظهر" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #E91E63;"/>
                     <Separator/>
 
                     <GridPane hgap="20" vgap="15">
                         <Label text="Thème :" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
-                        <ComboBox fx:id="themeCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <RadioButton fx:id="lightRadio" text="☀️ Clair / Light / فاتح" toggleGroup="$themeGroup" selected="true" onAction="#onThemeChange"/>
+                            <RadioButton fx:id="darkRadio" text="🌙 Sombre / Dark / داكن" toggleGroup="$themeGroup" onAction="#onThemeChange"/>
+                        </HBox>
 
                         <Label text="Taille du texte :" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
                         <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
