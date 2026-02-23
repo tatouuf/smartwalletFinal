@@ -275,6 +275,10 @@ public class WalletLayoutController {
         loadPage("wallet/dashboard.fxml");
     }
 
+    public void goDashboardDepens(){
+        loadPage("wallet/dashboarddepens.fxml");
+    }
+
     public void goLoanRequests(){
         loadPage("loan/requests.fxml");
     }
@@ -294,5 +298,10 @@ public class WalletLayoutController {
     @FXML
     public void goDepenses(){
         loadPage("wallet/depenses.fxml");
+    }
+
+    @FXML
+    public void goBudget(){
+        loadPage("wallet/budget.fxml");
     }
 }

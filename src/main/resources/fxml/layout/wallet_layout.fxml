@@ -21,11 +21,12 @@
             <Separator/>
 
             <Button text=" Dashboard" styleClass="sidebar-btn" onAction="#goDashboard"/>
+            <Button text=" Dashboard Dépenses" styleClass="sidebar-btn" onAction="#goDashboardDepens"/>
             <Button text=" Mes Cartes" styleClass="sidebar-btn" onAction="#goCards"/>
             <Button text=" Envoyer" styleClass="sidebar-btn" onAction="#goSend"/>
             <Button text=" Recevoir" styleClass="sidebar-btn" onAction="#goReceive"/>
             <Button text=" Historique" styleClass="sidebar-btn" onAction="#goHistory"/>
-            <Button text=" Depenses" styleClass="sidebar-btn" onAction="#goDepenses"/>
+
             <Button text="🔔 Notifications" styleClass="sidebar-btn" onAction="#showNotifications"/>
             <Label fx:id="notifBadge" text="0" styleClass="notification-badge" visible="false"/>
 

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.souha_pi.controllers.DashboardDepensController" prefHeight="900" prefWidth="1200">
+    <top>
+        <VBox style="-fx-background-color: #673AB7; -fx-padding: 15;">
+            <Label text="Tableau de Bord Dépenses" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20" style="-fx-padding: 20;">
+                <!-- Navigation Buttons -->
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Button text="Plannings" onAction="#goPlannings" style="-fx-font-size: 14;"/>
+                    <Button text="Budgets" onAction="#goBudget" style="-fx-font-size: 14;"/>
+                    <Button text="Dépenses" onAction="#goDepenses" style="-fx-font-size: 14;"/>
+                    <Button text="Advisor" onAction="#goAdvisor" style="-fx-font-size: 14;"/>
+                    <Button text="Settings" onAction="#goSettings" style="-fx-font-size: 14;"/>
+                </HBox>
+
+                <!-- Cartes de statistiques -->
+                <HBox spacing="20">
+                    <!-- Total Dépenses -->
+                    <VBox style="-fx-border-color: #2196F3; -fx-border-radius: 5; -fx-padding: 20; -fx-background-color: #E3F2FD;" HBox.hgrow="ALWAYS">
+                        <Label text="Total des Dépenses" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1976D2;"/>
+                        <Label fx:id="totalDepensesLabel" text="0.00 DT" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1565C0;"/>
+                    </VBox>
+
+                    <!-- Dépenses Mois -->
+                    <VBox style="-fx-border-color: #4CAF50; -fx-border-radius: 5; -fx-padding: 20; -fx-background-color: #E8F5E9;" HBox.hgrow="ALWAYS">
+                        <Label text="Dépenses ce Mois" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #388E3C;"/>
+                        <Label fx:id="depensesMoisLabel" text="0.00 DT" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
+                    </VBox>
+
+                    <!-- Total Budgets -->
+                    <VBox style="-fx-border-color: #FF9800; -fx-border-radius: 5; -fx-padding: 20; -fx-background-color: #FFF3E0;" HBox.hgrow="ALWAYS">
+                        <Label text="Total des Budgets" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #E65100;"/>
+                        <Label fx:id="totalBudgetsLabel" text="0.00 DT" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #D84315;"/>
+                    </VBox>
+
+                    <!-- Total Plannings -->
+                    <VBox style="-fx-border-color: #9C27B0; -fx-border-radius: 5; -fx-padding: 20; -fx-background-color: #F3E5F5;" HBox.hgrow="ALWAYS">
+                        <Label text="Nombre de Plannings" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #7B1FA2;"/>
+                        <Label fx:id="totalPlanningsLabel" text="0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #6A1B9A;"/>
+                    </VBox>
+
+                    <!-- Budget Utilisé -->
+                    <VBox style="-fx-border-color: #F44336; -fx-border-radius: 5; -fx-padding: 20; -fx-background-color: #FFEBEE;" HBox.hgrow="ALWAYS">
+                        <Label text="Budget Utilisé" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #C62828;"/>
+                        <Label fx:id="budgetUtiliseLabel" text="0.00 DT" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #B71C1C;"/>
+                    </VBox>
+
+                    <!-- Prédiction Dépenses Mois Prochain -->
+                    <VBox style="-fx-border-color: #00BCD4; -fx-border-radius: 5; -fx-padding: 20; -fx-background-color: #E0F7FA;" HBox.hgrow="ALWAYS">
+                        <Label text="Prédiction Mois Prochain" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #00838F;"/>
+                        <Label fx:id="predictionDepensesLabel" text="0.00 DT" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #006064;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Graphiques -->
+                <HBox spacing="20" prefHeight="400">
+                    <!-- Pie Chart -->
+                    <TitledPane text="Dépenses par Catégorie" prefWidth="350" prefHeight="400" animated="false">
+                        <PieChart fx:id="depensesCategorieChart" prefHeight="360"/>
+                    </TitledPane>
+
+                    <!-- Bar Chart -->
+                    <TitledPane text="Dépenses par Mois" animated="false" HBox.hgrow="ALWAYS">
+                        <BarChart fx:id="depensesParMoisChart" categoryGap="10" barGap="5" prefHeight="360">
+                            <xAxis>
+                                <CategoryAxis label="Mois"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Montant (DT)"/>
+                            </yAxis>
+                        </BarChart>
+                    </TitledPane>
+                </HBox>
+
+                <!-- Line Chart -->
+                <TitledPane text="Évolution des Dépenses" animated="false" prefHeight="400">
+                    <LineChart fx:id="evolutionDepensesChart" prefHeight="360">
+                        <xAxis>
+                            <CategoryAxis label="Date"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Montant (DT)"/>
+                        </yAxis>
+                    </LineChart>
+                </TitledPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
