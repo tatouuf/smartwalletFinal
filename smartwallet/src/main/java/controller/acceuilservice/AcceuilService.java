@@ -45,7 +45,7 @@ public class AcceuilService {
     // ================== BUTTON ACTIONS ==================
     @FXML
     private void showAfficherService() {
-        openFXMLInSameStage("/services/AfficherService.fxml", "Afficher Tous les Services");
+        openFXMLInSameStage("/esprit/tn/chayma/services/AfficherService.fxml", "Afficher Tous les Services");
     }
 
     @FXML

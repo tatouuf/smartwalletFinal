@@ -1,0 +1,12 @@
+package esprit.tn.chayma.utils;
+
+public class Config {
+    // Configuration email
+    public static final String EMAIL_EXPEDITEUR = "souhawallet@gmail.com";
+    public static final String EMAIL_PASSWORD = "votre_mot_de_passe_app";
+
+    // Configuration SMS (Twilio)
+    public static final String TWILIO_ACCOUNT_SID = "votre_account_sid";
+    public static final String TWILIO_AUTH_TOKEN = "votre_auth_token";
+    public static final String TWILIO_PHONE_NUMBER = "+1234567890";
+}

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.souha_pi.controllers.DepensesController" prefHeight="700" prefWidth="1000">
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.chayma.controllers.DepensesController" prefHeight="700" prefWidth="1000">
     <top>
         <VBox style="-fx-background-color: #2196F3; -fx-padding: 15;">
             <Label text="Gestion des Dépenses" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>

@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.souha_pi.controllers.DashboardDepensController" prefHeight="900" prefWidth="1200">
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.chayma.controllers.DashboardDepensController" prefHeight="900" prefWidth="1200">
     <top>
         <VBox style="-fx-background-color: #673AB7; -fx-padding: 15;">
             <Label text="Tableau de Bord Dépenses" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
@@ -16,13 +16,6 @@
         <ScrollPane fitToWidth="true" fitToHeight="true">
             <VBox spacing="20" style="-fx-padding: 20;">
                 <!-- Navigation Buttons -->
-                <HBox spacing="15" alignment="CENTER_LEFT">
-                    <Button text="Plannings" onAction="#goPlannings" style="-fx-font-size: 14;"/>
-                    <Button text="Budgets" onAction="#goBudget" style="-fx-font-size: 14;"/>
-                    <Button text="Dépenses" onAction="#goDepenses" style="-fx-font-size: 14;"/>
-                    <Button text="Advisor" onAction="#goAdvisor" style="-fx-font-size: 14;"/>
-                    <Button text="Settings" onAction="#goSettings" style="-fx-font-size: 14;"/>
-                </HBox>
 
                 <!-- Cartes de statistiques -->
                 <HBox spacing="20">

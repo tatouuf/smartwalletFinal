@@ -35,7 +35,7 @@ public class MainFXML extends Application {
 
     public static void showAfficherService() {
         try {
-            FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/services/AfficherService.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainFXML.class.getResource("/esprit/tn/chayma/services/AfficherService.fxml"));
             Parent root = loader.load();
 
             primaryStage.setTitle("Afficher Tous les Services");
