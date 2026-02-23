@@ -1,0 +1,127 @@
+.page {
+    -fx-padding: 18;
+    -fx-background-color: #0b1220; /* fond sombre */
+    -fx-font-family: "Segoe UI", "Inter", Arial;
+}
+
+/* Header */
+.header {
+    -fx-padding: 14;
+    -fx-background-color: #0f1b33;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: rgba(255,255,255,0.06);
+}
+
+.title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+}
+
+.subtitle {
+    -fx-text-fill: rgba(255,255,255,0.70);
+    -fx-font-size: 12px;
+}
+
+.brand {
+    -fx-text-fill: #7dd3fc;
+    -fx-font-weight: 700;
+    -fx-font-size: 13px;
+}
+
+/* Cards */
+.card {
+    -fx-padding: 14;
+    -fx-background-color: #101a2f;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: rgba(255,255,255,0.06);
+}
+
+/* Form */
+.fieldLabel {
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-font-size: 12px;
+}
+
+.input {
+    -fx-background-color: #0b1220;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255,255,255,0.35);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-padding: 10 12 10 12;
+}
+
+/* Buttons */
+.btnPrimary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-font-weight: 700;
+}
+
+.btnSecondary {
+    -fx-background-color: #334155;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-font-weight: 700;
+}
+
+.btnDanger {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-font-weight: 700;
+}
+
+.btnGhost {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255,255,255,0.8);
+    -fx-border-color: rgba(255,255,255,0.18);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+}
+
+/* List */
+.sectionTitle {
+    -fx-text-fill: rgba(255,255,255,0.9);
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.list {
+    -fx-background-color: transparent;
+}
+
+.list .list-cell {
+    -fx-background-color: #0b1220;
+    -fx-text-fill: rgba(255,255,255,0.90);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-padding: 10 12 10 12;
+    -fx-background-insets: 0 0 10 0; /* espace entre items */
+}
+
+.list .list-cell:selected {
+    -fx-background-color: #1d4ed8;
+    -fx-text-fill: white;
+}
+.bigNumber {
+    -fx-text-fill: white;
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+}
+
+.titleSmall {
+    -fx-text-fill: rgba(255,255,255,0.90);
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}

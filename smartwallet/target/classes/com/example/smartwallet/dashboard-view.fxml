@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.smartwallet.controllers.DashboardController"
+      spacing="14"
+      styleClass="page">
+
+    <HBox spacing="10" styleClass="header">
+        <VBox>
+            <Label text="Financial Health Dashboard" styleClass="title"/>
+            <Label text="Score, forecast and AI insights" styleClass="subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Go to Recurring" onAction="#goRecurring" styleClass="btnSecondary"/>
+    </HBox>
+
+    <HBox spacing="12">
+        <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Profile" styleClass="sectionTitle"/>
+            <TextField fx:id="incomeField" promptText="Monthly budget (TND)" styleClass="input"/>
+            <TextField fx:id="balanceField" promptText="Savings goal (TND)" styleClass="input"/>
+            <Button text="Save Profile" onAction="#saveProfile" styleClass="btnPrimary"/>
+        </VBox>
+
+        <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Score" styleClass="sectionTitle"/>
+            <Label fx:id="scoreLabel" text="--/100" styleClass="bigNumber"/>
+            <Label fx:id="riskLabel" text="Risk: --" styleClass="subtitle"/>
+        </VBox>
+
+        <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Forecast" styleClass="sectionTitle"/>
+            <Label fx:id="forecastLabel" text="-- TND" styleClass="bigNumber"/>
+            <Label fx:id="recurringLabel" text="Recurring total: --" styleClass="subtitle"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="10" styleClass="card">
+        <HBox spacing="10">
+            <Label text="AI Insights" styleClass="sectionTitle"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Generate AI Tips" onAction="#generateAI" styleClass="btnPrimary"/>
+        </HBox>
+
+        <Label fx:id="headlineLabel" text="-" styleClass="titleSmall"/>
+        <ListView fx:id="tipsList" prefHeight="160" styleClass="list"/>
+    </VBox>
+
+</VBox>

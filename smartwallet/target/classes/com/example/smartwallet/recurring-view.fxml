@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.smartwallet.controllers.RecurringPaymentController"
+      spacing="14"
+      styleClass="page">
+
+    <!-- Header -->
+    <HBox spacing="10" styleClass="header">
+        <VBox>
+            <Label text="Recurring Payments" styleClass="title"/>
+            <Label text="Manage subscriptions and scheduled payments" styleClass="subtitle"/>
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="← Dashboard"
+                onAction="#goToDashboard"
+                styleClass="btnSecondary"/>
+    </HBox>
+
+    <!-- Form Card -->
+    <VBox spacing="12" styleClass="card">
+        <GridPane hgap="12" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="75"/>
+            </columnConstraints>
+
+            <Label text="Name" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="fieldLabel"/>
+            <TextField fx:id="nameField" promptText="e.g. Netflix" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="input"/>
+
+            <Label text="Amount" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="fieldLabel"/>
+            <TextField fx:id="amountField" promptText="e.g. 60.00" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="input"/>
+
+            <Label text="Frequency" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="fieldLabel"/>
+            <ComboBox fx:id="frequencyBox" promptText="Select frequency" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="input"/>
+
+            <Label text="Next due date" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="fieldLabel"/>
+            <DatePicker fx:id="datePicker" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="input"/>
+        </GridPane>
+
+        <!-- Buttons -->
+        <HBox spacing="10">
+            <Button text="Add" onAction="#addPayment" styleClass="btnPrimary"/>
+            <Button text="Update" onAction="#updatePayment" styleClass="btnSecondary"/>
+            <Button text="Delete" onAction="#deletePayment" styleClass="btnDanger"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Clear" onAction="#clearFormAction" styleClass="btnGhost"/>
+        </HBox>
+    </VBox>
+
+    <!-- List Card -->
+    <VBox spacing="10" styleClass="card">
+        <Label text="Your recurring payments" styleClass="sectionTitle"/>
+        <ListView fx:id="paymentList" prefHeight="380" styleClass="list"/>
+    </VBox>
+
+</VBox>
