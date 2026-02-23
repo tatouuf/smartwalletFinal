@@ -2,7 +2,7 @@ package entities;
 
 import java.time.LocalDateTime;
 
-public class Users {
+public class User {
     private int id;
     private String nom;
     private String prenom;
@@ -10,14 +10,14 @@ public class Users {
     private String email;
     private String password;
     private Role role;              // Enum dans package enums
-    private LocalDateTime dateCreation;
-    private LocalDateTime dateUpdate;
-    private boolean isActif=false;
+    private LocalDateTime date_creation;
+    private LocalDateTime date_update;
+    private boolean is_actif = false;
 
-    public Users() {
+    public User() {
     }
 
-    public Users(int id, String nom, String prenom, String telephone, String email, String password, Role role, LocalDateTime dateCreation, LocalDateTime dateUpdate, boolean isActif) {
+    public User(int id, String nom, String prenom, String telephone, String email, String password, Role role, LocalDateTime date_creation, LocalDateTime date_update, boolean is_actif) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -25,18 +25,9 @@ public class Users {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.dateCreation = dateCreation;
-        this.dateUpdate = dateUpdate;
-        this.isActif = isActif;
-    }
-
-    public Users(String nom, String prenom, String telephone, String email, String password, boolean isActif) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.telephone = telephone;
-        this.email = email;
-        this.password = password;
-        this.isActif = isActif;
+        this.date_creation = date_creation;
+        this.date_update = date_update;
+        this.is_actif = is_actif;
     }
 
     public int getId() {
@@ -95,33 +86,38 @@ public class Users {
         this.role = role;
     }
 
-    public LocalDateTime getDateCreation() {
-        return dateCreation;
+    public LocalDateTime getDate_creation() {
+        return date_creation;
     }
 
-    public void setDateCreation(LocalDateTime dateCreation) {
-        this.dateCreation = dateCreation;
+    public void setDate_creation(LocalDateTime date_creation) {
+        this.date_creation = date_creation;
     }
 
-    public LocalDateTime getDateUpdate() {
-        return dateUpdate;
+    public LocalDateTime getDate_update() {
+        return date_update;
+    }
+    public String getFullname() {
+        return
+                nom + " " + prenom
+                ;
     }
 
-    public void setDateUpdate(LocalDateTime dateUpdate) {
-        this.dateUpdate = dateUpdate;
+    public void setDate_update(LocalDateTime date_update) {
+        this.date_update = date_update;
     }
 
-    public boolean isActif() {
-        return isActif;
+    public boolean isIs_actif() {
+        return is_actif;
     }
 
-    public void setActif(boolean actif) {
-        isActif = actif;
+    public void setIs_actif(boolean is_actif) {
+        this.is_actif = is_actif;
     }
 
     @Override
     public String toString() {
-        return "Users{" +
+        return "User{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
@@ -129,9 +125,9 @@ public class Users {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-                ", dateCreation=" + dateCreation +
-                ", dateUpdate=" + dateUpdate +
-                ", isActif=" + isActif +
+                ", date_creation=" + date_creation +
+                ", date_update=" + date_update +
+                ", is_actif=" + is_actif +
                 '}';
     }
 }

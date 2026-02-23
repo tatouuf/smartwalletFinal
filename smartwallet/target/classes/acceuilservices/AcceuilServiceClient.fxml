@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane prefHeight="500.0" prefWidth="900.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.acceuilservice.AcceuilServiceClient">
+    <!-- Bouton Retour -->
+    <Button fx:id="btnRetourMain" layoutX="750.0" layoutY="10.0"
+            text="Return"
+            onAction="#retourMain"
+            prefWidth="130.0" prefHeight="30.0"
+            style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+
+    <VBox alignment="TOP_CENTER" spacing="20" layoutX="0" layoutY="20" prefWidth="900">
+
+        <!-- Logo circulaire plus grand -->
+        <ImageView fx:id="imgLogo" fitWidth="200" fitHeight="200" preserveRatio="true">
+            <clip>
+                <Circle radius="100" centerX="100" centerY="100"/>
+            </clip>
+        </ImageView>
+
+        <!-- Titre centré -->
+        <Label text="Welcome to Services" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #0e0024;" />
+
+        <!-- HBox des images avec boutons -->
+        <HBox alignment="CENTER" spacing="50">
+            <VBox spacing="10" alignment="CENTER">
+                <ImageView fx:id="imgService" fitHeight="150" fitWidth="150" preserveRatio="true" />
+                <Button onAction="#showAfficherService" text="Afficher Services"
+                        style="-fx-background-color: #19052b; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 10; -fx-padding: 8 20 8 20;" />
+            </VBox>
+
+            <VBox spacing="10" alignment="CENTER">
+                <ImageView fx:id="imgAssurance" fitHeight="150" fitWidth="150" preserveRatio="true" />
+                <Button onAction="#showAfficherAssurance" text="Afficher Assurances"
+                        style="-fx-background-color: #19052b; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 10; -fx-padding: 8 20 8 20;" />
+            </VBox>
+
+            <VBox spacing="10" alignment="CENTER">
+                <ImageView fx:id="imgCredit" fitHeight="150" fitWidth="150" preserveRatio="true" />
+                <Button onAction="#showAfficherCredit" text="Afficher Crédits"
+                        style="-fx-background-color: #12041e; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 10; -fx-padding: 8 20 8 20;" />
+            </VBox>
+        </HBox>
+
+
+    </VBox>
+
+</AnchorPane>
