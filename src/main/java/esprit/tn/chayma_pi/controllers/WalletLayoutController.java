@@ -16,12 +16,16 @@ public class WalletLayoutController {
     private Scene scene;
 
     public WalletLayoutController() {
-        instance = this;
+        // instance assigned in initialize() when FXML injection completed
     }
 
     @FXML
     public void initialize() {
-        System.out.println("WalletLayoutController.initialize() called (shim)");
+        // L'instance doit être définie après injection des champs FXML
+        instance = this;
+        System.out.println("WalletLayoutController.initialize() called");
+        // Charger la page par défaut (Dashboard)
+        loadPage("/fxml/dep/dashboarddepens.fxml");
     }
 
     public void setMainContainer(BorderPane mainContainer) {

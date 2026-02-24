@@ -1,5 +1,6 @@
 package esprit.tn.chayma.controllers;
 
+import esprit.tn.chayma_pi.controllers.WalletLayoutController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.chart.PieChart;
@@ -42,31 +43,41 @@ public class DashboardDepensController {
 
     @FXML
     public void goPlannings() {
-        System.out.println("Plannings cliqué (navigation temporaire)");
-        // TODO: implémenter navigation via WalletLayoutController
+        System.out.println("Plannings cliqué");
+        if (WalletLayoutController.instance != null) {
+            WalletLayoutController.instance.loadPage("/fxml/dep/plannings.fxml");
+        }
     }
 
     @FXML
     public void goBudget() {
-        System.out.println("Budget cliqué (navigation temporaire)");
-        // TODO: implémenter navigation via WalletLayoutController
+        System.out.println("Budget cliqué");
+        if (WalletLayoutController.instance != null) {
+            WalletLayoutController.instance.loadPage("/fxml/dep/budget.fxml");
+        }
     }
 
     @FXML
     public void goDepenses() {
-        System.out.println("Dashboard cliqué (navigation temporaire)");
-        // TODO: implémenter navigation via WalletLayoutController
+        System.out.println("Dépenses cliqué");
+        if (WalletLayoutController.instance != null) {
+            WalletLayoutController.instance.loadPage("/fxml/dep/depenses.fxml");
+        }
     }
 
     @FXML
     public void goAdvisor() {
-        System.out.println("Advisor cliqué (navigation temporaire)");
-        // TODO: implémenter navigation via WalletLayoutController
+        System.out.println("Advisor cliqué");
+        if (WalletLayoutController.instance != null) {
+            WalletLayoutController.instance.loadPage("/fxml/dep/advisor.fxml");
+        }
     }
 
     @FXML
     public void goSettings() {
-        System.out.println("Settings cliqué (navigation temporaire)");
-        // TODO: implémenter navigation via WalletLayoutController
+        System.out.println("Settings cliqué");
+        if (WalletLayoutController.instance != null) {
+            WalletLayoutController.instance.loadPage("/fxml/dep/setting.fxml");
+        }
     }
 }

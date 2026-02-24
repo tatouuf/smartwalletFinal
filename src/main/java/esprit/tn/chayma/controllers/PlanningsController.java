@@ -136,7 +136,7 @@ public class PlanningsController {
             p.setEpargnePrevue(epargne);
             p.setPourcentageEpargne(pourcentage);
 
-            boolean ok = planningService.add(p);
+            boolean ok = planningService.addOrUpdate(p);
             if (ok) {
                 planningsObservable.add(0, p);
                 updateTotal();

@@ -20,7 +20,7 @@ public class PlanningService {
 
     public List<Planning> getAllByUser(int userId) {
         List<Planning> list = new ArrayList<>();
-        String sql = "SELECT id, user_id, nom, description, type, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut, created_at, updated_at FROM planning WHERE user_id = ? ORDER BY created_at DESC";
+        String sql = "SELECT id, user_id, nom, description, type, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut, created_at, updated_at FROM plannings WHERE user_id = ? ORDER BY created_at DESC";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
@@ -49,9 +49,13 @@ public class PlanningService {
         return list;
     }
 
-    public boolean add(Planning p) {
+    public boolean addOrUpdate(Planning p) {
         String sql = "INSERT INTO plannings (user_id, nom, description, `type`, mois, annee, revenu_prevu, epargne_prevue, pourcentage_epargne, statut, created_at, updated_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP())";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "nom = VALUES(nom), description = VALUES(description), type = VALUES(type), revenu_prevu = VALUES(revenu_prevu), " +
+                "epargne_prevue = VALUES(epargne_prevue), pourcentage_epargne = VALUES(pourcentage_epargne), statut = VALUES(statut), updated_at = CURRENT_TIMESTAMP()";
+
         try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, p.getUserId());
             ps.setString(2, p.getNom());
@@ -77,7 +81,7 @@ public class PlanningService {
     }
 
     public boolean update(Planning p) {
-        String sql = "UPDATE planning SET nom = ?, description = ?, type = ?, mois = ?, annee = ?, revenu_prevu = ?, epargne_prevue = ?, pourcentage_epargne = ?, statut = ?, updated_at = CURRENT_TIMESTAMP() WHERE id = ?";
+        String sql = "UPDATE plannings SET nom = ?, description = ?, type = ?, mois = ?, annee = ?, revenu_prevu = ?, epargne_prevue = ?, pourcentage_epargne = ?, statut = ?, updated_at = CURRENT_TIMESTAMP() WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, p.getNom());
             ps.setString(2, p.getDescription());
@@ -98,7 +102,7 @@ public class PlanningService {
     }
 
     public boolean delete(int id) {
-        String sql = "DELETE FROM planning WHERE id = ?";
+        String sql = "DELETE FROM plannings WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             int affected = ps.executeUpdate();
