@@ -73,21 +73,8 @@ public class SettingController {
     }
 
     private void applyTheme(String theme) {
-        String stylesheet = "dark".equals(theme) ? getDarkCSS() : getLightCSS();
-        WalletLayoutController.instance.getScene().getStylesheets().clear();
-        WalletLayoutController.instance.getScene().getStylesheets().add(stylesheet);
-    }
-
-    private String getDarkCSS() {
-        return getClass().getResource("/css/dark-theme.css") != null
-            ? getClass().getResource("/css/dark-theme.css").toExternalForm()
-            : "";
-    }
-
-    private String getLightCSS() {
-        return getClass().getResource("/css/light-theme.css") != null
-            ? getClass().getResource("/css/light-theme.css").toExternalForm()
-            : "";
+        // Best-effort: do nothing here (no central WalletLayoutController accessible in this module)
+        System.out.println("Apply theme: " + theme + " (stub)");
     }
 
     private void onSave() {

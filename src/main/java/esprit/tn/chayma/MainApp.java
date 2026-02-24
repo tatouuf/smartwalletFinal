@@ -11,7 +11,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // FXML principal (chemin exact dans resources)
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/wallet/deplayoutLayout.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/dep/deplayoutLayout.fxml"));
 
         // Crée la scène
         Scene scene = new Scene(root, 1200, 900);

@@ -9,6 +9,7 @@ module esprit.tn.chayma {
 
     opens esprit.tn.chayma to javafx.fxml;
     opens esprit.tn.chayma.controllers to javafx.fxml;
+    opens esprit.tn.chayma_pi.controllers to javafx.fxml;
 
     exports esprit.tn.chayma;
 }

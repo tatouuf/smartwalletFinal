@@ -7,7 +7,7 @@
 <BorderPane fx:id="mainContainer"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="esprit.tn.chayma.controllers.WalletLayoutController"
+            fx:controller="esprit.tn.chayma_pi.controllers.WalletLayoutController"
             prefWidth="1200" prefHeight="900">
 
     <!-- Sidebar gauche -->
@@ -18,6 +18,7 @@
             <Button text="📅 Plannings" onAction="#goPlannings" styleClass="sidebar-button"/>
             <Button text="💰 Budget" onAction="#goBudget" styleClass="sidebar-button"/>
             <Button text="📝 Dépenses" onAction="#goDepenses" styleClass="sidebar-button"/>
+            <Button text="🔔 Notifications" onAction="#goNotifications" styleClass="sidebar-button"/>
             <Button text="🧑‍💼 Advisor" onAction="#goAdvisor" styleClass="sidebar-button"/>
             <Button text="⚙️ Settings" onAction="#goSettings" styleClass="sidebar-button"/>
         </VBox>

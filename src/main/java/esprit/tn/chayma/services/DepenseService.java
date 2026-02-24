@@ -3,7 +3,6 @@ package esprit.tn.chayma.services;
 import esprit.tn.chayma.entities.Depense;
 import esprit.tn.chayma.entities.Notification;
 import esprit.tn.chayma.entities.Budget;
-import esprit.tn.chayma.utils.DialogUtil;
 import esprit.tn.chayma.utils.MyDataBase;
 
 import java.sql.Connection;
@@ -91,16 +90,20 @@ public class DepenseService {
         return null;
     }
 
-    public boolean add(Depense d) {
+    public AddResponse addWithMessage(Depense d) {
         String sql = "INSERT INTO depenses (user_id, planning_id, categorie_id, montant, description, date_depense, created_at, categorie) VALUES (?, NULL, NULL, ?, ?, ?, CURRENT_TIMESTAMP(), ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, d.getUserId());
             ps.setDouble(2, d.getMontant());
             ps.setString(3, d.getDescription());
-            if (d.getDateDepense() != null) ps.setDate(4, java.sql.Date.valueOf(d.getDateDepense())); else ps.setDate(4, null);
+            if (d.getDateDepense() != null) {
+                ps.setDate(4, java.sql.Date.valueOf(d.getDateDepense()));
+            } else {
+                ps.setNull(4, java.sql.Types.DATE);
+            }
             ps.setString(5, d.getCategorie());
             int affected = ps.executeUpdate();
-            if (affected == 0) return false;
+            if (affected == 0) return new AddResponse(AddResult.FAILED, "Insertion failed");
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) d.setId(keys.getInt(1));
 
@@ -130,19 +133,24 @@ public class DepenseService {
                         String msg = String.format("🔔 Dépassement du budget pour %s: total %.2f DT > limite %.2f DT", categorie, total, budget.getMontantMax());
                         Notification n = new Notification(userId, "depassement_budget", msg, budget.getId());
                         notificationService.add(n);
-                        // Afficher alerte immédiate à l'utilisateur
-                        DialogUtil.info("Alerte budget", msg);
+                        return new AddResponse(AddResult.ADDED_EXCEEDED, msg);
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
-            return true;
+            return new AddResponse(AddResult.ADDED, "Dépense ajoutée");
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return new AddResponse(AddResult.FAILED, "Erreur SQL");
         }
+    }
+
+    // Keep existing add for backward compatibility if needed
+    public AddResult add(Depense d) {
+        AddResponse r = addWithMessage(d);
+        return r.getResult();
     }
 
     public boolean update(Depense d) {
@@ -150,7 +158,11 @@ public class DepenseService {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, d.getMontant());
             ps.setString(2, d.getDescription());
-            if (d.getDateDepense() != null) ps.setDate(3, java.sql.Date.valueOf(d.getDateDepense())); else ps.setDate(3, null);
+            if (d.getDateDepense() != null) {
+                ps.setDate(3, java.sql.Date.valueOf(d.getDateDepense()));
+            } else {
+                ps.setNull(3, java.sql.Types.DATE);
+            }
             ps.setString(4, d.getCategorie());
             ps.setInt(5, d.getId());
             int affected = ps.executeUpdate();

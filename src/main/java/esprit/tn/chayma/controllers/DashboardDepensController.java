@@ -42,31 +42,31 @@ public class DashboardDepensController {
 
     @FXML
     public void goPlannings() {
-        System.out.println("Plannings cliqué");
-        WalletLayoutController.instance.loadPage("/fxml/wallet/plannings.fxml");
+        System.out.println("Plannings cliqué (navigation temporaire)");
+        // TODO: implémenter navigation via WalletLayoutController
     }
 
     @FXML
     public void goBudget() {
-        System.out.println("Budget cliqué");
-        WalletLayoutController.instance.loadPage("/fxml/wallet/budget.fxml");
+        System.out.println("Budget cliqué (navigation temporaire)");
+        // TODO: implémenter navigation via WalletLayoutController
     }
 
     @FXML
     public void goDepenses() {
-        System.out.println("Dashboard cliqué");
-        WalletLayoutController.instance.loadPage("/fxml/wallet/dashboarddepens.fxml");
+        System.out.println("Dashboard cliqué (navigation temporaire)");
+        // TODO: implémenter navigation via WalletLayoutController
     }
 
     @FXML
     public void goAdvisor() {
-        System.out.println("Advisor cliqué");
-        WalletLayoutController.instance.loadPage("/fxml/wallet/advisor.fxml");
+        System.out.println("Advisor cliqué (navigation temporaire)");
+        // TODO: implémenter navigation via WalletLayoutController
     }
 
     @FXML
     public void goSettings() {
-        System.out.println("Settings cliqué");
-        WalletLayoutController.instance.loadPage("/fxml/wallet/setting.fxml");
+        System.out.println("Settings cliqué (navigation temporaire)");
+        // TODO: implémenter navigation via WalletLayoutController
     }
 }

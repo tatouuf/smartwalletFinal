@@ -1,6 +1,8 @@
 package esprit.tn.chayma.controllers;
 
 import esprit.tn.chayma.entities.Depense;
+import esprit.tn.chayma.services.AddResponse;
+import esprit.tn.chayma.services.AddResult;
 import esprit.tn.chayma.services.DepenseService;
 import esprit.tn.chayma.utils.DialogUtil;
 import javafx.collections.FXCollections;
@@ -116,15 +118,23 @@ public class DepensesController {
             String categorie = categorieCombo.getValue();
 
             Depense d = new Depense(montant, description, date, categorie, 0);
-            boolean ok = depenseService.add(d);
-            if (ok) {
-                depensesObservable.add(0, d);
-                updateTotal();
-                clearForm();
-                DialogUtil.info("Succès", "Dépense ajoutée");
-            } else {
-                DialogUtil.error("Erreur", "Impossible d'ajouter la dépense");
+            AddResponse response = depenseService.addWithMessage(d);
+            if (response.getResult() == AddResult.FAILED) {
+                DialogUtil.error("Erreur", "Impossible d'ajouter la dépense: " + response.getMessage());
+                return;
             }
+
+            // Toujours ajouter à la liste locale pour affichage
+            depensesObservable.add(0, d);
+            updateTotal();
+            clearForm();
+
+            if (response.getResult() == AddResult.ADDED_EXCEEDED) {
+                DialogUtil.info("Alerte budget", "Il y a dépassement dans les dépenses: " + response.getMessage());
+            } else {
+                DialogUtil.info("Succès", response.getMessage());
+            }
+
         } catch (Exception e) {
             DialogUtil.error("Erreur", "Montant invalide ou champs manquants");
         }
