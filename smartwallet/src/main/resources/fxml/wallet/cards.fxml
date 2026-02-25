@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.souha_pi.controllers.CardListController">
+
+    <top>
+        <HBox alignment="CENTER_RIGHT" spacing="15" styleClass="page-header">
+            <Label text="My Bank Cards" styleClass="page-title"/>
+            <Button text="+ Add Card" onAction="#addCard" styleClass="btn-primary"/>
+        </HBox>
+    </top>
+
+    <center>
+        <FlowPane fx:id="cardsContainer"
+                  hgap="20"
+                  vgap="20"
+                  styleClass="cards-area"
+                  prefWrapLength="900"/>
+    </center>
+
+</BorderPane>
