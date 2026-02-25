@@ -1,7 +1,7 @@
 package entities;
 
-
-public enum ReclamationStatut {
-    LU,
-    NON_LU
+public enum ReclamationStatuts {
+    PENDING,
+    IN_PROGRESS,
+    RESOLVED
 }

@@ -1,0 +1,21 @@
+.menuCard{
+    -fx-background-color: rgba(30,41,59,0.9);
+    -fx-padding: 25;
+    -fx-background-radius: 18;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
+    -fx-pref-height: 140;
+    -fx-alignment: center;
+}
+
+.menuCard:hover{
+    -fx-background-color: linear-gradient(to bottom right,#2563eb,#3b82f6);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.menuText{
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

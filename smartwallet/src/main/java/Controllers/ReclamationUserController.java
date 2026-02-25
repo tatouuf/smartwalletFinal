@@ -2,12 +2,15 @@ package Controllers;
 
 import entities.Reclamation;
 import entities.ReclamationStatuts;
-import entities.Role;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
+import services.ServiceNotification;
 import services.ServiceReclamation;
 import tests.MainFxml;
 import utils.Session;
@@ -17,73 +20,49 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ReclamationController {
+public class ReclamationUserController {
 
-    private static final Logger logger = Logger.getLogger(ReclamationController.class.getName());
+    private static final Logger logger = Logger.getLogger(ReclamationUserController.class.getName());
 
-    @FXML private TableView<Reclamation> tableReclamations;
-    @FXML private TableColumn<Reclamation, Integer> colId;
-    @FXML private TableColumn<Reclamation, String>  colMessage;
-    @FXML private TableColumn<Reclamation, String>  colStatut;
-    @FXML private TableColumn<Reclamation, String>  colReponse;
-    @FXML private TableColumn<Reclamation, String>  colDateEnvoi;
-    @FXML private Button btnDelete;
-    @FXML private Button btnBack;
-    @FXML private Button btnResolve;
-
-    // User only
     @FXML private TextArea txtMessage;
-    @FXML private Button btnSend;
-
-    // Admin only
-    @FXML private TextArea txtReply;
-    @FXML private Button btnReply;
+    @FXML private TableView<ReclamationDisplay> tableReclamations;
+    @FXML private TableColumn<ReclamationDisplay, String> colStatus;
+    @FXML private TableColumn<ReclamationDisplay, String> colMessage;
+    @FXML private TableColumn<ReclamationDisplay, String> colDate;
+    @FXML private Label lblNotificationCount;  // ✅ NEW
 
     private final ServiceReclamation reclamationService;
-    private final ObservableList<Reclamation> reclamationList;
+    private final ServiceNotification notificationService;  // ✅ NEW
+    private final ObservableList<ReclamationDisplay> reclamationList;
     private final DateTimeFormatter dateFormatter =
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    public ReclamationController() {
+    public ReclamationUserController() {
         reclamationService = new ServiceReclamation();
-        reclamationList    = FXCollections.observableArrayList();
+        notificationService = new ServiceNotification();  // ✅ NEW
+        reclamationList = FXCollections.observableArrayList();
     }
 
     @FXML
     private void initialize() {
-        setupTableColumns();
-        adjustViewForRole();
+        setupTable();
         loadReclamations();
+        updateNotificationBadge();  // ✅ NEW
+
+        // ✅ AUTO-REFRESH NOTIFICATION BADGE EVERY 5 SECONDS
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(5), e -> updateNotificationBadge())
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
-    // ==================== TABLE SETUP ====================
+    private void setupTable() {
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colMessage.setCellValueFactory(new PropertyValueFactory<>("messagePreview"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("dateEnvoi"));
 
-    private void setupTableColumns() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
-
-        colStatut.setCellValueFactory(cell -> {
-            ReclamationStatuts statut = cell.getValue().getStatut();
-            boolean isAdmin = Session.isLoggedIn() &&
-                    Session.getCurrentUser().getRole() == Role.ADMIN;
-
-            String display;
-            if (isAdmin) {
-                // Admin sees full status
-                display = statut != null ? statut.name() : "";
-            } else {
-                // User sees LU / NON_LU
-                if (statut == ReclamationStatuts.PENDING) {
-                    display = "NON_LU";
-                } else {
-                    display = "LU";
-                }
-            }
-            return new javafx.beans.property.SimpleStringProperty(display);
-        });
-
-        // Color code status column
-        colStatut.setCellFactory(col -> new TableCell<>() {
+        colStatus.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String status, boolean empty) {
                 super.updateItem(status, empty);
@@ -92,80 +71,28 @@ public class ReclamationController {
                     setStyle("");
                 } else {
                     setText(status);
-                    switch (status) {
-                        case "PENDING",  "NON_LU"     ->
-                                setStyle("-fx-text-fill: #f59e0b; -fx-font-weight: bold;");
-                        case "IN_PROGRESS", "LU"      ->
-                                setStyle("-fx-text-fill: #3b82f6; -fx-font-weight: bold;");
-                        case "RESOLVED"               ->
-                                setStyle("-fx-text-fill: #10b981; -fx-font-weight: bold;");
-                        default                        -> setStyle("");
+                    if (status.equals("NON_LU")) {
+                        setStyle("-fx-text-fill: #f59e0b; -fx-font-weight: bold;");
+                    } else {
+                        setStyle("-fx-text-fill: #10b981; -fx-font-weight: bold;");
                     }
                 }
             }
         });
 
-        colReponse.setCellValueFactory(cell ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cell.getValue().getReponse() != null
-                                ? cell.getValue().getReponse() : "—"));
-
-        colDateEnvoi.setCellValueFactory(cell ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cell.getValue().getDate_envoi() != null
-                                ? cell.getValue().getDate_envoi().format(dateFormatter) : ""));
-
-        tableReclamations.setPlaceholder(new Label("No reclamations found."));
         tableReclamations.setItems(reclamationList);
+        tableReclamations.setPlaceholder(new Label("No reclamations yet."));
 
-        // Auto-fill reply box when admin selects a row
-        tableReclamations.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldVal, selected) -> {
-                    if (selected != null && txtReply != null) {
-                        txtReply.setText(selected.getReponse() != null
-                                ? selected.getReponse() : "");
-                    }
-                    // Enable resolve only if IN_PROGRESS
-                    if (btnResolve != null && selected != null) {
-                        btnResolve.setDisable(
-                                selected.getStatut() != ReclamationStatuts.IN_PROGRESS);
-                    }
-                });
+        tableReclamations.setRowFactory(tv -> {
+            TableRow<ReclamationDisplay> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    handleViewDetail(row.getItem());
+                }
+            });
+            return row;
+        });
     }
-
-    // ==================== ROLE-BASED VIEW ====================
-
-    private void adjustViewForRole() {
-        boolean isAdmin = Session.isLoggedIn() &&
-                Session.getCurrentUser().getRole() == Role.ADMIN;
-
-        // User elements
-        if (txtMessage != null) {
-            txtMessage.setVisible(!isAdmin);
-            txtMessage.setManaged(!isAdmin);
-        }
-        if (btnSend != null) {
-            btnSend.setVisible(!isAdmin);
-            btnSend.setManaged(!isAdmin);
-        }
-
-        // Admin elements
-        if (txtReply != null) {
-            txtReply.setVisible(isAdmin);
-            txtReply.setManaged(isAdmin);
-        }
-        if (btnReply != null) {
-            btnReply.setVisible(isAdmin);
-            btnReply.setManaged(isAdmin);
-        }
-        if (btnResolve != null) {
-            btnResolve.setVisible(isAdmin);
-            btnResolve.setManaged(isAdmin);
-            btnResolve.setDisable(true); // enabled only when IN_PROGRESS is selected
-        }
-    }
-
-    // ==================== SEND (USER) ====================
 
     @FXML
     private void sendReclamation() {
@@ -191,135 +118,77 @@ public class ReclamationController {
         }
     }
 
-    // ==================== REPLY (ADMIN) ====================
+    private void handleViewDetail(ReclamationDisplay display) {
+        if (display == null) return;
+        ReclamationDetailController.setSelectedReclamationId(display.getId());
+        MainFxml.getInstance().showReclamationDetail();
+    }
 
     @FXML
-    private void replyReclamation() {
-        Reclamation selected = tableReclamations.getSelectionModel().getSelectedItem();
+    private void backToFriends() {
+        MainFxml.getInstance().showFriendsList();
+    }
 
-        if (selected == null) {
-            showAlert(Alert.AlertType.WARNING, "No Selection",
-                    "Please select a reclamation to reply to.");
-            return;
-        }
-
-        if (selected.getStatut() == ReclamationStatuts.RESOLVED) {
-            showAlert(Alert.AlertType.WARNING, "Already Resolved",
-                    "This reclamation is already resolved.");
-            return;
-        }
-
-        String reply = txtReply.getText().trim();
-        if (reply.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error",
-                    "Please enter a reply message.");
-            return;
-        }
-
+    // ✅ NEW: NOTIFICATION BADGE UPDATE
+    private void updateNotificationBadge() {
         try {
-            reclamationService.replyReclamation(
-                    selected.getId(),
-                    Session.getCurrentUser().getId(),
-                    reply);
-            showAlert(Alert.AlertType.INFORMATION, "Success",
-                    "Reply sent! Status set to IN_PROGRESS.");
-            txtReply.clear();
-            loadReclamations();
+            if (!Session.isLoggedIn()) return;
+
+            int unreadCount = notificationService.getUnreadCount(Session.getCurrentUser().getId());
+
+            if (lblNotificationCount != null) {
+                lblNotificationCount.setText(String.valueOf(unreadCount));
+                lblNotificationCount.setVisible(unreadCount > 0);
+            }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error replying", e);
-            showAlert(Alert.AlertType.ERROR, "Database Error",
-                    "An error occurred. Please try again.");
+            logger.log(Level.SEVERE, "Error updating notification badge", e);
         }
     }
 
-    // ==================== RESOLVE (ADMIN) ====================
-
+    // ✅ NEW: NAVIGATE TO NOTIFICATIONS
     @FXML
-    private void resolveReclamation() {
-        Reclamation selected = tableReclamations.getSelectionModel().getSelectedItem();
-
-        if (selected == null) {
-            showAlert(Alert.AlertType.WARNING, "No Selection",
-                    "Please select a reclamation to resolve.");
-            return;
-        }
-
-        try {
-            reclamationService.resolveReclamation(selected.getId());
-            showAlert(Alert.AlertType.INFORMATION, "Resolved",
-                    "Reclamation marked as RESOLVED.");
-            loadReclamations();
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error resolving", e);
-            showAlert(Alert.AlertType.ERROR, "Database Error",
-                    "An error occurred. Please try again.");
-        }
+    private void handleNotifications() {
+        MainFxml.getInstance().showNotifications();
     }
 
-    // ==================== DELETE ====================
-
     @FXML
-    private void deleteReclamation() {
-        Reclamation selected = tableReclamations.getSelectionModel().getSelectedItem();
-
-        if (selected == null) {
-            showAlert(Alert.AlertType.WARNING, "No Selection",
-                    "Please select a reclamation to delete.");
-            return;
-        }
-
-        if (Session.getCurrentUser().getRole() != Role.ADMIN &&
-                selected.getUser_id() != Session.getCurrentUser().getId()) {
-            showAlert(Alert.AlertType.ERROR, "Unauthorized",
-                    "You can only delete your own reclamations.");
-            return;
-        }
-
+    private void handleLogout() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirm Deletion");
+        confirm.setTitle("Confirm Logout");
         confirm.setHeaderText(null);
-        confirm.setContentText("Are you sure you want to delete this reclamation?");
+        confirm.setContentText("Are you sure you want to logout?");
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                try {
-                    reclamationService.deleteReclamation(selected.getId());
-                    showAlert(Alert.AlertType.INFORMATION, "Success",
-                            "Reclamation deleted!");
-                    loadReclamations();
-                } catch (SQLException e) {
-                    logger.log(Level.SEVERE, "Error deleting", e);
-                    showAlert(Alert.AlertType.ERROR, "Database Error",
-                            "An error occurred. Please try again.");
-                }
+                Session.clearSession();
+                MainFxml.getInstance().showSignIn();
             }
         });
     }
-
-    // ==================== BACK ====================
-
-    @FXML
-    private void backToDashboard() {
-        if (Session.isLoggedIn() && Session.getCurrentUser().getRole() == Role.ADMIN) {
-            MainFxml.getInstance().showDashboard();
-        } else {
-            MainFxml.getInstance().showAmitie();
-        }
-    }
-
-    // ==================== LOAD ====================
 
     private void loadReclamations() {
         try {
             reclamationList.clear();
             if (!Session.isLoggedIn()) return;
 
-            if (Session.getCurrentUser().getRole() == Role.ADMIN) {
-                reclamationList.addAll(reclamationService.getAllReclamations());
-            } else {
-                reclamationList.addAll(
-                        reclamationService.getReclamationsByUser(
-                                Session.getCurrentUser().getId()));
+            var reclamations = reclamationService.getReclamationsByUser(
+                    Session.getCurrentUser().getId());
+
+            for (Reclamation r : reclamations) {
+                String status = (r.getStatut() == ReclamationStatuts.PENDING)
+                        ? "NON_LU" : "LU";
+
+                String preview = r.getMessage();
+                if (preview.length() > 50) {
+                    preview = preview.substring(0, 50) + "...";
+                }
+
+                reclamationList.add(new ReclamationDisplay(
+                        r.getId(),
+                        status,
+                        preview,
+                        r.getDate_envoi().format(dateFormatter)
+                ));
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error loading reclamations", e);
@@ -334,5 +203,24 @@ public class ReclamationController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public static class ReclamationDisplay {
+        private int id;
+        private String status;
+        private String messagePreview;
+        private String dateEnvoi;
+
+        public ReclamationDisplay(int id, String status, String preview, String date) {
+            this.id = id;
+            this.status = status;
+            this.messagePreview = preview;
+            this.dateEnvoi = date;
+        }
+
+        public int getId() { return id; }
+        public String getStatus() { return status; }
+        public String getMessagePreview() { return messagePreview; }
+        public String getDateEnvoi() { return dateEnvoi; }
     }
 }
