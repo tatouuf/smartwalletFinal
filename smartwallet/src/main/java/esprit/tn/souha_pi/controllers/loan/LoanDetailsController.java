@@ -31,14 +31,13 @@ public class LoanDetailsController {
 
     private LoanService loanService = new LoanService();
     private LoanPaymentService paymentService = new LoanPaymentService();
-    private UserService userService = new UserService();
-    private ServiceUser ServiceUser = new ServiceUser();
+
+    // CORRECTION: Utilisez le même nom de variable partout
+    private ServiceUser userService = new ServiceUser();  // Renommé de ServiceUser à userService
 
     private Loan currentLoan;
-    entities.User currentUser = Session.getCurrentUser();
-
-    private int currentUserId = currentUser.getId(); // ⚠️ remplacer plus tard par user connecté
-
+    private User currentUser = Session.getCurrentUser();
+    private int currentUserId = currentUser != null ? currentUser.getId() : 0;
 
     /* ================= LOAD LOAN ================= */
     public static boolean confirm(String title, String message){
@@ -83,14 +82,11 @@ public class LoanDetailsController {
         }
     }
 
-
     /* ================= REFRESH ================= */
-
     private void refresh(){
-
         try {
-
-            entities.User lender = userService.getById(currentLoan.getLenderId());
+            // CORRECTION: Utilisez userService au lieu de ServiceUser
+            User lender = userService.getById(currentLoan.getLenderId());
             User borrower = userService.getById(currentLoan.getBorrowerId());
 
             if(lender == null || borrower == null){
@@ -104,22 +100,25 @@ public class LoanDetailsController {
             amountLabel.setText("Total Amount: " + currentLoan.getPrincipalAmount() + " TND");
             remainingLabel.setText("Remaining: " + currentLoan.getRemainingAmount() + " TND");
 
+            // Mettre à jour le statut si présent
+            if (statusLabel != null) {
+                statusLabel.setText("Status: " + currentLoan.getStatus());
+            }
+
             loadPaymentCards();
 
         }catch(Exception e){
             DialogUtil.error("Refresh Error",
-                    "Unable to refresh loan information.");
+                    "Unable to refresh loan information.\n" + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     /* ================= PAYMENT CARDS ================= */
-
     private void loadPaymentCards(){
-
         paymentsContainer.getChildren().clear();
 
         try{
-
             List<LoanPayment> payments = paymentService.getByLoan(currentLoan.getId());
 
             if(payments == null || payments.isEmpty()){
@@ -136,22 +135,24 @@ public class LoanDetailsController {
 
         }catch(Exception e){
             DialogUtil.error("Payment Error",
-                    "Unable to load payment history.");
+                    "Unable to load payment history.\n" + e.getMessage());
         }
     }
 
     /* ================= CARD UI ================= */
-
     private VBox createPaymentCard(LoanPayment payment) throws SQLException {
+        // CORRECTION: Utilisez userService au lieu de ServiceUser
+        User payer = userService.getById(payment.getPayerId());
+        User receiver = userService.getById(payment.getReceiverId());
 
-        entities.User payer = ServiceUser.recupererParId(payment.getPayerId());
-        entities.User receiver = ServiceUser.recupererParId(payment.getReceiverId());
+        String payerName = (payer != null) ? payer.getFullname() : "Unknown User";
+        String receiverName = (receiver != null) ? receiver.getFullname() : "Unknown User";
 
         Label amount = new Label(payment.getAmountPaid() + " TND");
         amount.setStyle("-fx-font-size:18px; -fx-font-weight:bold; -fx-text-fill:#2ecc71;");
 
-        Label payerLabel = new Label("From: " + payer.getFullname());
-        Label receiverLabel = new Label("To: " + receiver.getFullname());
+        Label payerLabel = new Label("From: " + payerName);
+        Label receiverLabel = new Label("To: " + receiverName);
         Label date = new Label("Date: " + payment.getPaymentDate());
 
         VBox info = new VBox(5, payerLabel, receiverLabel, date);
@@ -177,14 +178,10 @@ public class LoanDetailsController {
     }
 
     /* ================= PAY LOAN ================= */
-
     @FXML
     private void payLoan(){
-
         try{
-
             /* ---------- INPUT VALIDATION ---------- */
-
             String text = amountField.getText();
 
             if(text == null || text.isBlank()){
@@ -193,7 +190,6 @@ public class LoanDetailsController {
             }
 
             double amount;
-
             try{
                 amount = Double.parseDouble(text);
             }catch(NumberFormatException ex){
@@ -214,7 +210,6 @@ public class LoanDetailsController {
             }
 
             /* ---------- CONFIRMATION DIALOG ---------- */
-
             boolean confirmed = DialogUtil.confirm(
                     "Confirm Payment",
                     "You are about to pay " + amount + " TND for this loan.\n\n" +
@@ -227,14 +222,12 @@ public class LoanDetailsController {
             }
 
             /* ---------- PROCESS PAYMENT ---------- */
-
             loanService.payLoan(currentLoan.getId(), currentUserId, amount);
 
             DialogUtil.success("Payment Completed",
                     "Payment of " + amount + " TND was successfully processed.");
 
             amountField.clear();
-
             loadLoan(currentLoan.getId());
 
         }catch(Exception e){

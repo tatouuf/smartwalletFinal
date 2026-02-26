@@ -5,24 +5,23 @@ import esprit.tn.souha_pi.entities.LoanRequest;
 import esprit.tn.souha_pi.entities.Transaction;
 import esprit.tn.souha_pi.services.LoanService;
 import esprit.tn.souha_pi.services.TransactionService;
-import esprit.tn.souha_pi.services.UserService;
 import esprit.tn.souha_pi.services.ia.ICreditScoringService;
+import services.ServiceUser;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class CreditScoringService implements ICreditScoringService {
 
     private final LoanService loanService;
     private final TransactionService transactionService;
-    private final UserService userService;
+    private final ServiceUser userService;
     private final Map<String, Double> weights;
 
     public CreditScoringService() {
         this.loanService = new LoanService();
         this.transactionService = new TransactionService();
-        this.userService = new UserService();
+        this.userService = new ServiceUser();
         this.weights = initializeWeights();
     }
 

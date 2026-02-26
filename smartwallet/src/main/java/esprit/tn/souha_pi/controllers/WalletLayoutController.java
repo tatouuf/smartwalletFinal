@@ -1,8 +1,8 @@
 package esprit.tn.souha_pi.controllers;
 
+import entities.User;
 import esprit.tn.souha_pi.controllers.loan.LoanDetailsController;
 import esprit.tn.souha_pi.entities.Notification;
-import esprit.tn.souha_pi.entities.User;
 import esprit.tn.souha_pi.services.NotificationService;
 import esprit.tn.souha_pi.utils.DialogUtil;
 import javafx.fxml.FXML;
@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import utils.Session;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class WalletLayoutController {
 
     public static WalletLayoutController instance;
 
-    entities.User currentUser = Session.getCurrentUser();
+    private User currentUser;
     private NotificationService notificationService = new NotificationService(); // Ajouté
 
     @FXML
@@ -44,12 +43,19 @@ public class WalletLayoutController {
 
         // Charger la page de connexion au démarrage
         javafx.application.Platform.runLater(() -> {
-            loadPage("login.fxml");
+            loadPage("signin.fxml");
         });
     }
 
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        updateMenuVisibility();
+        mettreAJourBadgeNotifications(); // Mettre à jour les notifications après connexion
+    }
 
-
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
     private void updateMenuVisibility() {
         if (adminDashboardBtn != null) {
@@ -83,36 +89,24 @@ public class WalletLayoutController {
             e.printStackTrace();
         }
     }
-    public void loadPage2(String page){
-        try{
-            String path = "/" + page;
 
-            FXMLLoader loader = new FXMLLoader(
-                    WalletLayoutController.class.getResource(path)
-            );
+    @FXML
+    public void logout() {
+        boolean confirm = DialogUtil.confirm(
+                "Déconnexion",
+                "Voulez-vous vraiment vous déconnecter ?"
+        );
 
-            if(loader.getLocation() == null){
-                System.out.println("FXML INTROUVABLE: " + path);
-                return;
-            }
-
-            Parent view = loader.load();
-            contentArea.getChildren().setAll(view);
-
-        }catch(Exception e){
-            e.printStackTrace();
+        if (confirm) {
+            setCurrentUser(null);
+            loadPage("signin.fxml");
+            DialogUtil.success("Déconnexion", "Vous avez été déconnecté avec succès.");
         }
     }
 
     @FXML
-    public void logout() {
-
-    }
-
-    @FXML
     public void openInscription() {
-
-        loadPage("inscription_wallet.fxml");
+        loadPage("InscriptionWallet.fxml");
     }
 
     @FXML

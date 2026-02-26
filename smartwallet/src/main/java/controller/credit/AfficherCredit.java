@@ -1,5 +1,6 @@
 package controller.credit;
 
+import entities.User;
 import entities.credit.Credit;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import services.credit.ServiceCredit;
+import utils.Session;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -35,12 +37,12 @@ public class AfficherCredit {
 
     // 🔥 LOGO
     @FXML private ImageView imgLogoCredit;
+    @FXML private Button btnRetourcredit;
+    @FXML private Button itafa;
 
     private final ServiceCredit serviceCredit = new ServiceCredit();
     private final ObservableList<Credit> creditList = FXCollections.observableArrayList();
-    @FXML private Button btnRetourcredit;
-    @FXML
-    private Button itafa;
+
     @FXML
     public void initialize() {
         loadLogo();          // ✅ charger logo
@@ -48,22 +50,45 @@ public class AfficherCredit {
         styleTable();
         loadCredits();
     }
+
     @FXML
     private void retourMain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainALC/MainALC.fxml"));
-            Parent root = loader.load();
+            User currentUser = Session.getCurrentUser();
 
-            Stage stage = (Stage) btnRetourcredit.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Main ALC");
-
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            showAlert("Erreur FXML", "Le fichier MainALC.fxml est introuvable ou le bouton est mal initialisé !");
+            if (currentUser != null && "ADMIN".equals(currentUser.getRole().name())) {
+                // Retour au DashboardAdmin
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardAdmin.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) btnRetourcredit.getScene().getWindow();
+                stage.setScene(new Scene(root, 900, 500));
+                stage.setTitle("Admin Dashboard");
+            } else {
+                // Retour à la page d'accueil des services
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/acceuilservices/AcceuilService.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) btnRetourcredit.getScene().getWindow();
+                stage.setScene(new Scene(root, 900, 500));
+                stage.setTitle("Services");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de revenir au menu principal !");
+            showAlert("Erreur", "Impossible de retourner à la page précédente.");
+        }
+    }
+
+    @FXML
+    private void itafaaction() {
+        // Ajouter un crédit
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/credit/AjouterCredit.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) itafa.getScene().getWindow();
+            stage.setScene(new Scene(root, 900, 500));
+            stage.setTitle("Ajouter Crédit");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir Ajouter Credit !");
         }
     }
 
@@ -172,24 +197,6 @@ public class AfficherCredit {
                 setGraphic(empty ? null : container);
             }
         });
-    }
-    @FXML
-    private void itafaaction() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/credit/AjouterCredit.fxml")
-            );
-
-            Parent root = loader.load();
-
-            Stage stage = (Stage) itafa.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Add Credit");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir Ajouter Credit !");
-        }
     }
 
     private void styleTable() {

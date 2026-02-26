@@ -1,57 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="esprit.tn.souha_pi.controllers.WalletLayoutController"
-            styleClass="page-bg">
+            style="-fx-background-color: #f5f7fb;">
 
-    <!-- Sidebar gauche -->
-    <left>
-        <VBox styleClass="sidebar" spacing="10" prefWidth="250">
-            <padding>
-                <Insets top="20" right="10" bottom="20" left="10"/>
-            </padding>
+    <!-- Header avec gradient -->
+    <top>
+        <VBox>
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);">
+                <padding>
+                    <Insets top="15" right="25" bottom="15" left="25"/>
+                </padding>
+                <Label text="💰" style="-fx-font-size: 28px; -fx-text-fill: white;"/>
+                <Label text="SmartWallet" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
 
-            <Label text=" Souha Wallet" styleClass="sidebar-title"/>
+                <!-- Notifications avec badge -->
+                <StackPane>
+                    <Button text="🔔" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 20px; -fx-cursor: hand;" onAction="#showNotifications"/>
+                    <Label fx:id="notifBadge" text="0" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 2 6 2 6; -fx-min-width: 18; -fx-min-height: 18; -fx-alignment: center;" StackPane.alignment="TOP_RIGHT" translateX="5" translateY="-5" visible="false"/>
+                </StackPane>
 
-            <Separator/>
+                <Button text="Déconnexion" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20 8 20;" onAction="#logout"/>
+            </HBox>
 
-            <Button text=" Dashboard" styleClass="sidebar-btn" onAction="#goDashboard"/>
-            <Button text=" Mes Cartes" styleClass="sidebar-btn" onAction="#goCards"/>
-            <Button text=" Envoyer" styleClass="sidebar-btn" onAction="#goSend"/>
-            <Button text=" Recevoir" styleClass="sidebar-btn" onAction="#goReceive"/>
-            <Button text=" Historique" styleClass="sidebar-btn" onAction="#goHistory"/>
-            <Button text="🔔 Notifications" styleClass="sidebar-btn" onAction="#showNotifications"/>
-            <Label fx:id="notifBadge" text="0" styleClass="notification-badge" visible="false"/>
+            <!-- Barre de navigation -->
+            <HBox style="-fx-background-color: white; -fx-padding: 8 25; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);" spacing="5">
+                <Button text="Dashboard" style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-font-weight: 600; -fx-padding: 8 15; -fx-background-radius: 20; -fx-cursor: hand;" onAction="#goDashboard"/>
+                <Button text="Mes Cartes" style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-font-weight: 600; -fx-padding: 8 15; -fx-background-radius: 20; -fx-cursor: hand;" onAction="#goCards"/>
+                <Button text="Envoyer" style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-font-weight: 600; -fx-padding: 8 15; -fx-background-radius: 20; -fx-cursor: hand;" onAction="#goSend"/>
+                <Button text="Recevoir" style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-font-weight: 600; -fx-padding: 8 15; -fx-background-radius: 20; -fx-cursor: hand;" onAction="#goReceive"/>
+                <Button text="Historique" style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-font-weight: 600; -fx-padding: 8 15; -fx-background-radius: 20; -fx-cursor: hand;" onAction="#goHistory"/>
 
-            <Separator/>
+                <Separator orientation="VERTICAL" style="-fx-background-color: #e5e7eb; -fx-pref-width: 1; -fx-pref-height: 25;"/>
 
-            <Button text=" Demander prêt" styleClass="sidebar-btn" onAction="#goRequestLoan"/>
-            <Button text=" Demandes reçues" styleClass="sidebar-btn" onAction="#goLoanRequests"/>
-            <Button text=" Mes prêts" styleClass="sidebar-btn" onAction="#goMyLoans"/>
+                <Button text="Demander prêt" style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-font-weight: 600; -fx-padding: 8 15; -fx-background-radius: 20; -fx-cursor: hand;" onAction="#goRequestLoan"/>
+                <Button text="Demandes reçues" style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-font-weight: 600; -fx-padding: 8 15; -fx-background-radius: 20; -fx-cursor: hand;" onAction="#goLoanRequests"/>
+                <Button text="Mes prêts" style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-font-weight: 600; -fx-padding: 8 15; -fx-background-radius: 20; -fx-cursor: hand;" onAction="#goMyLoans"/>
 
-            <Separator/>
+                <Region HBox.hgrow="ALWAYS"/>
 
-            <Button text="Retour Acceuil" styleClass="sidebar-btn-highlight" onAction="#openInscription"/>
-
-            <Region VBox.vgrow="ALWAYS"/>
-
-            <Button text=" Déconnexion" styleClass="sidebar-btn" onAction="#logout"/>
-            <Button text=" Test Admin" styleClass="sidebar-btn" onAction="#goAdminDashboard"/>
-
-
+                <Button text="Retour Accueil" style="-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20; -fx-effect: dropshadow(two-pass-box, rgba(124,58,237,0.3), 8, 0, 0, 2);" onAction="#openInscription"/>
+            </HBox>
         </VBox>
-    </left>
+    </top>
 
     <!-- Zone de contenu centrale -->
     <center>
-        <StackPane fx:id="contentArea" styleClass="content-area"/>
+        <StackPane fx:id="contentArea" style="-fx-background-color: transparent; -fx-padding: 20;"/>
     </center>
 
-
-
+    <!-- Footer -->
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 1 0 0 0;">
+            <padding>
+                <Insets bottom="15" left="25" right="25" top="15"/>
+            </padding>
+            <Label text="© 2026 SmartWallet - All rights reserved" style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+        </HBox>
+    </bottom>
 </BorderPane>

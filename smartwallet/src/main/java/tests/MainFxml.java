@@ -183,6 +183,13 @@ public class MainFxml extends Application {
         }
     }
 
+
+    public void showVerifyCode() {
+        loadScene("/VerifyCode.fxml");
+    }
+
+
+
     // ==================== SCENE LOADER ====================
 
     private void loadScene(String fxmlPath) {

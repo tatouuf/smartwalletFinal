@@ -1,22 +1,29 @@
 package utils;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordUtils {
 
-    // Hash password using SHA-256
-    public static String hashPassword(String password) {
+    // Hash a password for storage
+    public static String hashPassword(String plainTextPassword) {
+        if (plainTextPassword == null || plainTextPassword.isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+    }
+
+    // Verify that a plain text password matches a stored hash
+    public static boolean checkPassword(String plainTextPassword, String hashedPassword) {
+        if (plainTextPassword == null || hashedPassword == null) {
+            System.err.println("Password or hash is null");
+            return false;
+        }
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashed = md.digest(password.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashed) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Erreur hashing password", e);
+            return BCrypt.checkpw(plainTextPassword, hashedPassword);
+        } catch (Exception e) {
+            System.err.println("BCrypt check error: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 }

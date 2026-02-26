@@ -1,175 +1,185 @@
-    package esprit.tn.souha_pi.controllers.loan;
+package esprit.tn.souha_pi.controllers.loan;
 
-    import entities.User;
-    import esprit.tn.souha_pi.entities.LoanRequest;
-     import esprit.tn.souha_pi.services.LoanRequestService;
-    import esprit.tn.souha_pi.services.UserService;
-    import esprit.tn.souha_pi.services.ia.ICreditScoringService;
-    import esprit.tn.souha_pi.services.ia.impl.CreditScoringService;
+import entities.User;
+import esprit.tn.souha_pi.entities.LoanRequest;
+import esprit.tn.souha_pi.services.LoanRequestService;
+import esprit.tn.souha_pi.services.ia.ICreditScoringService;
+import esprit.tn.souha_pi.services.ia.impl.CreditScoringService;
 
-    import javafx.fxml.FXML;
-    import javafx.scene.control.Button;
-    import javafx.scene.control.Label;
-    import javafx.scene.layout.*;
-    import esprit.tn.souha_pi.utils.DialogUtil;
-    import utils.Session;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import esprit.tn.souha_pi.utils.DialogUtil;
+import services.ServiceUser;
+import utils.Session;
 
-    import java.util.List;
+import java.sql.SQLException;
+import java.util.List;
 
-    public class LoanRequestsController {
+public class LoanRequestsController {
 
-        @FXML
-        private VBox requestsContainer;
+    @FXML
+    private VBox requestsContainer;
 
-        @FXML
-        private Label statusLabel;
+    @FXML
+    private Label statusLabel;
 
-        // IA Components
-        @FXML
-        private VBox iaInsightsContainer;
+    // IA Components
+    @FXML
+    private VBox iaInsightsContainer;
 
-        @FXML
-        private Label iaSummaryLabel;
+    @FXML
+    private Label iaSummaryLabel;
 
-        private LoanRequestService requestService = new LoanRequestService();
-        private UserService userService = new UserService();
+    private LoanRequestService requestService = new LoanRequestService();
+    private ServiceUser userService = new ServiceUser();
 
-        // IA Service
-        private ICreditScoringService creditScoringService = new CreditScoringService();
+    // IA Service
+    private ICreditScoringService creditScoringService = new CreditScoringService();
 
-        // ⚠️ remplacer par user connecté plus tard
-        private entities.User currentUser;
-        private int currentUserId;
+    private User currentUser;
+    private int currentUserId;
 
-        @FXML
-        public void initialize(){
+    @FXML
+    public void initialize(){
+        currentUser = Session.getCurrentUser();
 
-            currentUser = Session.getCurrentUser();
-
-            if(currentUser == null){
-                System.out.println("ERROR: No logged user in session");
-                statusLabel.setText("Session expired. Please login again.");
-                return;
-            }
-
-            currentUserId = currentUser.getId();
-
-            loadRequests();
-            loadIAInsights();
-        }
-        /* ================= LOAD ================= */
-
-        private void loadRequests(){
-            requestsContainer.getChildren().clear();
-
-            List<LoanRequest> list = requestService.getRequestsForLender(currentUserId);
-
-            if(list.isEmpty()){
-                Label empty = new Label("No loan requests");
-                empty.setStyle("-fx-text-fill:gray; -fx-font-size:15px;");
-                requestsContainer.getChildren().add(empty);
-                return;
-            }
-
-            for(LoanRequest request : list){
-                VBox card = createRequestCard(request);
-                requestsContainer.getChildren().add(card);
-            }
+        if(currentUser == null){
+            System.out.println("ERROR: No logged user in session");
+            statusLabel.setText("Session expired. Please login again.");
+            return;
         }
 
-        /* ================= IA INSIGHTS ================= */
+        currentUserId = currentUser.getId();
 
-        private void loadIAInsights() {
-            if (iaInsightsContainer == null) return;
+        loadRequests();
+        loadIAInsights();
+    }
 
-            iaInsightsContainer.getChildren().clear();
+    /* ================= LOAD ================= */
+    private void loadRequests(){
+        requestsContainer.getChildren().clear();
 
-            List<LoanRequest> list = requestService.getRequestsForLender(currentUserId);
+        List<LoanRequest> list = requestService.getRequestsForLender(currentUserId);
 
-            if (list.isEmpty()) {
-                return;
-            }
+        if(list.isEmpty()){
+            Label empty = new Label("No loan requests");
+            empty.setStyle("-fx-text-fill:gray; -fx-font-size:15px;");
+            requestsContainer.getChildren().add(empty);
+            return;
+        }
 
-            Label title = new Label("🤖 ANALYSE IA DES DEMANDES");
-            title.setStyle("-fx-font-size:16px; -fx-font-weight:bold; -fx-text-fill:#9b59b6;");
-            iaInsightsContainer.getChildren().add(title);
+        for(LoanRequest request : list){
+            VBox card = createRequestCard(request);
+            requestsContainer.getChildren().add(card);
+        }
+    }
 
-            int totalRequests = list.size();
-            double totalAmount = 0;
-            for (LoanRequest r : list) {
-                totalAmount += r.getAmount();
-            }
+    /* ================= IA INSIGHTS ================= */
+    private void loadIAInsights() {
+        if (iaInsightsContainer == null) return;
 
-            Label stats = new Label(String.format(
-                    "📊 %d demandes • %.2f TND",
-                    totalRequests, totalAmount
-            ));
-            stats.setStyle("-fx-text-fill:#555; -fx-padding: 0 0 10 0;");
-            iaInsightsContainer.getChildren().add(stats);
+        iaInsightsContainer.getChildren().clear();
 
-            // Analyser chaque demande avec IA
-            for (LoanRequest request : list) {
+        List<LoanRequest> list = requestService.getRequestsForLender(currentUserId);
+
+        if (list.isEmpty()) {
+            return;
+        }
+
+        Label title = new Label("🤖 ANALYSE IA DES DEMANDES");
+        title.setStyle("-fx-font-size:16px; -fx-font-weight:bold; -fx-text-fill:#9b59b6;");
+        iaInsightsContainer.getChildren().add(title);
+
+        int totalRequests = list.size();
+        double totalAmount = 0;
+        for (LoanRequest r : list) {
+            totalAmount += r.getAmount();
+        }
+
+        Label stats = new Label(String.format(
+                "📊 %d demandes • %.2f TND",
+                totalRequests, totalAmount
+        ));
+        stats.setStyle("-fx-text-fill:#555; -fx-padding: 0 0 10 0;");
+        iaInsightsContainer.getChildren().add(stats);
+
+        // Analyser chaque demande avec IA
+        for (LoanRequest request : list) {
+            try {
+                // CORRECTION: Gérer l'exception SQLException
+                User borrower = null;
                 try {
-                    User borrower = userService.getById(request.getBorrowerId());
-
-                    String borrowerName = "Unknown User";
-
-                    if(borrower != null){
-                        borrowerName = borrower.getNom();
-                    }
-
-                    Label name = new Label(borrowerName);
-                    name.setStyle("-fx-font-size:18px; -fx-font-weight:bold;");
-                    // Calculer score de confiance
-                    ICreditScoringService.TrustScore score =
-                            creditScoringService.calculateTrustScore(
-                                    request.getBorrowerId(),
-                                    currentUserId
-                            );
-
-                    HBox insightRow = new HBox(10);
-                    insightRow.setStyle("-fx-padding: 8; -fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-border-radius: 5;");
-
-                     Label nameLabel = new Label(borrowerName + ":");
-                    nameLabel.setStyle("-fx-font-weight:bold; -fx-min-width: 100;");
-
-                    Label scoreLabel = new Label(String.format("%.0f/100", score.getScore()));
-                    scoreLabel.setStyle("-fx-font-weight:bold; -fx-min-width: 60;");
-
-                    // Color by score
-                    if (score.getScore() >= 70) {
-                        scoreLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight:bold; -fx-min-width: 60;");
-                    } else if (score.getScore() >= 50) {
-                        scoreLabel.setStyle("-fx-text-fill: #f39c12; -fx-font-weight:bold; -fx-min-width: 60;");
-                    } else {
-                        scoreLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight:bold; -fx-min-width: 60;");
-                    }
-
-                    Label levelLabel = new Label("(" + score.getLevel() + ")");
-                    levelLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-min-width: 80;");
-
-                    Button analyzeBtn = new Button("🔍 Détails");
-                    analyzeBtn.setStyle("-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 5 10;");
-
-                    LoanRequest finalRequest = request;
-                    analyzeBtn.setOnAction(e -> showIADetails(finalRequest, score));
-
-                    insightRow.getChildren().addAll(nameLabel, scoreLabel, levelLabel, analyzeBtn);
-                    iaInsightsContainer.getChildren().add(insightRow);
-
-                } catch (Exception e) {
-                    // Ignorer les erreurs pour une demande
-                    System.err.println("Erreur analyse IA: " + e.getMessage());
+                    borrower = userService.getById(request.getBorrowerId());
+                } catch (SQLException e) {
+                    System.err.println("Erreur lors du chargement de l'emprunteur: " + e.getMessage());
                 }
+
+                String borrowerName = "Unknown User";
+                if(borrower != null){
+                    borrowerName = borrower.getPrenom() + " " + borrower.getNom();
+                }
+
+                // Calculer score de confiance
+                ICreditScoringService.TrustScore score =
+                        creditScoringService.calculateTrustScore(
+                                request.getBorrowerId(),
+                                currentUserId
+                        );
+
+                HBox insightRow = new HBox(10);
+                insightRow.setStyle("-fx-padding: 8; -fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-border-radius: 5;");
+
+                Label nameLabel = new Label(borrowerName + ":");
+                nameLabel.setStyle("-fx-font-weight:bold; -fx-min-width: 100;");
+
+                Label scoreLabel = new Label(String.format("%.0f/100", score.getScore()));
+                scoreLabel.setStyle("-fx-font-weight:bold; -fx-min-width: 60;");
+
+                // Color by score
+                if (score.getScore() >= 70) {
+                    scoreLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight:bold; -fx-min-width: 60;");
+                } else if (score.getScore() >= 50) {
+                    scoreLabel.setStyle("-fx-text-fill: #f39c12; -fx-font-weight:bold; -fx-min-width: 60;");
+                } else {
+                    scoreLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight:bold; -fx-min-width: 60;");
+                }
+
+                Label levelLabel = new Label("(" + score.getLevel() + ")");
+                levelLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-min-width: 80;");
+
+                Button analyzeBtn = new Button("🔍 Détails");
+                analyzeBtn.setStyle("-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 5 10;");
+
+                LoanRequest finalRequest = request;
+                analyzeBtn.setOnAction(e -> showIADetails(finalRequest, score));
+
+                insightRow.getChildren().addAll(nameLabel, scoreLabel, levelLabel, analyzeBtn);
+                iaInsightsContainer.getChildren().add(insightRow);
+
+            } catch (Exception e) {
+                System.err.println("Erreur analyse IA: " + e.getMessage());
             }
         }
+    }
 
-        private void showIADetails(LoanRequest request, ICreditScoringService.TrustScore score) {
-            User borrower = userService.getById(request.getBorrowerId());
+    private void showIADetails(LoanRequest request, ICreditScoringService.TrustScore score) {
+        try {
+            // CORRECTION: Gérer l'exception SQLException
+            User borrower = null;
+            try {
+                borrower = userService.getById(request.getBorrowerId());
+            } catch (SQLException e) {
+                System.err.println("Erreur lors du chargement de l'emprunteur: " + e.getMessage());
+            }
 
             StringBuilder details = new StringBuilder();
-            String borrowerName = (borrower != null) ? borrower.getNom() : "Unknown User";
-            details.append("=== ANALYSE IA POUR ").append(borrowerName).append(" ===\n\n");            details.append("Score de confiance: ").append(String.format("%.1f/100", score.getScore())).append("\n");
+            String borrowerName = (borrower != null) ?
+                    borrower.getPrenom() + " " + borrower.getNom() : "Unknown User";
+
+            details.append("=== ANALYSE IA POUR ").append(borrowerName).append(" ===\n\n");
+            details.append("Score de confiance: ").append(String.format("%.1f/100", score.getScore())).append("\n");
             details.append("Niveau: ").append(score.getLevel()).append("\n\n");
 
             details.append("Facteurs analysés:\n");
@@ -196,18 +206,29 @@
                 }
             }
 
-            // Utiliser DialogUtil.confirm pour afficher (car info n'existe pas)
             DialogUtil.confirm("Analyse IA Détail", details.toString());
+
+        } catch (Exception e) {
+            DialogUtil.error("Erreur", "Impossible d'afficher les détails: " + e.getMessage());
         }
+    }
 
-        /* ================= CARD ================= */
+    /* ================= CARD ================= */
+    private VBox createRequestCard(LoanRequest request){
+        try {
+            // CORRECTION: Gérer l'exception SQLException
+            User borrower = null;
+            try {
+                borrower = userService.getById(request.getBorrowerId());
+            } catch (SQLException e) {
+                System.err.println("Erreur lors du chargement de l'emprunteur: " + e.getMessage());
+            }
 
-        private VBox createRequestCard(LoanRequest request){
-
-            User borrower = userService.getById(request.getBorrowerId());
+            String borrowerName = (borrower != null) ?
+                    borrower.getPrenom() + " " + borrower.getNom() : "Unknown User";
 
             /* ---- borrower ---- */
-            Label name = new Label(borrower.getNom());
+            Label name = new Label(borrowerName);
             name.setStyle("-fx-font-size:18px; -fx-font-weight:bold;");
 
             /* ---- amount ---- */
@@ -222,7 +243,6 @@
             Label date = new Label("Requested at: " + request.getCreatedAt());
 
             /* ---- buttons ---- */
-
             Button accept = new Button("✅ Accept");
             accept.setStyle("-fx-background-color:#27ae60; -fx-text-fill:white; -fx-font-weight:bold;");
 
@@ -245,14 +265,13 @@
                             );
                     showIADetails(request, score);
                 } catch (Exception ex) {
-                    DialogUtil.confirm("Erreur IA", ex.getMessage());
+                    DialogUtil.error("Erreur IA", ex.getMessage());
                 }
             });
 
             HBox actions = new HBox(10, accept, reject, analyzeBtn);
 
             /* ---- card ---- */
-
             VBox card = new VBox(10);
             card.setStyle(
                     "-fx-background-color:white;" +
@@ -266,68 +285,70 @@
             card.getChildren().addAll(name, amount, message, date, actions);
 
             return card;
-        }
 
-        /* ================= ACCEPT ================= */
-
-        private void acceptRequest(LoanRequest request){
-
-            boolean confirmed = DialogUtil.confirm(
-                    "Accept Loan Request",
-                    "You are about to ACCEPT this loan request.\n\n"
-                            + "Amount: " + request.getAmount() + " TND\n\n"
-                            + "A real loan will be created and the borrower will owe you money.\n"
-                            + "Do you want to continue?"
-            );
-
-            if(!confirmed) return;
-
-            try{
-
-                requestService.acceptRequest(request.getId());
-
-                DialogUtil.success(
-                        "Loan Created",
-                        "The loan has been successfully created."
-                );
-
-                loadRequests();
-                loadIAInsights();
-
-            }catch(Exception e){
-                e.printStackTrace();
-                DialogUtil.error("Accept Failed",
-                        "Unable to accept the loan request.\n" + e.getMessage());
-            }
-        }
-
-        /* ================= REJECT ================= */
-
-        private void rejectRequest(LoanRequest request){
-
-            boolean confirmed = DialogUtil.confirm(
-                    "Reject Loan Request",
-                    "Are you sure you want to reject this loan request?"
-            );
-
-            if(!confirmed) return;
-
-            try{
-
-                requestService.rejectRequest(request.getId());
-
-                DialogUtil.success(
-                        "Request Rejected",
-                        "The loan request has been rejected."
-                );
-
-                loadRequests();
-                loadIAInsights();
-
-            }catch(Exception e){
-                e.printStackTrace();
-                DialogUtil.error("Reject Failed",
-                        "Unable to reject the loan request.\n" + e.getMessage());
-            }
+        } catch (Exception e) {
+            // En cas d'erreur, retourner une carte d'erreur
+            VBox errorCard = new VBox(10);
+            errorCard.setStyle("-fx-background-color:#ffeeee; -fx-padding:18; -fx-background-radius:12;");
+            errorCard.getChildren().add(new Label("Erreur lors du chargement de la demande"));
+            return errorCard;
         }
     }
+
+    /* ================= ACCEPT ================= */
+    private void acceptRequest(LoanRequest request){
+        boolean confirmed = DialogUtil.confirm(
+                "Accept Loan Request",
+                "You are about to ACCEPT this loan request.\n\n"
+                        + "Amount: " + request.getAmount() + " TND\n\n"
+                        + "A real loan will be created and the borrower will owe you money.\n"
+                        + "Do you want to continue?"
+        );
+
+        if(!confirmed) return;
+
+        try{
+            requestService.acceptRequest(request.getId());
+
+            DialogUtil.success(
+                    "Loan Created",
+                    "The loan has been successfully created."
+            );
+
+            loadRequests();
+            loadIAInsights();
+
+        }catch(Exception e){
+            e.printStackTrace();
+            DialogUtil.error("Accept Failed",
+                    "Unable to accept the loan request.\n" + e.getMessage());
+        }
+    }
+
+    /* ================= REJECT ================= */
+    private void rejectRequest(LoanRequest request){
+        boolean confirmed = DialogUtil.confirm(
+                "Reject Loan Request",
+                "Are you sure you want to reject this loan request?"
+        );
+
+        if(!confirmed) return;
+
+        try{
+            requestService.rejectRequest(request.getId());
+
+            DialogUtil.success(
+                    "Request Rejected",
+                    "The loan request has been rejected."
+            );
+
+            loadRequests();
+            loadIAInsights();
+
+        }catch(Exception e){
+            e.printStackTrace();
+            DialogUtil.error("Reject Failed",
+                    "Unable to reject the loan request.\n" + e.getMessage());
+        }
+    }
+}

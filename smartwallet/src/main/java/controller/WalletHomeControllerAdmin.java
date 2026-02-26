@@ -14,6 +14,10 @@ public class WalletHomeControllerAdmin  {
         // Popup wallet layout (uses your MainFxml helper)
         MainFxml.getInstance().openWalletLayoutPopup();
     }
+    @FXML
+    private void logout() {
+        MainFxml.getInstance().logout();
+    }
 
     @FXML
     private void goCards() {

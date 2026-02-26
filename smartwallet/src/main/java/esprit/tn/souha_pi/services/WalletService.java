@@ -75,18 +75,6 @@ public class WalletService {
             System.out.println("✅ Wallet créé pour l'utilisateur ID: " + userId);
         }
     }
-    public boolean walletExiste(int userId) {
-        String sql = "SELECT id FROM wallet WHERE user_id = ?";
-        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
-
-            ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     /* ================= GET WALLET (pour user_id=1 par défaut) ================= */
     public Wallet getWallet() {
@@ -182,6 +170,19 @@ public class WalletService {
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    // ================== VERIFIER SI UN WALLET EXISTE POUR UN UTILISATEUR ==================
+    public boolean walletExiste(int userId) {
+        String sql = "SELECT id FROM wallet WHERE user_id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // retourne true si un wallet existe
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur lors de la vérification du wallet: " + e.getMessage());
+            return false;
         }
     }
 

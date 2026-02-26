@@ -1,6 +1,7 @@
 package esprit.tn.souha_pi.services;
 
-import esprit.tn.souha_pi.entities.User;
+import entities.User;
+
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;

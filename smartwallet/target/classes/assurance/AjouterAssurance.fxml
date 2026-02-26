@@ -1,53 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.assurance.AjouterAssurance">
+<BorderPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #f5f7fb;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.assurance.AjouterAssurance">
 
-    <children>
+    <!-- Header avec gradient -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);">
+            <padding>
+                <Insets top="15" right="25" bottom="15" left="25"/>
+            </padding>
+            <Label text="💰" style="-fx-font-size: 28px; -fx-text-fill: white;"/>
+            <Label text="SmartWallet" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="retouritaf" onAction="#retourMain" text="Retour"
+                    style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20 8 20; -fx-font-size: 13px; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);"/>
+        </HBox>
+    </top>
 
-        <!-- ================= LEFT FORM ================= -->
+    <!-- Centre -->
+    <center>
+        <HBox alignment="CENTER" spacing="40">
+            <padding>
+                <Insets top="30" bottom="30" left="40" right="40"/>
+            </padding>
 
-        <Text layoutX="40.0" layoutY="50.0" text="Insurance Name" />
-        <TextField fx:id="nomAssuranceField" layoutX="150.0" layoutY="30.0" prefWidth="220" />
+            <!-- Formulaire gauche -->
+            <VBox spacing="15" prefWidth="380">
+                <Label text="Add New Insurance" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
 
-        <Text layoutX="40.0" layoutY="95.0" text="Insurance Type" />
-        <ComboBox fx:id="typeAssuranceCombo" layoutX="150.0" layoutY="75.0" prefWidth="220.0" />
+                <GridPane hgap="15" vgap="12">
+                    <padding><Insets top="10"/></padding>
 
-        <Text layoutX="40.0" layoutY="140.0" text="Amount" />
-        <TextField fx:id="prixField" layoutX="150.0" layoutY="120.0" prefWidth="220" />
+                    <Label text="Insurance Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                    <TextField fx:id="nomAssuranceField" prefWidth="240" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                               style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12;"/>
 
-        <Text layoutX="40.0" layoutY="185.0" text="Duration (months)" />
-        <TextField fx:id="dureeField" layoutX="150.0" layoutY="165.0" prefWidth="220" />
+                    <Label text="Insurance Type:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                    <ComboBox fx:id="typeAssuranceCombo" prefWidth="240" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 8; -fx-background-radius: 8;"/>
 
-        <Text layoutX="40.0" layoutY="230.0" text="Description" />
-        <TextArea fx:id="descriptionField" layoutX="150.0" layoutY="210.0" prefHeight="70" prefWidth="220" />
+                    <Label text="Amount:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                    <TextField fx:id="prixField" prefWidth="240" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                               style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12;"/>
 
-        <Text layoutX="40.0" layoutY="310.0" text="Conditions" />
-        <TextArea fx:id="conditionsField" layoutX="150.0" layoutY="290.0" prefHeight="70" prefWidth="220" />
+                    <Label text="Duration (months):" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                    <TextField fx:id="dureeField" prefWidth="240" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                               style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12;"/>
 
-        <Text layoutX="40.0" layoutY="390.0" text="Status" />
-        <ComboBox fx:id="statutCombo" layoutX="150.0" layoutY="370.0" prefWidth="220.0" />
-        <Button fx:id="retouritaf" layoutX="611.0" layoutY="396.0" onAction="#retourMain" prefHeight="30" prefWidth="220" style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;" text="Return" />
-        <!-- Bouton Ajouter -->
-        <Button fx:id="btnAjouterAssurance" layoutX="150.0" layoutY="421.0" onAction="#ajouterAssurance" prefWidth="220" style="-fx-background-color: #08010e; -fx-text-fill: white; -fx-font-weight: bold;" text="Add Insurance" />
+                    <Label text="Description:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                    <TextArea fx:id="descriptionField" prefWidth="240" prefHeight="60" GridPane.rowIndex="4" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8;"/>
 
-        <!-- Vertical Black Bar -->
-        <Rectangle arcHeight="20" arcWidth="20" fill="#000000" height="380.0" layoutX="520.0" layoutY="70.0" width="8.0" />
+                    <Label text="Conditions:" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                    <TextArea fx:id="conditionsField" prefWidth="240" prefHeight="60" GridPane.rowIndex="5" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8;"/>
 
-        <!-- Right Side Logo -->
-        <ImageView fx:id="imgLogoAssurance" fitHeight="300.0" fitWidth="300.0" layoutX="560.0" layoutY="90.0" preserveRatio="true" />
+                    <Label text="Status:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                    <ComboBox fx:id="statutCombo" prefWidth="240" GridPane.rowIndex="6" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                </GridPane>
 
-        <!-- Title under Logo -->
-        <Label alignment="CENTER" layoutX="531.0" layoutY="361.0" prefWidth="380.0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #08010e;" text="Add an insurance" />
+                <Button fx:id="btnAjouterAssurance" onAction="#ajouterAssurance" text="Add Insurance"
+                        style="-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 12 20; -fx-font-size: 15px; -fx-cursor: hand; -fx-effect: dropshadow(two-pass-box, rgba(124,58,237,0.3), 8, 0, 0, 2);"
+                        prefWidth="380" prefHeight="45"/>
+            </VBox>
 
-    </children>
-</AnchorPane>
+            <!-- Séparateur vertical -->
+            <Region prefWidth="2" style="-fx-background-color: #e5e7eb; -fx-background-radius: 1;"/>
+
+            <!-- Partie droite avec logo -->
+            <VBox alignment="CENTER" spacing="20" prefWidth="320">
+                <ImageView fx:id="imgLogoAssurance" fitHeight="220" fitWidth="220" preserveRatio="true"
+                           style="-fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5);"/>
+                <Label text="Add an Insurance" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;" wrapText="true" textAlignment="CENTER"/>
+                <Label text="Fill the form to add a new insurance policy to your portfolio"
+                       style="-fx-font-size: 14px; -fx-text-fill: #64748B; -fx-alignment: center;"
+                       wrapText="true" maxWidth="250" textAlignment="CENTER"/>
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- Footer -->
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 1 0 0 0;">
+            <padding>
+                <Insets bottom="15" left="25" right="25" top="15"/>
+            </padding>
+            <Label text="© 2026 SmartWallet - All rights reserved" style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

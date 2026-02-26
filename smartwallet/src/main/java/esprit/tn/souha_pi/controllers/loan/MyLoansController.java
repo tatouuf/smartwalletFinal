@@ -4,8 +4,7 @@ import entities.User;
 import esprit.tn.souha_pi.controllers.WalletLayoutController;
 import esprit.tn.souha_pi.entities.Loan;
 import esprit.tn.souha_pi.services.LoanService;
-import esprit.tn.souha_pi.services.UserService;
-
+import services.ServiceUser;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -14,6 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import utils.Session;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class MyLoansController {
@@ -22,28 +22,40 @@ public class MyLoansController {
     private VBox cardsContainer;
 
     private LoanService loanService = new LoanService();
-    private UserService userService = new UserService();
+    private ServiceUser userService = new ServiceUser();
 
-    // ⚠️ remplacer plus tard par utilisateur connecté
-    entities.User currentUser = Session.getCurrentUser();
-
-    private int currentUserId = currentUser.getId(); // ⚠️ remplacer plus tard par user connecté
+    private User currentUser = Session.getCurrentUser();
+    private int currentUserId = currentUser != null ? currentUser.getId() : 0;
 
     @FXML
     public void initialize(){
-        loadLoans();
+        if (currentUser != null) {
+            try {
+                loadLoans();
+            } catch (SQLException e) {
+                afficherErreur("Erreur de chargement des prêts: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            afficherErreur("Veuillez vous connecter pour voir vos prêts");
+        }
+    }
+
+    private void afficherErreur(String message) {
+        cardsContainer.getChildren().clear();
+        Label error = new Label(message);
+        error.setStyle("-fx-text-fill:red; -fx-font-size:14px;");
+        cardsContainer.getChildren().add(error);
     }
 
     /* ================= LOAD LOANS ================= */
-
-    private void loadLoans(){
-
+    private void loadLoans() throws SQLException {
         cardsContainer.getChildren().clear();
 
         List<Loan> loans = loanService.getLoansForUser(currentUserId);
 
-        if(loans.isEmpty()){
-            Label empty = new Label("No loans found");
+        if(loans == null || loans.isEmpty()){
+            Label empty = new Label("Aucun prêt trouvé");
             empty.setStyle("-fx-text-fill:gray; -fx-font-size:16px;");
             cardsContainer.getChildren().add(empty);
             return;
@@ -56,19 +68,25 @@ public class MyLoansController {
     }
 
     /* ================= CARD CREATION ================= */
-
     private VBox createLoanCard(Loan loan){
-
         boolean isBorrower = loan.getBorrowerId() == currentUserId;
+        int otherUserId = isBorrower ? loan.getLenderId() : loan.getBorrowerId();
 
-        int otherUserId = isBorrower
-                ? loan.getLenderId()
-                : loan.getBorrowerId();
+        // Gérer le cas où l'autre utilisateur pourrait être null
+        User otherUser = null;
+        try {
+            otherUser = userService.getById(otherUserId);
+        } catch (SQLException e) {
+            System.err.println("Erreur lors du chargement de l'utilisateur: " + e.getMessage());
+        }
 
-        User otherUser = userService.getById(otherUserId);
+        String otherUserName = "Utilisateur inconnu";
+        if (otherUser != null) {
+            otherUserName = otherUser.getPrenom() + " " + otherUser.getNom();
+        }
 
         /* ===== ROLE ===== */
-        Label roleLabel = new Label(isBorrower ? "You Borrowed" : "You Lent");
+        Label roleLabel = new Label(isBorrower ? "Vous avez emprunté" : "Vous avez prêté");
         roleLabel.setStyle(
                 "-fx-font-size:14px;" +
                         "-fx-text-fill:white;" +
@@ -78,7 +96,7 @@ public class MyLoansController {
         );
 
         /* ===== USER NAME ===== */
-        Label nameLabel = new Label(otherUser.getFullname());
+        Label nameLabel = new Label(otherUserName);
         nameLabel.setStyle("-fx-font-size:18px; -fx-font-weight:bold;");
 
         /* ===== AMOUNT ===== */
@@ -86,7 +104,7 @@ public class MyLoansController {
         amountLabel.setStyle("-fx-font-size:15px;");
 
         /* ===== REMAINING ===== */
-        Label remainingLabel = new Label("Remaining: " + loan.getRemainingAmount() + " TND");
+        Label remainingLabel = new Label("Restant: " + loan.getRemainingAmount() + " TND");
         remainingLabel.setStyle("-fx-font-size:15px; -fx-text-fill:#c0392b;");
 
         /* ===== STATUS ===== */
@@ -101,10 +119,6 @@ public class MyLoansController {
 
         /* ===== HEADER ===== */
         HBox header = new HBox(10, roleLabel, statusLabel);
-
-        /* ===== SPACER ===== */
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         /* ===== CARD ===== */
         VBox card = new VBox(8);

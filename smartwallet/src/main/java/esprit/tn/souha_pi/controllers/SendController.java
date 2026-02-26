@@ -2,7 +2,6 @@ package esprit.tn.souha_pi.controllers;
 
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.entities.Transaction;
-import esprit.tn.souha_pi.entities.User;
 import esprit.tn.souha_pi.services.BankCardService;
 import esprit.tn.souha_pi.services.TransactionService;
 import esprit.tn.souha_pi.services.WalletService;

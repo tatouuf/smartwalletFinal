@@ -1,5 +1,6 @@
 package controller.assurance;
 
+import entities.User;
 import entities.assurances.Assurances;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import services.assurances.ServiceAssurances;
+import utils.Session;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -33,17 +35,29 @@ public class AfficherAssurance {
     @FXML
     private void retourMain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainalc/MainALC.fxml"));
-            Parent root = loader.load();
+            User currentUser = Session.getCurrentUser();
 
-            Stage stage = (Stage) retourhaamdi.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Main ALC");
+            if (currentUser != null && "ADMIN".equals(currentUser.getRole().name())) {
+                // Retour au DashboardAdmin
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardAdmin.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) retourhaamdi.getScene().getWindow();
+                stage.setScene(new Scene(root, 900, 500));
+                stage.setTitle("Admin Dashboard");
+            } else {
+                // Retour à la page d'accueil des services
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/acceuilservices/AcceuilService.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) retourhaamdi.getScene().getWindow();
+                stage.setScene(new Scene(root, 900, 500));
+                stage.setTitle("Services");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au menu principal !");
         }
     }
+
+
     @FXML
     private void haamdiah() {
         try {

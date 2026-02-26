@@ -16,23 +16,21 @@ public class ServiceReclamation {
 
     private Connection cnx;
     private ServiceUser userService;
-    private AIService aiService; // NEW
+    private AIService aiService;
 
     public ServiceReclamation() {
         cnx = MyDataBase.getInstance().getConnection();
         userService = new ServiceUser();
-        aiService = AIService.getInstance(); // NEW
+        aiService = AIService.getInstance();
     }
 
     // ================= SEND RECLAMATION (WITH AI) =================
     public void sendReclamation(int userId, String message) throws SQLException {
-        // AI: Categorize the reclamation
         String category = aiService.categorizeReclamation(message);
-
-        // AI: Analyze sentiment
         AIService.SentimentResult sentiment = aiService.analyzeSentiment(message);
 
-        String sql = "INSERT INTO reclamation(user_id, message, statut, date_envoi, category, sentiment, is_urgent) " +
+        // CORRIGÉ: 'dateEnvoi' au lieu de 'date_envoi'
+        String sql = "INSERT INTO reclamation(userId, message, statut, dateEnvoi, category, sentiment, is_urgent) " +
                 "VALUES (?, ?, ?, NOW(), ?, ?, ?)";
 
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
@@ -44,9 +42,8 @@ public class ServiceReclamation {
             ps.setBoolean(6, sentiment.isUrgent());
             ps.executeUpdate();
 
-            // Notify admins (urgent ones get priority notification)
             List<User> admins = userService.recuperer().stream()
-                    .filter(u -> u.getRole() == Role.ADMIN)
+                    .filter(u -> "ADMIN".equals(u.getRole()))
                     .toList();
 
             User sender = userService.recupererParId(userId);
@@ -76,7 +73,8 @@ public class ServiceReclamation {
 
     // ================= REPLY TO RECLAMATION =================
     public void replyReclamation(int reclamationId, int adminId, String reponse) throws SQLException {
-        String sql = "UPDATE reclamation SET reponse = ?, admin_id = ?, statut = ?, date_reponse = NOW() WHERE id = ?";
+        // CORRIGÉ: 'adminId' au lieu de 'admin_id'
+        String sql = "UPDATE reclamation SET reponse = ?, adminId = ?, statut = ?, dateReponse = NOW() WHERE id = ?";
 
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setString(1, reponse);
@@ -85,7 +83,6 @@ public class ServiceReclamation {
             ps.setInt(4, reclamationId);
             ps.executeUpdate();
 
-            // Notify user
             Reclamation reclamation = getReclamationById(reclamationId);
             if (reclamation != null) {
                 NotificationHelper.createAndShowNotification(
@@ -97,8 +94,6 @@ public class ServiceReclamation {
             }
         }
     }
-
-    // ... (rest of methods stay the same)
 
     // ================= RESOLVE RECLAMATION =================
     public void resolveReclamation(int reclamationId) throws SQLException {
@@ -124,7 +119,8 @@ public class ServiceReclamation {
     // ================= GET ALL RECLAMATIONS (ADMIN) =================
     public List<Reclamation> getAllReclamations() throws SQLException {
         List<Reclamation> list = new ArrayList<>();
-        String sql = "SELECT * FROM reclamation ORDER BY is_urgent DESC, date_envoi DESC";
+        // CORRIGÉ: 'dateEnvoi' au lieu de 'date_envoi'
+        String sql = "SELECT * FROM reclamation ORDER BY is_urgent DESC, dateEnvoi DESC";
 
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -138,7 +134,8 @@ public class ServiceReclamation {
     // ================= GET RECLAMATIONS BY USER =================
     public List<Reclamation> getReclamationsByUser(int userId) throws SQLException {
         List<Reclamation> list = new ArrayList<>();
-        String sql = "SELECT * FROM reclamation WHERE user_id = ? ORDER BY date_envoi DESC";
+        // CORRIGÉ: 'userId' et 'dateEnvoi'
+        String sql = "SELECT * FROM reclamation WHERE userId = ? ORDER BY dateEnvoi DESC";
 
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -168,7 +165,7 @@ public class ServiceReclamation {
     private Reclamation mapReclamation(ResultSet rs) throws SQLException {
         Reclamation r = new Reclamation();
         r.setId(rs.getInt("id"));
-        r.setUser_id(rs.getInt("user_id"));
+        r.setUser_id(rs.getInt("userId"));  // CORRIGÉ: 'userId' au lieu de 'user_id'
         r.setMessage(rs.getString("message"));
         r.setStatut(ReclamationStatuts.valueOf(rs.getString("statut")));
         r.setReponse(rs.getString("reponse"));
@@ -178,14 +175,15 @@ public class ServiceReclamation {
         r.setSentiment(rs.getString("sentiment"));
         r.setUrgent(rs.getBoolean("is_urgent"));
 
-        int adminId = rs.getInt("admin_id");
+        int adminId = rs.getInt("adminId");  // CORRIGÉ: 'adminId' au lieu de 'admin_id'
         if (!rs.wasNull()) {
             r.setAdmin_id(adminId);
         }
 
-        r.setDate_envoi(rs.getTimestamp("date_envoi").toLocalDateTime());
+        // CORRIGÉ: 'dateEnvoi' au lieu de 'date_envoi'
+        r.setDate_envoi(rs.getTimestamp("dateEnvoi").toLocalDateTime());
 
-        Timestamp dateReponse = rs.getTimestamp("date_reponse");
+        Timestamp dateReponse = rs.getTimestamp("dateReponse");  // CORRIGÉ: 'dateReponse'
         if (dateReponse != null) {
             r.setDate_reponse(dateReponse.toLocalDateTime());
         }

@@ -1,5 +1,4 @@
 module com.example.smartwallet {
-
     // ================= JAVA FX =================
     requires javafx.controls;
     requires javafx.fxml;
@@ -7,7 +6,10 @@ module com.example.smartwallet {
     requires javafx.base;
     requires javafx.web;
     requires javafx.media;
-
+    requires com.google.gson;
+    requires org.apache.httpcomponents.client5.httpclient5;  // Ajouter
+    requires org.apache.httpcomponents.core5.httpcore5;      // Ajouter
+    requires org.slf4j;                                       // Ajouter (souvent
     // ================= CORE =================
     requires java.sql;
     requires java.prefs;
@@ -19,43 +21,42 @@ module com.example.smartwallet {
     requires jdk.jsobject;
 
     // ================= LIBRARIES =================
-    requires com.google.gson;
+
     requires org.controlsfx.controls;
     requires org.json;
     requires stripe.java;
     requires org.locationtech.jts;
     requires jersey.client;
     requires jersey.media.json.jackson;
+    requires jbcrypt;
+    requires mysql.connector.j;
 
-    // FXGL
-    requires com.almasb.fxgl.all;
-    requires api;
-    requires service;
-
-    // ⚠️ IMPORTANT : NE PAS utiliser requires api/service ici
-    // (ça casse la lecture des modules JavaFX)
-
-    // ================= OPEN FOR FXML =================
-    opens tests to javafx.fxml, javafx.graphics;
-   // opens esprit.tn.souha_pi.controllers.user to javafx.fxml;
-    opens Controllers to javafx.fxml, javafx.base;
+    // ================= OPEN PACKAGES FOR FXML =================
+    opens tests to javafx.fxml;
+    opens Controllers to javafx.fxml;
     opens controller to javafx.fxml;
-
-    opens esprit.tn.souha_pi.controllers to javafx.fxml;
-    opens esprit.tn.souha_pi.controllers.wallet to javafx.fxml;
-    opens esprit.tn.souha_pi.controllers.loan to javafx.fxml;
-    opens esprit.tn.souha_pi.controllers.admin to javafx.fxml;
     opens controller.acceuilservice to javafx.fxml;
     opens controller.mainalc to javafx.fxml;
-     opens controller.assurance to javafx.fxml;
+    opens controller.assurance to javafx.fxml;
     opens controller.credit to javafx.fxml;
     opens controller.service to javafx.fxml;
 
-    // Entities (TableView reflection)
+    // ================= OPEN PACKAGES FOR REFLECTION =================
     opens entities to javafx.base;
-    opens esprit.tn.souha_pi.entities to javafx.base;
 
-
-
+    // ================= EXPORTS =================
     exports tests;
+    exports api;
+    exports services;
+    exports utils;
+    exports entities;
+
+    // ================= ESPRIT PACKAGES - VÉRIFIEZ QUE CES DOSSIERS EXISTENT =================
+    // Commentez ou supprimez les packages qui n'existent pas
+
+    // Si le dossier esprit/tn/souha_pi/controllers/admin existe
+    opens esprit.tn.souha_pi.controllers to javafx.fxml;
+    opens esprit.tn.souha_pi.controllers.wallet to javafx.fxml;
+    opens esprit.tn.souha_pi.controllers.loan to javafx.fxml;
+    opens esprit.tn.souha_pi.entities to javafx.base;
 }

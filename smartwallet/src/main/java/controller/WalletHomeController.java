@@ -14,6 +14,10 @@ public class WalletHomeController {
         // Popup wallet layout (uses your MainFxml helper)
         MainFxml.getInstance().openWalletLayoutPopup();
     }
+    @FXML
+    private void logout() {
+        MainFxml.getInstance().logout();
+    }
 
     @FXML
     private void goCards() {
@@ -33,6 +37,11 @@ public class WalletHomeController {
 
         // or if you prefer directly:
         // MainFxml.getInstance().openPopup("/services/AfficherServiceClient.fxml","Services",1100,700,true);
+    }
+    @FXML
+    private void goReclamations() {
+        // Popup réclamations
+        MainFxml.getInstance().openReclamationUserPopup();
     }
 
     @FXML

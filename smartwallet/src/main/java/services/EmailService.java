@@ -1,107 +1,164 @@
 package services;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import utils.EmailConfig;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class EmailService {
 
     private static final Logger logger = Logger.getLogger(EmailService.class.getName());
+    private static final Gson gson = new Gson();
+    private static final Random random = new Random();
 
-    public static boolean sendPasswordResetEmail(String toEmail, String resetToken) {
+    private static final Map<String, VerificationCode> verificationCodes = new HashMap<>();
+
+    public static String generateVerificationCode() {
+        int code = 100000 + random.nextInt(900000);
+        return String.valueOf(code);
+    }
+
+    public static boolean sendVerificationCode(String toEmail, String userName) {
         try {
-            // Setup mail server properties
-            Properties props = new Properties();
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.host", EmailConfig.SMTP_HOST);
-            props.put("mail.smtp.port", EmailConfig.SMTP_PORT);
-            props.put("mail.smtp.ssl.trust", EmailConfig.SMTP_HOST);
-            props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            String code = generateVerificationCode();
 
-            // Create session with authentication
-            Session session = Session.getInstance(props, new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(
-                            EmailConfig.EMAIL_USERNAME,
-                            EmailConfig.EMAIL_PASSWORD
-                    );
+            long expirationTime = System.currentTimeMillis() +
+                    (EmailConfig.CODE_EXPIRATION_MINUTES * 60 * 1000);
+            verificationCodes.put(toEmail.toLowerCase(), new VerificationCode(code, expirationTime));
+
+            // Prepare email data with PRIVATE KEY
+            JsonObject emailData = new JsonObject();
+            emailData.addProperty("service_id", EmailConfig.EMAILJS_SERVICE_ID);
+            emailData.addProperty("template_id", EmailConfig.EMAILJS_TEMPLATE_ID);
+            emailData.addProperty("user_id", EmailConfig.EMAILJS_PUBLIC_KEY);
+            emailData.addProperty("accessToken", EmailConfig.EMAILJS_PRIVATE_KEY); // Private Key for JavaFX
+
+            JsonObject templateParams = new JsonObject();
+            templateParams.addProperty("user_name", userName);
+            templateParams.addProperty("to_email", toEmail);
+            templateParams.addProperty("verification_code", code);
+            emailData.add("template_params", templateParams);
+
+            System.out.println("═══════════════════════════════════════");
+            System.out.println("📧 SENDING EMAIL WITH PRIVATE KEY");
+            System.out.println("═══════════════════════════════════════");
+            System.out.println("Service ID: " + EmailConfig.EMAILJS_SERVICE_ID);
+            System.out.println("Template ID: " + EmailConfig.EMAILJS_TEMPLATE_ID);
+            System.out.println("To Email: " + toEmail);
+            System.out.println("Code: " + code);
+            System.out.println("═══════════════════════════════════════");
+
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                HttpPost httpPost = new HttpPost(EmailConfig.EMAILJS_API_URL);
+                httpPost.setHeader("Content-Type", "application/json");
+                httpPost.setEntity(new StringEntity(gson.toJson(emailData)));
+
+                try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+                    int statusCode = response.getCode();
+
+                    // Read response body - Simple way without EntityUtils
+                    String responseBody = "";
+                    if (response.getEntity() != null) {
+                        try (BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(response.getEntity().getContent()))) {
+                            responseBody = reader.lines().collect(Collectors.joining("\n"));
+                        } catch (Exception e) {
+                            responseBody = "Unable to read response";
+                        }
+                    }
+
+                    System.out.println("Response Status: " + statusCode);
+                    System.out.println("Response Body: " + responseBody);
+                    System.out.println("═══════════════════════════════════════");
+
+                    if (statusCode == 200) {
+                        logger.info("✅ Verification code sent successfully to: " + toEmail);
+                        System.out.println("✅ Email sent! Code: " + code + " (DEV MODE)");
+                        return true;
+                    } else {
+                        logger.warning("❌ Failed to send email. Status: " + statusCode);
+                        logger.warning("Response: " + responseBody);
+                        return false;
+                    }
                 }
-            });
+            }
 
-            // Create email message
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(EmailConfig.EMAIL_USERNAME, EmailConfig.FROM_NAME));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
-            message.setSubject(EmailConfig.RESET_SUBJECT);
-
-            // Create reset link
-            String resetLink = EmailConfig.APP_URL + "/reset?token=" + resetToken;
-
-            // HTML email body
-            String htmlContent = createEmailTemplate(resetLink);
-            message.setContent(htmlContent, "text/html; charset=utf-8");
-
-            // Send email
-            Transport.send(message);
-
-            logger.info("Password reset email sent successfully to: " + toEmail);
-            return true;
-
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Failed to send email to: " + toEmail, e);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "❌ Error sending verification email", e);
+            e.printStackTrace();
             return false;
         }
     }
 
-    private static String createEmailTemplate(String resetLink) {
-        return """
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <style>
-                        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-                        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-                        .header { text-align: center; color: #7c3aed; margin-bottom: 30px; }
-                        .content { color: #333; line-height: 1.6; }
-                        .button { display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; font-weight: bold; }
-                        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #999; text-align: center; }
-                        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px; margin: 20px 0; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <h1>🔐 SmartWallet</h1>
-                            <h2>Password Reset Request</h2>
-                        </div>
-                        <div class="content">
-                            <p>Hello,</p>
-                            <p>We received a request to reset your SmartWallet account password.</p>
-                            <p>Click the button below to reset your password:</p>
-                            <center>
-                                <a href="%s" class="button">Reset Password</a>
-                            </center>
-                            <p>Or copy and paste this link into your browser:</p>
-                            <p style="word-break: break-all; color: #7c3aed;"><a href="%s">%s</a></p>
-                            <div class="warning">
-                                <strong>⚠️ Security Notice:</strong> This link will expire in 1 hour. If you didn't request this reset, please ignore this email.
-                            </div>
-                        </div>
-                        <div class="footer">
-                            <p>This email was sent by SmartWallet</p>
-                            <p>© 2026 SmartWallet. All rights reserved.</p>
-                        </div>
-                    </div>
-                </body>
-                </html>
-                """.formatted(resetLink, resetLink, resetLink);
+    public static boolean verifyCode(String email, String enteredCode) {
+        String emailKey = email.toLowerCase();
+
+        if (!verificationCodes.containsKey(emailKey)) {
+            logger.warning("❌ No verification code found for: " + email);
+            return false;
+        }
+
+        VerificationCode storedCode = verificationCodes.get(emailKey);
+
+        if (System.currentTimeMillis() > storedCode.expirationTime) {
+            logger.warning("❌ Verification code expired for: " + email);
+            verificationCodes.remove(emailKey);
+            return false;
+        }
+
+        if (storedCode.code.equals(enteredCode)) {
+            logger.info("✅ Verification code matched for: " + email);
+            return true;
+        } else {
+            logger.warning("❌ Verification code mismatch for: " + email);
+            return false;
+        }
+    }
+
+    public static void clearVerificationCode(String email) {
+        verificationCodes.remove(email.toLowerCase());
+        logger.info("🗑️ Verification code cleared for: " + email);
+    }
+
+    public static boolean hasValidCode(String email) {
+        String emailKey = email.toLowerCase();
+        if (!verificationCodes.containsKey(emailKey)) {
+            return false;
+        }
+
+        VerificationCode storedCode = verificationCodes.get(emailKey);
+        boolean isValid = System.currentTimeMillis() <= storedCode.expirationTime;
+
+        if (!isValid) {
+            logger.info("⏰ Code expired for: " + email);
+            verificationCodes.remove(emailKey);
+        }
+
+        return isValid;
+    }
+
+    // Inner class to store verification code with expiration
+    private static class VerificationCode {
+        String code;
+        long expirationTime;
+
+        VerificationCode(String code, long expirationTime) {
+            this.code = code;
+            this.expirationTime = expirationTime;
+        }
     }
 }

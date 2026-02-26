@@ -1,17 +1,15 @@
 package esprit.tn.souha_pi.controllers;
 
 import esprit.tn.souha_pi.entities.Transaction;
-import esprit.tn.souha_pi.entities.User;
 import esprit.tn.souha_pi.services.TransactionService;
-import esprit.tn.souha_pi.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import services.ServiceUser;
 import utils.Session;
 
 import java.net.URL;
@@ -42,7 +40,7 @@ public class HistoryController implements Initializable {
     @FXML private Label noHistoryLabel;
 
     private TransactionService transactionService = new TransactionService();
-    private UserService userService = new UserService();
+    private ServiceUser userService = new ServiceUser();
     entities.User currentUser = Session.getCurrentUser();
     private List<Transaction> allTransactions;
 

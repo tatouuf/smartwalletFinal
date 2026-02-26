@@ -1,7 +1,8 @@
 package esprit.tn.souha_pi.services;
 
+import entities.User;
 import esprit.tn.souha_pi.entities.Notification;
-import esprit.tn.souha_pi.entities.User;
+
 import java.util.ArrayList;
 import java.util.List;
 

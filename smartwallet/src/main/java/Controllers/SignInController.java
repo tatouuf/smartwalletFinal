@@ -102,30 +102,21 @@ public class SignInController {
                 return;
             }
 
-            // remember me
-            if (rememberCheck.isSelected()) {
-                prefs.put(PREF_EMAIL, email);
-                prefs.put(PREF_PASSWORD, password);
-                prefs.putBoolean(PREF_REMEMBER, true);
-            } else {
-                prefs.remove(PREF_EMAIL);
-                prefs.remove(PREF_PASSWORD);
-                prefs.putBoolean(PREF_REMEMBER, false);
-            }
-
             Session.setCurrentUser(user);
 
-            // main navigation after login (PRIMARY STAGE)
-            if (user.getRole() == Role.ADMIN) {
-                MainFxml.getInstance().showDashboard();
+            // Redirection selon le rôle
+            if (user.isAdmin()) {  // Vérifie si l'utilisateur est ADMIN
+                System.out.println("✅ Admin detected, redirecting to Admin Dashboard");
+                MainFxml.getInstance().showDashboard();  // Ouvre le dashboard admin
             } else {
-                MainFxml.getInstance().showWalletHome();
+                System.out.println("✅ User detected, redirecting to User Wallet");
+                MainFxml.getInstance().showWalletHome();  // Ouvre le wallet user
             }
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Database error during login", e);
             showAlert(Alert.AlertType.ERROR, "Database Error",
-                    "An error occurred while trying to log in. Please try again.");
+                    "An error occurred while trying to log in.");
         }
     }
 

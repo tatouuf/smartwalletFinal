@@ -1,63 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="controller.WalletHomeController">
+           fx:controller="controller.WalletHomeController"
+           style="-fx-background-color: #f5f7fb;">
 
-    <VBox spacing="30" alignment="TOP_CENTER"
-          style="-fx-background-color:linear-gradient(to bottom,#0f172a,#020617);
-                 -fx-padding:40;">
+    <BorderPane prefHeight="600.0" prefWidth="1000.0">
 
-        <!-- TITLE -->
-        <VBox alignment="CENTER" spacing="8">
-            <Label text="SMART WALLET"
-                   style="-fx-text-fill:white; -fx-font-size:28px; -fx-font-weight:bold;"/>
-            <Label text="Gérez vos finances simplement"
-                   style="-fx-text-fill:#94a3b8; -fx-font-size:14px;"/>
-        </VBox>
+        <!-- Header avec gradient -->
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="20"
+                  style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);"
+                  prefHeight="80">
+                <padding>
+                    <Insets top="15" right="25" bottom="15" left="25"/>
+                </padding>
+                <Label text="💰" style="-fx-font-size: 36px; -fx-text-fill: white;"/>
+                <Label text="SmartWallet" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="userNameLabel" text="Utilisateur" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: 600; -fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 20; -fx-padding: 8 20;"/>
+                <Button text="Déconnexion" onAction="#logout"
+                        style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20; -fx-font-size: 14px; -fx-effect: dropshadow(two-pass-box, rgba(239,68,68,0.3), 8, 0, 0, 2);"/>
+            </HBox>
+        </top>
 
-        <!-- GRID MENU -->
-        <GridPane hgap="25" vgap="25" alignment="CENTER">
+        <!-- Centre -->
+        <center>
+            <StackPane>
+                <VBox spacing="40" alignment="CENTER">
+                    <padding>
+                        <Insets top="40" bottom="40" left="30" right="30"/>
+                    </padding>
 
-            <!-- WALLET -->
-            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="0"
-                  styleClass="menuCard" onMouseClicked="#goWallet">
-                <FontIcon iconLiteral="fas-wallet" iconSize="36" iconColor="white"/>
-                <Label text="Wallet" styleClass="menuText"/>
-            </VBox>
+                    <!-- Titre de bienvenue -->
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="Bienvenue sur SmartWallet"
+                               style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #4f46e5; -fx-effect: dropshadow(two-pass-box, rgba(79,70,229,0.2), 10, 0, 0, 3);"/>
+                        <Label text="Gérez vos finances simplement"
+                               style="-fx-font-size: 18px; -fx-text-fill: #64748b;"/>
+                    </VBox>
 
-            <!-- CREDIT CARD -->
-            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="1"
-                  styleClass="menuCard" onMouseClicked="#goCards">
-                <FontIcon iconLiteral="fas-credit-card" iconSize="36" iconColor="white"/>
-                <Label text="Cartes Bancaires" styleClass="menuText"/>
-            </VBox>
+                    <!-- GRID MENU -->
+                    <GridPane hgap="30" vgap="30" alignment="CENTER">
 
-            <!-- SERVICES -->
-            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0"
-                  styleClass="menuCard" onMouseClicked="#goServices">
-                <FontIcon iconLiteral="fas-concierge-bell" iconSize="36" iconColor="white"/>
-                <Label text="Services" styleClass="menuText"/>
-            </VBox>
+                        <!-- WALLET -->
+                        <VBox alignment="CENTER" spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                              style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 180; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 25; -fx-cursor: hand;"
+                              onMouseClicked="#goWallet">
+                            <Label text="💰" style="-fx-font-size: 52px;"/>
+                            <Label text="Wallet" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Gérez votre portefeuille" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                        </VBox>
 
-            <!-- ASSURANCES -->
-            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="1"
-                  styleClass="menuCard" onMouseClicked="#goAssurances">
-                <FontIcon iconLiteral="fas-shield-alt" iconSize="36" iconColor="white"/>
-                <Label text="Assurances" styleClass="menuText"/>
-            </VBox>
+                        <!-- CREDIT CARD -->
+                        <VBox alignment="CENTER" spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 180; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 25; -fx-cursor: hand;"
+                              onMouseClicked="#goCards">
+                            <Label text="💳" style="-fx-font-size: 52px;"/>
+                            <Label text="Cartes" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Gérez vos cartes" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                        </VBox>
 
-            <!-- FRIENDS -->
-            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="0"
-                  styleClass="menuCard" onMouseClicked="#goFriends">
-                <FontIcon iconLiteral="fas-user-friends" iconSize="36" iconColor="white"/>
-                <Label text="Friends &amp; Reclamations" styleClass="menuText"/>
-            </VBox>
+                        <!-- SERVICES -->
+                        <VBox alignment="CENTER" spacing="15" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                              style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 180; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 25; -fx-cursor: hand;"
+                              onMouseClicked="#goServices">
+                            <Label text="🛠️" style="-fx-font-size: 52px;"/>
+                            <Label text="Services" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Accédez aux services" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                        </VBox>
 
-        </GridPane>
 
-    </VBox>
+
+                        <!-- FRIENDS -->
+                        <VBox alignment="CENTER" spacing="15" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                              style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 180; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 25; -fx-cursor: hand;"
+                              onMouseClicked="#goFriends">
+                            <Label text="👥" style="-fx-font-size: 52px;"/>
+                            <Label text="Amis" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Gérez vos relations" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- RÉCLAMATIONS -->
+                        <VBox alignment="CENTER" spacing="15" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 180; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 25; -fx-cursor: hand;"
+                              onMouseClicked="#goReclamations">
+                            <Label text="📝" style="-fx-font-size: 52px;"/>
+                            <Label text="Réclamations" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Suivez vos réclamations" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                    </GridPane>
+
+                    <!-- Message d'information -->
+                    <Label text="Sélectionnez une option pour commencer"
+                           style="-fx-text-fill: #94a3b8; -fx-font-size: 14px; -fx-font-style: italic;"/>
+                </VBox>
+            </StackPane>
+        </center>
+
+        <!-- Footer -->
+        <bottom>
+            <HBox alignment="CENTER" style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 1 0 0 0;" prefHeight="50">
+                <Label text="© 2026 SmartWallet - Tous droits réservés" style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+            </HBox>
+        </bottom>
+
+    </BorderPane>
 </StackPane>

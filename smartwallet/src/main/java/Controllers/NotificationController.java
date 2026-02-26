@@ -1,6 +1,7 @@
 package Controllers;
 
 import entities.Notification;
+import entities.Role;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -132,7 +133,12 @@ public class NotificationController {
 
     @FXML
     private void handleBack() {
-        MainFxml.getInstance().showFriendsList();
+        // Check user role and navigate accordingly
+        if (Session.getCurrentUser().getRole() == Role.ADMIN) {
+            MainFxml.getInstance().showDashboard();
+        } else {
+            MainFxml.getInstance().showFriendsList();
+        }
     }
 
     private void loadNotifications() {

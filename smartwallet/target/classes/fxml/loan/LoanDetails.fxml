@@ -1,71 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="esprit.tn.souha_pi.controllers.loan.LoanDetailsController">
+<ScrollPane fitToWidth="true" style="-fx-background: transparent;" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.souha_pi.controllers.loan.LoanDetailsController">
 
     <content>
-        <VBox spacing="18">
+        <VBox spacing="20" style="-fx-padding: 20;">
 
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+            <!-- Carte des détails du prêt -->
+            <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 25; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20;">
 
-            <!-- ===== LOAN HEADER CARD ===== -->
+                <Label text="Loan Details" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
 
-            <VBox spacing="10"
-                  style="-fx-background-color:white;
-                         -fx-padding:18;
-                         -fx-background-radius:14;
-                         -fx-border-radius:14;
-                         -fx-border-color:#e0e0e0;
-                         -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.08), 12,0,0,3);">
-
-                <Label text="Loan Details"
-                       style="-fx-font-size:22px; -fx-font-weight:bold;"/>
-
-                <Label fx:id="lenderLabel"/>
-                <Label fx:id="borrowerLabel"/>
-                <Label fx:id="amountLabel"/>
-                <Label fx:id="remainingLabel"/>
+                <VBox spacing="10" style="-fx-padding: 10 0 0 0;">
+                    <Label fx:id="lenderLabel" style="-fx-font-size: 16px; -fx-padding: 5 0;"/>
+                    <Label fx:id="borrowerLabel" style="-fx-font-size: 16px; -fx-padding: 5 0;"/>
+                    <Label fx:id="amountLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #10b981; -fx-padding: 5 0;"/>
+                    <Label fx:id="remainingLabel" style="-fx-font-size: 16px; -fx-text-fill: #f59e0b; -fx-padding: 5 0;"/>
+                </VBox>
 
             </VBox>
 
-            <!-- ===== PAYMENT FORM ===== -->
+            <!-- Carte de paiement -->
+            <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 25; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20;">
 
-            <VBox spacing="10"
-                  style="-fx-background-color:white;
-                         -fx-padding:18;
-                         -fx-background-radius:14;
-                         -fx-border-radius:14;
-                         -fx-border-color:#e0e0e0;
-                         -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.08), 12,0,0,3);">
+                <Label text="Make a Payment" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
 
-                <Label text="Make a Payment"
-                       style="-fx-font-size:18px; -fx-font-weight:bold;"/>
-
-                <HBox spacing="10">
-                    <TextField fx:id="amountField" promptText="Payment amount"/>
-                    <Button text="💸 Pay Loan" onAction="#payLoan"/>
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <TextField fx:id="amountField" promptText="Payment amount"
+                               style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 12 15; -fx-font-size: 14px; -fx-pref-width: 250;"/>
+                    <Button text="💸 Pay Loan" onAction="#payLoan"
+                            style="-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 12 30; -fx-font-size: 14px; -fx-effect: dropshadow(two-pass-box, rgba(124,58,237,0.3), 8, 0, 0, 2);"/>
                 </HBox>
 
-                <Label fx:id="statusLabel" style="-fx-text-fill:green;"/>
+                <Label fx:id="statusLabel" style="-fx-text-fill: #10b981; -fx-font-size: 14px; -fx-padding: 5 0;"/>
 
             </VBox>
 
-            <!-- ===== PAYMENT HISTORY ===== -->
+            <!-- Historique des paiements -->
+            <VBox spacing="15">
 
-            <VBox spacing="10">
+                <Label text="Payment History" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
 
-                <Label text="Payment History"
-                       style="-fx-font-size:18px; -fx-font-weight:bold;"/>
-
-                <!-- container cards -->
-                <VBox fx:id="paymentsContainer" spacing="12"/>
+                <VBox fx:id="paymentsContainer" spacing="15"/>
 
             </VBox>
 
