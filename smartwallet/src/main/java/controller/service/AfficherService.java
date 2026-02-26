@@ -2,6 +2,8 @@ package controller.service;
 
 import entities.service.Services;
 import javafx.application.Platform;
+import javafx.application.HostServices;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,8 +15,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.locationtech.jts.geom.Point;
 import services.service.ServiceServices;
@@ -26,124 +26,84 @@ import java.util.List;
 public class AfficherService {
 
     @FXML private Button retouritafser;
+    @FXML private Button btnAjouterserrr;
     @FXML private HBox cardaffserv;
     @FXML private ImageView imgLogoList;
-    @FXML private Button btnAjouterserrr;
 
-    // ================= NAVIGATION =================
 
-    @FXML
-    private void retourMain() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainALC/MainALC.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) retouritafser.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Main ALC");
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de retourner au menu principal !");
-        }
-    }
-
-    @FXML
-    private void retourAjouter() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/services/AjouterService.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) retouritafser.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Ajouter Service");
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible d'ouvrir Ajouter Service !");
-        }
-    }
-
-    // ================= INITIALISATION =================
 
     @FXML
     public void initialize() {
-        if (imgLogoList != null) {
-            try {
-                Image image = new Image(getClass().getResourceAsStream("/icons/logoservices.png"));
+
+        // ✅ Logo
+        try {
+            if (imgLogoList != null) {
+                Image image = new Image(
+                        getClass().getResourceAsStream("/icons/logoservices.png")
+                );
                 imgLogoList.setImage(image);
-                Circle clip = new Circle(40, 40, 40);
-                imgLogoList.setClip(clip);
-            } catch (Exception e) {
-                System.err.println("Logo non chargé: " + e.getMessage());
+                imgLogoList.setClip(new Circle(40, 40, 40));
             }
+        } catch (Exception e) {
+            System.err.println("Logo non chargé: " + e.getMessage());
         }
 
         loadServices();
     }
 
-    // ================= MINI MAP LOCAL =================
+    // ======================================================
+    // 🔹 Navigation
+    // ======================================================
 
-    private WebView createMiniMap(double lat, double lng,
-                                  int serviceId, String type, String statut) {
+    @FXML
+    private void retourMain(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/acceuilservice/AcceuilService.fxml")
+            );
+            Parent root = loader.load();
 
-        WebView webView = new WebView();
-        webView.setPrefSize(250, 180);
-        webView.setMinSize(250, 180);
-        webView.setMaxSize(250, 180);
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource())
+                    .getScene().getWindow();
 
-        WebEngine engine = webView.getEngine();
-        engine.setJavaScriptEnabled(true);
+            stage.setScene(new Scene(root, 900, 500));
+            stage.setTitle("Accueil Services");
 
-        // Chemins locaux Leaflet
-        String leafletJs = getClass().getResource("/leaflet/leaflet.js").toExternalForm();
-        String leafletCss = getClass().getResource("/leaflet/leaflet.css").toExternalForm();
-
-        String html = String.format("""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <link rel="stylesheet" href="%s"/>
-                <style>
-                    html, body { margin:0; padding:0; height:100%%; width:100%%; overflow:hidden; }
-                    #map { height:100%%; width:100%%; }
-                </style>
-            </head>
-            <body>
-                <div id="map"></div>
-                <script src="%s"></script>
-                <script>
-                    var map = L.map('map', {scrollWheelZoom:false}).setView([%f, %f], 13);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap',
-                        maxZoom: 19
-                    }).addTo(map);
-                    var marker = L.marker([%f, %f]).addTo(map);
-                    marker.bindPopup('<b>Service #%d</b><br>Type: %s<br>Statut: %s').openPopup();
-                    setTimeout(function(){ map.invalidateSize(); }, 100);
-                </script>
-            </body>
-            </html>
-            """,
-                leafletCss,
-                leafletJs,
-                lat, lng,
-                lat, lng,
-                serviceId, type, statut
-        );
-
-        engine.loadContent(html);
-        return webView;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    // ================= LOAD SERVICES =================
+    @FXML
+    private void retourAjouter(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/services/AjouterService.fxml")
+            );
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource())
+                    .getScene().getWindow();
+
+            stage.setScene(new Scene(root, 900, 500));
+            stage.setTitle("Ajouter Service");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ======================================================
+    // 🔹 Chargement services
+    // ======================================================
 
     @FXML
     public void loadServices() {
         ServiceServices ss = new ServiceServices();
+        cardaffserv.getChildren().clear();
 
         try {
             List<Services> services = ss.recupererServices();
-            cardaffserv.getChildren().clear();
 
             if (services.isEmpty()) {
                 Text noData = new Text("Aucun service trouvé");
@@ -153,47 +113,60 @@ public class AfficherService {
             }
 
             for (Services s : services) {
-                VBox card = createServiceCard(s);
-                cardaffserv.getChildren().add(card);
+                cardaffserv.getChildren().add(createServiceCard(s));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur",
+            showAlert(Alert.AlertType.ERROR,
+                    "Erreur",
                     "Impossible de récupérer les services !");
         }
     }
 
-    // ================= CARD =================
+    // ======================================================
+    // 🔹 Card Service
+    // ======================================================
 
     private VBox createServiceCard(Services service) {
 
         VBox card = new VBox(8);
         card.setPrefWidth(250);
-        card.setStyle(
-                "-fx-border-color:#ccc; -fx-border-radius:5; -fx-padding:12;" +
-                        "-fx-background-color:white;" +
-                        "-fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.1), 5,0,0,0);"
-        );
+        card.setStyle("""
+                -fx-border-color:#ccc;
+                -fx-border-radius:5;
+                -fx-padding:12;
+                -fx-background-color:white;
+                -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.1), 5,0,0,0);
+                """);
 
-        // IMAGE
+        // ================= IMAGE =================
         ImageView imageView = new ImageView();
         imageView.setFitWidth(226);
         imageView.setFitHeight(120);
         imageView.setPreserveRatio(true);
 
-        String imagePath = service.getImage();
-        if (imagePath != null && !imagePath.isEmpty() && new File(imagePath).exists()) {
-            imageView.setImage(new Image(new File(imagePath).toURI().toString()));
-        } else {
+        try {
+            if (service.getImage() != null &&
+                    !service.getImage().isEmpty() &&
+                    new File(service.getImage()).exists()) {
+
+                imageView.setImage(
+                        new Image(new File(service.getImage()).toURI().toString())
+                );
+            } else {
+                setDefaultImage(imageView);
+            }
+        } catch (Exception e) {
             setDefaultImage(imageView);
         }
 
+        // ================= TEXT =================
         Text typeText = new Text("Type: " + service.getType());
         Text statutText = new Text("Statut: " + service.getStatutString());
         Text typeServiceText = new Text("Catégorie: " + service.getTypeServiceString());
 
-        // COORDONNÉES DEPUIS BD
+        // ================= COORD =================
         double lat = 36.8065;
         double lng = 10.1815;
 
@@ -203,17 +176,36 @@ public class AfficherService {
             lng = p.getX();
         }
 
-        WebView miniMap = createMiniMap(
-                lat,
-                lng,
-                service.getId(),
-                service.getType(),
-                service.getStatutString()
+        final double latValue = lat;
+        final double lngValue = lng;
+
+        // ================= MINI MAP =================
+        ImageView mapImage = new ImageView();
+        mapImage.setFitWidth(250);
+        mapImage.setFitHeight(180);
+        mapImage.setPreserveRatio(true);
+
+        try {
+            String mapUrl =
+                    "https://static-maps.yandex.ru/1.x/?lang=fr_FR&ll="
+                            + lngValue + "," + latValue
+                            + "&z=13&l=map&size=250,180&pt="
+                            + lngValue + "," + latValue + ",pm2rdm";
+
+            mapImage.setImage(new Image(mapUrl, true));
+
+        } catch (Exception e) {
+            mapImage.setStyle("-fx-background-color:#bdc3c7;");
+        }
+
+        // ✅ CLIC → OPENSTREETMAP
+        mapImage.setOnMouseClicked(e -> openInOSM(latValue, lngValue));
+
+        Label coordLabel = new Label(
+                String.format("%.4f, %.4f", latValue, lngValue)
         );
 
-        Label coordLabel = new Label(String.format("%.4f, %.4f", lat, lng));
-
-        // BOUTONS
+        // ================= BUTTONS =================
         HBox buttonsBox = new HBox(10);
 
         Button btnModifier = new Button("Modifier");
@@ -229,7 +221,7 @@ public class AfficherService {
                 typeText,
                 statutText,
                 typeServiceText,
-                miniMap,
+                mapImage,
                 coordLabel,
                 buttonsBox
         );
@@ -237,13 +229,15 @@ public class AfficherService {
         return card;
     }
 
-    // ================= UTIL =================
+    // ======================================================
+    // 🔹 Helpers
+    // ======================================================
 
     private void setDefaultImage(ImageView imageView) {
         try {
-            Image defaultImage =
-                    new Image(getClass().getResourceAsStream("/icons/default_service.png"));
-            imageView.setImage(defaultImage);
+            imageView.setImage(
+                    new Image(getClass().getResourceAsStream("/icons/default_service.png"))
+            );
         } catch (Exception e) {
             imageView.setStyle("-fx-background-color:#bdc3c7;");
         }
@@ -253,21 +247,20 @@ public class AfficherService {
         try {
             new ServiceServices().supprimerServices(service);
             loadServices();
-            showAlert(Alert.AlertType.INFORMATION,
-                    "Succès", "Service supprimé !");
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Service supprimé !");
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR,
-                    "Erreur", "Suppression impossible !");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Suppression impossible !");
         }
     }
 
     private void showModifierService(Services service) {
         try {
-            FXMLLoader loader =
-                    new FXMLLoader(getClass().getResource("/services/ModifierService.fxml"));
-            Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/services/ModifierService.fxml")
+            );
 
+            Parent root = loader.load();
             ModifierService controller = loader.getController();
             controller.setService(service);
 
@@ -275,7 +268,6 @@ public class AfficherService {
             stage.setScene(new Scene(root));
             stage.setTitle("Modifier Service");
             stage.show();
-
             stage.setOnHidden(e -> loadServices());
 
         } catch (Exception e) {
@@ -291,5 +283,24 @@ public class AfficherService {
             alert.setContentText(message);
             alert.showAndWait();
         });
+    }
+
+    // ======================================================
+    // 🔥 OPEN STREET MAP
+    // ======================================================
+
+    private void openInOSM(double lat, double lon) {
+
+        String url = "https://www.openstreetmap.org/?mlat="
+                + lat + "&mlon=" + lon
+                + "#map=18/" + lat + "/" + lon;
+
+        HostServices hs = MyApp.getHostServicesInstance();
+
+        if (hs != null) {
+            hs.showDocument(url);
+        } else {
+            System.err.println("HostServices non initialisé !");
+        }
     }
 }

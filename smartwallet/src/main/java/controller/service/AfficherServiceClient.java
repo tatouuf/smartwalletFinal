@@ -2,12 +2,14 @@ package controller.service;
 
 import entities.service.Services;
 import entities.service.Statut;
+import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -15,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.locationtech.jts.geom.Point;
 import services.service.ServiceServices;
 
 import java.io.File;
@@ -35,6 +38,13 @@ public class AfficherServiceClient {
     private ImageView imgLogoList;
 
     private final ServiceServices ss = new ServiceServices();
+
+    // 🔥 HostServices pour ouvrir OpenStreetMap
+    private HostServices hostServices;
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
 
     // garde trace des services ajoutés
     private final Map<Integer, Services> addedServices = new HashMap<>();
@@ -119,13 +129,59 @@ public class AfficherServiceClient {
                         "-fx-background-color: white;"
         );
 
-        // ===== IMAGE =====
+        // ===== IMAGE SERVICE =====
         ImageView imageView = new ImageView();
         imageView.setFitWidth(220);
         imageView.setFitHeight(130);
         imageView.setPreserveRatio(true);
-
         loadServiceImage(imageView, s.getImage());
+
+        // ===== MINI MAP =====
+        ImageView mapImage = new ImageView();
+        mapImage.setFitWidth(250);
+        mapImage.setFitHeight(180);
+        mapImage.setPreserveRatio(true);
+
+        // récupérer coordonnées par défaut
+        double lat = 36.8065; // Tunis centre par défaut
+        double lng = 10.1815;
+
+        if (s.getLocalisation() != null) {
+            Point p = s.getLocalisation();
+            lat = p.getY();
+            lng = p.getX();
+        }
+
+        final double latValue = lat;
+        final double lngValue = lng;
+
+        // charger image statique de carte (optionnel)
+        try {
+            String mapUrl = "https://static-maps.yandex.ru/1.x/?lang=fr_FR&ll="
+                    + lngValue + "," + latValue
+                    + "&z=13&l=map&size=250,180&pt="
+                    + lngValue + "," + latValue + ",pm2rdm";
+
+            mapImage.setImage(new Image(mapUrl, true));
+
+        } catch (Exception e) {
+            mapImage.setStyle("-fx-background-color:#bdc3c7;");
+        }
+
+        // tooltip coordonnées
+        Tooltip.install(mapImage, new Tooltip(String.format("%.4f, %.4f", latValue, lngValue)));
+
+        // clic → ouvrir OpenStreetMap
+        mapImage.setOnMouseClicked(e -> {
+            if (hostServices != null) {
+                String url = "https://www.openstreetmap.org/?mlat=" + latValue +
+                        "&mlon=" + lngValue +
+                        "#map=18/" + latValue + "/" + lngValue;
+                hostServices.showDocument(url);
+            } else {
+                System.err.println("HostServices non initialisé !");
+            }
+        });
 
         // ===== TEXT =====
         Text id = new Text("Code: " + s.getId());
@@ -139,7 +195,6 @@ public class AfficherServiceClient {
         // ===== BUTTONS =====
         Button btnAdd = new Button("Add");
         Button btnCancel = new Button("Cancel");
-
         styleButtons(btnAdd, btnCancel);
 
         // ---------- ADD ----------
@@ -190,10 +245,10 @@ public class AfficherServiceClient {
                 id,
                 prix,
                 type,
+                typeService,
                 statutText,
                 localisation,
-                adresse,
-                typeService,
+                mapImage,
                 buttonBox
         );
 

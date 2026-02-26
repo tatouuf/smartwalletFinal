@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class MyDataBase {
 
-    private final String URL = "jdbc:mysql://localhost:3306/smartwallet?useSSL=false&serverTimezone=UTC";
+    private final String URL = "jdbc:mysql://localhost:3306/smartwalletdb";
 
     private  final  String USER="root";
     private  final  String PASSWORD="";

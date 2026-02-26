@@ -59,27 +59,16 @@ public class AcceuilService {
     }
 
     @FXML
-    private void retourMain() {
+    private void retourMain(javafx.event.ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainALC/MainALC.fxml"));
             Parent root = loader.load();
 
-            // Essaie de récupérer le Stage actuel
-            Stage stage = null;
-            if (btnRetourMain.getScene() != null) {
-                stage = (Stage) btnRetourMain.getScene().getWindow();
-            }
+            // Récupère le Stage actuel depuis le bouton qui a déclenché l'événement
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 
-            if (stage != null) {
-                stage.setScene(new Scene(root, 900, 500));
-                stage.setTitle("Main ALC");
-            } else {
-                // Si aucun stage existant, ouvre une nouvelle fenêtre
-                Stage newStage = new Stage();
-                newStage.setScene(new Scene(root, 900, 500));
-                newStage.setTitle("Main ALC");
-                newStage.show();
-            }
+            stage.setScene(new Scene(root, 900, 500));
+            stage.setTitle("Main ALC");
 
         } catch (Exception e) {
             e.printStackTrace();

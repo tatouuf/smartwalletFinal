@@ -1,23 +1,44 @@
 module com.example.smartwallet {
+
+    // =============================
+    // JavaFX
+    // =============================
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.sql;
-    requires jdk.jsobject;
     requires javafx.web;
+    requires javafx.graphics;
+
+    // =============================
+    // Java standard
+    // =============================
+    requires java.sql;
     requires java.desktop;
-    requires org.locationtech.jts;
     requires java.net.http;
+    requires jdk.jsobject;
+
+    // =============================
+    // Bibliothèques externes
+    // =============================
+    requires org.locationtech.jts;
     requires org.json;
 
-    // Ouvre les packages contenant les FXML controllers
-    opens controller.service to javafx.fxml, javafx.web; // <-- ajouter javafx.web ici
+    // =========================================================
+    // ✅ EXPORTS (TRÈS IMPORTANT pour lancer MyApp)
+    // =========================================================
+    exports controller.service;
+    exports tests.services; // si MyApp est ici (à garder si utilisé)
+
+    // =========================================================
+    // ✅ OPENS pour FXML
+    // =========================================================
+    opens controller.service to javafx.fxml, javafx.web;
     opens controller.assurance to javafx.fxml;
     opens controller.credit to javafx.fxml;
     opens controller.mainalc to javafx.fxml;
     opens controller.acceuilservice to javafx.fxml;
-    // Ouvre le package contenant les entités
-    opens entities.service to javafx.base;
 
-    // Ouvre le package contenant la classe principale au module javafx.graphics
-    opens tests.services to javafx.fxml, javafx.graphics;
+    // =========================================================
+    // ✅ OPENS pour les entités (TableView, etc.)
+    // =========================================================
+    opens entities.service to javafx.base;
 }
