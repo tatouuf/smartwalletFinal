@@ -262,7 +262,7 @@ public class ModifierService {
     @FXML
     private void retourMain() {
         try {
-            URL fxmlURL = getClass().getResource("/acceuilservice/AcceuilService.fxml");
+            URL fxmlURL = getClass().getResource("/services/AfficherService.fxml");
             if (fxmlURL == null) {
                 System.err.println("AcceuilService.fxml introuvable !");
                 return;

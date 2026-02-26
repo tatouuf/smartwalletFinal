@@ -6,12 +6,14 @@ import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -29,8 +31,6 @@ public class AfficherService {
     @FXML private Button btnAjouterserrr;
     @FXML private HBox cardaffserv;
     @FXML private ImageView imgLogoList;
-
-
 
     @FXML
     public void initialize() {
@@ -59,7 +59,7 @@ public class AfficherService {
     private void retourMain(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/acceuilservice/AcceuilService.fxml")
+                    getClass().getResource("/acceuilservices/AcceuilService.fxml")
             );
             Parent root = loader.load();
 
@@ -140,7 +140,7 @@ public class AfficherService {
                 -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.1), 5,0,0,0);
                 """);
 
-        // ================= IMAGE =================
+        // ================= IMAGE + OVERLAY =================
         ImageView imageView = new ImageView();
         imageView.setFitWidth(226);
         imageView.setFitHeight(120);
@@ -161,20 +161,48 @@ public class AfficherService {
             setDefaultImage(imageView);
         }
 
+        StackPane imageContainer = new StackPane();
+        imageContainer.getChildren().add(imageView);
+
+        // ✅ Overlay si NON_DISPONIBLE
+        if ("non_disponible".equalsIgnoreCase(service.getStatutString())) {
+            Label loueeLabel = new Label(
+                    "Cette "+ service.getTypeServiceString()+ " a été louée\nDurée: " + service.getDuree() + " jour(s)"
+            );
+            loueeLabel.setStyle("""
+                    -fx-background-color: rgba(231,76,60,0.85);
+                    -fx-text-fill: white;
+                    -fx-font-weight: bold;
+                    -fx-padding: 6 10 6 10;
+                    -fx-background-radius: 5;
+                    -fx-alignment: center;
+                    """);
+            StackPane.setAlignment(loueeLabel, Pos.TOP_CENTER);
+            imageContainer.getChildren().add(loueeLabel);
+        }
+
         // ================= TEXT =================
         Text typeText = new Text("Type: " + service.getType());
         Text statutText = new Text("Statut: " + service.getStatutString());
         Text typeServiceText = new Text("Catégorie: " + service.getTypeServiceString());
 
-        // ================= COORD =================
+        // ================= LOCALISATION =================
         double lat = 36.8065;
         double lng = 10.1815;
 
+        String localisationStr = "Localisation: ";
         if (service.getLocalisation() != null) {
             Point p = service.getLocalisation();
             lat = p.getY();
             lng = p.getX();
+            localisationStr += String.format("%.4f, %.4f", lat, lng);
+        } else {
+            localisationStr += "Non définie";
         }
+        Text localisationText = new Text(localisationStr);
+
+        // ================= PRIX =================
+        Text prixText = new Text("Prix: " + service.getPrix() + " DT");
 
         final double latValue = lat;
         final double lngValue = lng;
@@ -217,10 +245,12 @@ public class AfficherService {
         buttonsBox.getChildren().addAll(btnModifier, btnSupprimer);
 
         card.getChildren().addAll(
-                imageView,
+                imageContainer,
                 typeText,
                 statutText,
                 typeServiceText,
+                localisationText,   // nouveau
+                prixText,           // nouveau
                 mapImage,
                 coordLabel,
                 buttonsBox

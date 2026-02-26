@@ -17,6 +17,15 @@ public class Services {
     private User user;
     private String image;         // chemin ou URL de l'image
 
+    private int duree; // enlever le static
+
+    public int getDuree() {
+        return duree;
+    }
+
+    public void setDuree(int duree) {
+        this.duree = duree;
+    }
     // ======== Constructeurs ========
 
     /** Constructeur vide */
@@ -44,7 +53,6 @@ public class Services {
     }
 
     // ======== Getters ========
-
     public int getId() { return id; }
     public float getPrix() { return prix; }
     public Point getLocalisation() { return localisation; }

@@ -23,19 +23,27 @@ public class ServiceServices implements IServiceServices {
         }
     }
 
-    // ================= AJOUTER =================
+    // ================= MODIFIER DUREE =================
+    public void modifierDureeService(int serviceId, int nouvelleDuree) throws SQLException {
+        String sql = "UPDATE services SET duree = ? WHERE id = ?";
 
+        try (PreparedStatement pst = cnx.prepareStatement(sql)) {
+            pst.setInt(1, nouvelleDuree);
+            pst.setInt(2, serviceId);
+            pst.executeUpdate();
+        } // la connexion globale cnx reste ouverte
+    }
+
+    // ================= AJOUTER =================
     @Override
     public void ajouterServices(Services s) throws SQLException {
-
         String query = """
                 INSERT INTO services
                 (prix, localisation, adresse, description, type, statut, id_user, TypeService, image)
                 VALUES (?, ST_GeomFromText(?), ?, ?, ?, ?, ?, ?, ?)
                 """;
 
-        try (PreparedStatement pst =
-                     cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pst = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             pst.setFloat(1, s.getPrix());
 
@@ -67,10 +75,8 @@ public class ServiceServices implements IServiceServices {
     }
 
     // ================= MODIFIER =================
-
     @Override
     public void modifierServices(Services s) throws SQLException {
-
         String query = """
                 UPDATE services SET
                 prix=?,
@@ -111,7 +117,6 @@ public class ServiceServices implements IServiceServices {
     }
 
     // ================= SUPPRIMER =================
-
     @Override
     public void supprimerServices(Services s) throws SQLException {
         String query = "DELETE FROM services WHERE id=?";
@@ -122,19 +127,15 @@ public class ServiceServices implements IServiceServices {
     }
 
     // ================= RECUPERER =================
-
     @Override
     public List<Services> recupererServices() throws SQLException {
-
         List<Services> list = new ArrayList<>();
-
         String req = "SELECT *, ST_AsText(localisation) AS loc FROM services";
 
         try (Statement st = cnx.createStatement();
              ResultSet rs = st.executeQuery(req)) {
 
             while (rs.next()) {
-
                 Services s = new Services();
 
                 s.setId(rs.getInt("id"));
@@ -143,7 +144,7 @@ public class ServiceServices implements IServiceServices {
                 s.setType(rs.getString("type"));
                 s.setAdresse(rs.getString("adresse"));
                 s.setImage(rs.getString("image"));
-
+                s.setDuree(rs.getInt("duree"));
                 // ===== statut =====
                 try {
                     String statutStr = rs.getString("statut");
@@ -167,7 +168,6 @@ public class ServiceServices implements IServiceServices {
 
                 // ===== localisation =====
                 String loc = rs.getString("loc");
-
                 if (loc != null && loc.startsWith("POINT")) {
                     try {
                         loc = loc.replace("POINT(", "").replace(")", "");
@@ -194,10 +194,8 @@ public class ServiceServices implements IServiceServices {
     }
 
     // ================= MODIFIER STATUT =================
-
     @Override
     public void modifierServiceStatut(Services s) throws SQLException {
-
         String req = "UPDATE services SET statut=? WHERE id=?";
 
         try (PreparedStatement ps = cnx.prepareStatement(req)) {

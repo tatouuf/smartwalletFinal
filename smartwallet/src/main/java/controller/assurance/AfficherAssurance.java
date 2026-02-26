@@ -33,7 +33,7 @@ public class AfficherAssurance {
     @FXML
     private void retourMain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainalc/MainALC.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/acceuilservices/AcceuilService.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) retourhaamdi.getScene().getWindow();

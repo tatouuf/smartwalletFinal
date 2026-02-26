@@ -7,9 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -28,26 +26,17 @@ import java.util.Map;
 
 public class AfficherServiceClient {
 
-    @FXML
-    private Button retouritafser;
-
-    @FXML
-    private HBox cardaffserv;
-
-    @FXML
-    private ImageView imgLogoList;
+    @FXML private Button retouritafser;
+    @FXML private HBox cardaffserv;
+    @FXML private ImageView imgLogoList;
 
     private final ServiceServices ss = new ServiceServices();
-
-    // 🔥 HostServices pour ouvrir OpenStreetMap
     private HostServices hostServices;
+    private final Map<Integer, Services> addedServices = new HashMap<>();
 
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }
-
-    // garde trace des services ajoutés
-    private final Map<Integer, Services> addedServices = new HashMap<>();
 
     // ================= RETOUR =================
     @FXML
@@ -57,11 +46,9 @@ public class AfficherServiceClient {
                     getClass().getResource("/acceuilservices/AcceuilServiceClient.fxml")
             );
             Parent root = loader.load();
-
             Stage stage = (Stage) retouritafser.getScene().getWindow();
             stage.setScene(new Scene(root, 900, 500));
             stage.setTitle("Main ALC");
-
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to load main screen!");
@@ -71,8 +58,6 @@ public class AfficherServiceClient {
     // ================= INITIALIZE =================
     @FXML
     public void initialize() {
-
-        // sécuriser logo
         try {
             if (imgLogoList != null) {
                 Image img = new Image(
@@ -84,7 +69,6 @@ public class AfficherServiceClient {
         } catch (Exception e) {
             System.out.println("Logo not found");
         }
-
         loadAvailableServices();
     }
 
@@ -92,18 +76,12 @@ public class AfficherServiceClient {
     private void loadAvailableServices() {
         try {
             List<Services> services = ss.recupererServices();
-
             if (cardaffserv == null) return;
-
             cardaffserv.getChildren().clear();
 
             for (Services s : services) {
-
-                // afficher seulement DISPONIBLE ou déjà ajouté
-                if (s.getStatut() != Statut.DISPONIBLE
-                        && !addedServices.containsKey(s.getId())) {
+                if (s.getStatut() != Statut.DISPONIBLE && !addedServices.containsKey(s.getId()))
                     continue;
-                }
 
                 VBox card = createServiceCard(s);
                 cardaffserv.getChildren().add(card);
@@ -129,6 +107,9 @@ public class AfficherServiceClient {
                         "-fx-background-color: white;"
         );
 
+        Text confirmationText = new Text();
+        confirmationText.setStyle("-fx-font-weight: bold; -fx-fill: #2c3e50;");
+
         // ===== IMAGE SERVICE =====
         ImageView imageView = new ImageView();
         imageView.setFitWidth(220);
@@ -142,44 +123,31 @@ public class AfficherServiceClient {
         mapImage.setFitHeight(180);
         mapImage.setPreserveRatio(true);
 
-        // récupérer coordonnées par défaut
-        double lat = 36.8065; // Tunis centre par défaut
-        double lng = 10.1815;
-
+        double lat = 36.8065, lng = 10.1815;
         if (s.getLocalisation() != null) {
             Point p = s.getLocalisation();
             lat = p.getY();
             lng = p.getX();
         }
-
         final double latValue = lat;
         final double lngValue = lng;
 
-        // charger image statique de carte (optionnel)
         try {
             String mapUrl = "https://static-maps.yandex.ru/1.x/?lang=fr_FR&ll="
                     + lngValue + "," + latValue
-                    + "&z=13&l=map&size=250,180&pt="
-                    + lngValue + "," + latValue + ",pm2rdm";
-
+                    + "&z=13&l=map&size=250,180&pt=" + lngValue + "," + latValue + ",pm2rdm";
             mapImage.setImage(new Image(mapUrl, true));
-
         } catch (Exception e) {
             mapImage.setStyle("-fx-background-color:#bdc3c7;");
         }
 
-        // tooltip coordonnées
         Tooltip.install(mapImage, new Tooltip(String.format("%.4f, %.4f", latValue, lngValue)));
 
-        // clic → ouvrir OpenStreetMap
         mapImage.setOnMouseClicked(e -> {
             if (hostServices != null) {
                 String url = "https://www.openstreetmap.org/?mlat=" + latValue +
-                        "&mlon=" + lngValue +
-                        "#map=18/" + latValue + "/" + lngValue;
+                        "&mlon=" + lngValue + "#map=18/" + latValue + "/" + lngValue;
                 hostServices.showDocument(url);
-            } else {
-                System.err.println("HostServices non initialisé !");
             }
         });
 
@@ -188,8 +156,7 @@ public class AfficherServiceClient {
         Text prix = new Text("Price: " + s.getPrix());
         Text type = new Text("Type: " + s.getType());
         Text statutText = new Text("Status: " + s.getStatutString());
-        Text localisation = new Text("Location: " + s.getLocalisation());
-        Text adresse = new Text("Address: " + s.getAdresse());
+        Text localisationText = new Text("Location: " + String.format("%.4f, %.4f", lat, lng));
         Text typeService = new Text("Service Type: " + s.getTypeServiceString());
 
         // ===== BUTTONS =====
@@ -199,39 +166,54 @@ public class AfficherServiceClient {
 
         // ---------- ADD ----------
         btnAdd.setOnAction(event -> {
-            try {
-                s.setStatut(Statut.NON_DISPONIBLE);
-                ss.modifierServiceStatut(s);
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Durée du service");
+            dialog.setHeaderText("Entrez la durée pour ce service (jours)");
+            dialog.setContentText("Durée (jours) :");
 
-                addedServices.put(s.getId(), s);
-                statutText.setText("Status: " + s.getStatutString());
+            dialog.showAndWait().ifPresent(duree -> {
+                try {
+                    int dureeVal = Integer.parseInt(duree);
+                    if (dureeVal <= 0) {
+                        showAlert(Alert.AlertType.WARNING, "Invalid", "Durée doit être positive !");
+                        return;
+                    }
 
-                showAlert(Alert.AlertType.INFORMATION,
-                        "Success",
-                        "Service added! You can Cancel if needed.");
+                    s.setDuree(dureeVal);
+                    ss.modifierDureeService(s.getId(), dureeVal); // corrigé
+                    s.setStatut(Statut.NON_DISPONIBLE);
+                    ss.modifierServiceStatut(s);
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Error", "Failed to add service!");
-            }
+                    addedServices.put(s.getId(), s);
+                    statutText.setText("Status: " + s.getStatutString());
+                    confirmationText.setText("Vous avez créé " + s.getTypeServiceString() +
+                            " avec une durée de " + dureeVal + " jours");
+
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "Service added !");
+                } catch (NumberFormatException ex) {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Durée invalide !");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Error", "Failed to add service!");
+                }
+            });
         });
 
         // ---------- CANCEL ----------
         btnCancel.setOnAction(event -> {
             try {
                 if (addedServices.containsKey(s.getId())) {
-
+                    s.setDuree(0);
+                    ss.modifierDureeService(s.getId(), 0);
                     s.setStatut(Statut.DISPONIBLE);
                     ss.modifierServiceStatut(s);
 
                     addedServices.remove(s.getId());
                     statutText.setText("Status: " + s.getStatutString());
+                    confirmationText.setText("");
 
-                    showAlert(Alert.AlertType.INFORMATION,
-                            "Cancelled",
-                            "Service addition cancelled!");
+                    showAlert(Alert.AlertType.INFORMATION, "Cancelled", "Service annulé et durée réinitialisée !");
                 }
-
             } catch (SQLException e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to cancel service!");
@@ -241,15 +223,8 @@ public class AfficherServiceClient {
         HBox buttonBox = new HBox(10, btnAdd, btnCancel);
 
         card.getChildren().addAll(
-                imageView,
-                id,
-                prix,
-                type,
-                typeService,
-                statutText,
-                localisation,
-                mapImage,
-                buttonBox
+                confirmationText, imageView, id, prix, type, typeService, statutText,
+                localisationText, mapImage, buttonBox
         );
 
         return card;
@@ -258,11 +233,10 @@ public class AfficherServiceClient {
     // ================= IMAGE SAFE LOAD =================
     private void loadServiceImage(ImageView imageView, String path) {
         try {
-            if (path != null && !path.isBlank()) {
-                File file = new File(path);
-                if (file.exists()) {
-                    imageView.setImage(new Image(file.toURI().toString()));
-                }
+            if (path != null && !path.isBlank() && new File(path).exists()) {
+                imageView.setImage(new Image(new File(path).toURI().toString()));
+            } else {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/icons/default_service.png")));
             }
         } catch (Exception e) {
             System.out.println("Image not loaded: " + path);
@@ -271,19 +245,8 @@ public class AfficherServiceClient {
 
     // ================= STYLE BUTTONS =================
     private void styleButtons(Button add, Button cancel) {
-        add.setStyle(
-                "-fx-background-color: #ff96db;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 8;"
-        );
-
-        cancel.setStyle(
-                "-fx-background-color: #888888;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 8;"
-        );
+        add.setStyle("-fx-background-color: #ff96db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;");
+        cancel.setStyle("-fx-background-color: #888888; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;");
     }
 
     // ================= ALERT =================

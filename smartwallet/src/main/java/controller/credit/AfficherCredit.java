@@ -51,7 +51,7 @@ public class AfficherCredit {
     @FXML
     private void retourMain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainALC/MainALC.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/acceuilservices/AcceuilService.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) btnRetourcredit.getScene().getWindow();
