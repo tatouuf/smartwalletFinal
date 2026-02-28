@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="controller.service.AfficherService"
+           style="-fx-background-color: #f5f7fb;">
+
+    <VBox spacing="20" alignment="CENTER" maxWidth="1200">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-background-radius: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3); -fx-padding: 20 25;">
+            <ImageView fx:id="imgLogoList" fitHeight="50" fitWidth="50" preserveRatio="true"/>
+            <Label text="Cars and houses available for rent" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="retouritafser" onAction="#retourMain" text="Return" style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 20; -fx-cursor: hand;"/>
+        </HBox>
+
+        <!-- Statistiques -->
+        <HBox spacing="20" alignment="CENTER">
+            <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-min-width: 200; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 3);">
+                <Label text="Total" style="-fx-text-fill: #4f46e5; -fx-font-weight: bold;"/>
+                <Label fx:id="totalLabel" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+            </VBox>
+            <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-min-width: 200; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 3);">
+                <Label text="Disponibles" style="-fx-text-fill: #22c55e; -fx-font-weight: bold;"/>
+                <Label fx:id="disponibleLabel" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #166534;"/>
+            </VBox>
+            <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-min-width: 200; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 3);">
+                <Label text="Loués" style="-fx-text-fill: #f59e0b; -fx-font-weight: bold;"/>
+                <Label fx:id="loueLabel" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #b45309;"/>
+            </VBox>
+        </HBox>
+
+        <!-- Liste des services -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5);">
+            <ScrollPane hbarPolicy="AS_NEEDED" prefHeight="300" style="-fx-background-color: transparent;">
+                <content>
+                    <HBox fx:id="cardaffserv" alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10;" />
+                </content>
+            </ScrollPane>
+        </VBox>
+
+        <!-- Bouton Ajouter -->
+        <Button fx:id="btnAjouterserrr"
+                onAction="#retourAjouter"
+                text="Add Car / Home"
+                style="-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 12 30; -fx-cursor: hand; -fx-font-size: 14px; -fx-effect: dropshadow(two-pass-box, rgba(124,58,237,0.3), 10, 0, 0, 3);"
+                maxWidth="200"/>
+    </VBox>
+</StackPane>

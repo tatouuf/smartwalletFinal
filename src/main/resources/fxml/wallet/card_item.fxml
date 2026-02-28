@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="rootCard"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="esprit.tn.souha_pi.controllers.CardItemController"
+      spacing="15"
+      style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 5); -fx-min-width: 320; -fx-max-width: 320;">
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Label fx:id="typeLabel" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 15; -fx-padding: 5 15;" text="VISA"/>
+        <Button fx:id="eyeBtn" text="👁" onAction="#toggleCardView"
+                style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18px; -fx-cursor: hand;"/>
+    </HBox>
+
+    <!-- ICÔNE PUCE -->
+    <Label text="💳" style="-fx-font-size: 40px; -fx-text-fill: white;"/>
+
+    <!-- CARD NUMBER -->
+    <Label fx:id="numberLabel" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-letter-spacing: 2;" text="**** **** **** 1234"/>
+
+    <!-- RIB -->
+    <Label fx:id="ribLabel" text="RIB: " style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 12px; -fx-font-family: monospace;"/>
+
+    <!-- BALANCE (HIDDEN INITIALLY) -->
+    <Label fx:id="balanceLabel" text="Balance: 0.00 TND" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" visible="false"/>
+
+    <HBox spacing="20">
+        <VBox>
+            <Label text="CARD HOLDER" style="-fx-text-fill: rgba(255,255,255,0.6); -fx-font-size: 10px; -fx-font-weight: bold;"/>
+            <Label fx:id="holderLabel" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="JOHN DOE"/>
+        </VBox>
+        <VBox>
+            <Label text="EXPIRES" style="-fx-text-fill: rgba(255,255,255,0.6); -fx-font-size: 10px; -fx-font-weight: bold;"/>
+            <Label fx:id="expiryLabel" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="12/25"/>
+        </VBox>
+    </HBox>
+
+    <!-- BOUTONS D'ACTION - 3 BOUTONS MAINTENANT -->
+    <HBox spacing="10" alignment="CENTER">
+        <!-- Top Up - Vert -->
+        <Button text="💰 Top Up" onAction="#topUp"
+                style="-fx-background-color: #22c55e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; -fx-padding: 8 15; -fx-font-size: 13px;"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+        <!-- Envoyer - Bleu (NOUVEAU) -->
+        <Button text="📤 Envoyer" onAction="#sendFromCard"
+                style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; -fx-padding: 8 15; -fx-font-size: 13px;"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+        <!-- Remove - Rouge -->
+        <Button text="🗑️ Remove" onAction="#delete"
+                style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; -fx-padding: 8 15; -fx-font-size: 13px;"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+    </HBox>
+
+</VBox>

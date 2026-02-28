@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane prefHeight="800" prefWidth="1300" style="-fx-background-color: white;" stylesheets="@css/signIn.css"  xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ForgotResetController">
+
+    <!-- LEFT SIDE - Decoration -->
+    <left>
+        <VBox alignment="CENTER" prefWidth="650" spacing="30" styleClass="left-panel">
+
+            <Text style="-fx-font-size: 56px; -fx-font-weight: 900; -fx-fill: white; -fx-font-family: 'Poppins', 'Segoe UI';" text="SmartWallet" />
+
+            <Text style="-fx-font-size: 20px; -fx-fill: rgba(255,255,255,0.9); -fx-font-family: 'Inter', 'Segoe UI';" text="Secure your account and reset your password safely" textAlignment="CENTER" wrappingWidth="450" />
+        </VBox>
+    </left>
+
+    <!-- RIGHT SIDE - Verification Form -->
+    <center>
+        <VBox alignment="CENTER" spacing="40" style="-fx-padding: 60 80; -fx-background-color: white;">
+
+            <!-- Header -->
+            <VBox alignment="CENTER" spacing="15">
+                <Label style="-fx-font-size: 48px;" text="✉️" textFill="#7123e7" />
+                <Label style="-fx-font-size: 24px; -fx-font-weight: 700; -fx-text-fill: #4A4A4A; -fx-letter-spacing: 2px;" text="VERIFY YOUR EMAIL" />
+                <Separator maxWidth="400" style="-fx-opacity: 0.3;" />
+            </VBox>
+
+            <!-- Message -->
+            <VBox alignment="CENTER" spacing="10">
+
+                <Text style="-fx-font-size: 14px; -fx-fill: #4A4A4A; -fx-opacity: 0.8;" text="Please check your inbox and enter the 6-digit verification code below. The code will expire in 10 minutes." textAlignment="CENTER" wrappingWidth="400" />
+            </VBox>
+
+            <!-- Code Input Fields (6 digits) -->
+            <HBox alignment="CENTER" spacing="12">
+                <TextField fx:id="codeField1" alignment="CENTER" prefHeight="65" prefWidth="55" style="-fx-font-size: 24px; -fx-font-weight: 700;" styleClass="code-field" />
+                <TextField fx:id="codeField2" alignment="CENTER" prefHeight="65" prefWidth="55" style="-fx-font-size: 24px; -fx-font-weight: 700;" styleClass="code-field" />
+                <TextField fx:id="codeField3" alignment="CENTER" prefHeight="65" prefWidth="55" style="-fx-font-size: 24px; -fx-font-weight: 700;" styleClass="code-field" />
+                <TextField fx:id="codeField4" alignment="CENTER" prefHeight="65" prefWidth="55" style="-fx-font-size: 24px; -fx-font-weight: 700;" styleClass="code-field" />
+                <TextField fx:id="codeField5" alignment="CENTER" prefHeight="65" prefWidth="55" style="-fx-font-size: 24px; -fx-font-weight: 700;" styleClass="code-field" />
+                <TextField fx:id="codeField6" alignment="CENTER" prefHeight="65" prefWidth="55" style="-fx-font-size: 24px; -fx-font-weight: 700;" styleClass="code-field" />
+            </HBox>
+
+            <!-- Status Label -->
+            <Label fx:id="lblCodeStatus" style="-fx-text-fill: #3b82f6; -fx-font-size: 14px; -fx-font-weight: 600;" text="" />
+
+            <!-- Action Buttons -->
+            <VBox alignment="CENTER" maxWidth="400" spacing="20">
+                <Button fx:id="btnVerifyCode" onAction="#handleVerifyCode" prefHeight="50" prefWidth="Infinity" style="-fx-font-size: 16px; -fx-font-weight: 700; -fx-background-radius: 8; -fx-cursor: hand;" styleClass="primary-button" text="✅ Verify Code" />
+
+                <HBox alignment="CENTER" spacing="40">
+                    <Hyperlink fx:id="btnResendCode" onAction="#handleResendCode" style="-fx-text-fill: #667eea; -fx-font-weight: 600; -fx-underline: false;" text="🔄 Resend Code" />
+                    <Hyperlink onAction="#handleBackToForgot" style="-fx-text-fill: #667eea; -fx-font-weight: 600; -fx-underline: false;" text="← Back" textFill="#d13939" />
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </center>
+</BorderPane>
