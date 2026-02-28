@@ -11,7 +11,6 @@ import entities.credit.Credit;
 import entities.credit.StatutCredit;
 
 import entities.user.User;
-
 import services.service.ServiceServices;
 import services.assurances.ServiceAssurances;
 import services.credit.ServiceCredit;

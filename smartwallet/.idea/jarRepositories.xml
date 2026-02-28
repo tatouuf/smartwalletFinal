@@ -12,6 +12,11 @@
       <option name="url" value="https://jitpack.io" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="paypal-releases" />
+      <option name="name" value="paypal-releases" />
+      <option name="url" value="https://github.com/paypal/Checkout-Java-SDK/raw/mvn-repo/releases" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Maven Central repository" />
       <option name="url" value="https://repo1.maven.org/maven2" />
@@ -20,6 +25,16 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven-central" />
+      <option name="name" value="maven-central" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="hansolo" />
+      <option name="name" value="hansolo" />
+      <option name="url" value="https://maven.hansolo.eu" />
     </remote-repository>
   </component>
 </project>

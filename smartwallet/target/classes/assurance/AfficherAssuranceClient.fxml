@@ -6,37 +6,35 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0"
-            style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);"
-            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.assurance.AfficherAssuranceClient">
+<AnchorPane prefHeight="550.0" prefWidth="950.0" style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.assurance.AfficherAssuranceClient">
 
-    <Button fx:id="retourhaamdi" layoutX="748.0" layoutY="25.0"
-            onAction="#retourMain" prefHeight="32.0" prefWidth="131.0"
-            style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;"
-            text="Return" />
+    <!-- Bouton Retour -->
+    <Button fx:id="retourhaamdi" layoutX="800.0" layoutY="25.0" onAction="#retourMain" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Retour" />
 
-    <!-- Logo à gauche -->
-    <ImageView fx:id="imgLogoAssurance" fitHeight="200.0" fitWidth="109.0" preserveRatio="true" />
+    <!-- Logo -->
+    <ImageView fx:id="imgLogoAssurance" fitHeight="120.0" fitWidth="120.0" layoutX="20.0" layoutY="15.0" preserveRatio="true" />
 
-    <!-- Titre au centre -->
-    <Label alignment="CENTER" layoutX="280.0" layoutY="40.0" prefWidth="400.0"
-           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0e0024;"
-           text="Insurances List" />
+    <!-- Titre -->
+    <Label alignment="CENTER" layoutX="330.0" layoutY="40.0" prefWidth="300.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0e0024;" text="Liste des Assurances" />
 
-    <!-- ScrollPane pour cartes assurances -->
-    <ScrollPane hbarPolicy="NEVER" layoutX="106.0" layoutY="81.0"
-                prefHeight="376.0" prefWidth="716.0"
-                style="-fx-background-color: white; -fx-border-color: #c388b5; -fx-border-width: 2;"
-                vbarPolicy="AS_NEEDED">
+    <!-- Bouton Payer (principal) -->
+    <Button fx:id="payer" layoutX="760.0" layoutY="500.0" mnemonicParsing="false" onAction="#payer" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #0070ba; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;" text="Payer en ligne" />
 
+    <!-- ScrollPane pour les cartes d'assurances -->
+    <ScrollPane hbarPolicy="NEVER" layoutX="50.0" layoutY="100.0" prefHeight="380.0" prefWidth="850.0" style="-fx-background-color: white; -fx-border-color: #c388b5; -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10;" vbarPolicy="AS_NEEDED">
         <content>
-            <FlowPane fx:id="cardAffAssurance" alignment="TOP_LEFT" hgap="15" prefWrapLength="800" vgap="15">
-                <!-- Les cartes seront ajoutées dynamiquement via Java -->
-            </FlowPane>
+            <FlowPane fx:id="cardAffAssurance" alignment="TOP_LEFT" hgap="20" prefWrapLength="830" vgap="20" style="-fx-padding: 15;" />
         </content>
-
     </ScrollPane>
+
+    <!-- WebView pour PayPal (caché par défaut) -->
+    <WebView fx:id="paypalWebView" layoutX="50.0" layoutY="100.0" prefWidth="850.0" prefHeight="380.0" visible="false" style="-fx-background-radius: 10; -fx-border-radius: 10;" />
+
+    <!-- Bouton Fermer pour PayPal (caché par défaut) -->
+    <Button fx:id="closePayPalButton" layoutX="820.0" layoutY="110.0" text="Fermer" visible="false"
+            style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; -fx-cursor: hand;"
+            onAction="#hidePayPalWebView" />
 
 </AnchorPane>

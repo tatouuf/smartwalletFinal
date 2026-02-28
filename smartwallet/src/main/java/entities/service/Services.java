@@ -1,5 +1,6 @@
 package entities.service;
 
+import entities.user.Role;
 import entities.user.User;
 import org.locationtech.jts.geom.Point;
 
