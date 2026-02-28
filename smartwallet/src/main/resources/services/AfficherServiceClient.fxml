@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 
+<?import javafx.scene.image.Image?>
 <AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #e4ecf7);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AfficherServiceClient">
 
     <children>
@@ -33,13 +34,19 @@
             </children>
 
         </HBox>
-
         <!-- ================= SCROLLPANE POUR LES CARDS ================= -->
 
         <ScrollPane hbarPolicy="AS_NEEDED" layoutX="23.0" layoutY="103.0" prefHeight="366.0" prefWidth="842.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
 
             <content>
-
+                <Button fx:id="btnMesFavoris" onAction="#goToMesFavoris" style="-fx-background-color: #e74c3c; -fx-text-fill: white;">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@/icons/heart.png"/>
+                        </ImageView>
+                    </graphic>
+                    Mes Favoris
+                </Button>
                 <HBox fx:id="cardaffserv" alignment="CENTER_LEFT" prefHeight="363.0" prefWidth="842.0" spacing="20" style="-fx-padding: 10;">
                     <!-- Les VBoxes seront ajoutées dynamiquement par le code Java -->
                 </HBox>

@@ -102,7 +102,14 @@ public class AcceuilServiceClient {
     private void showAfficherAssurance() {
         openFXMLWithHostServices("/assurance/AfficherAssuranceClient.fxml", "Afficher Toutes les Assurances");
     }
+    // Dans AcceuilServiceClient.java, ajoutez cette méthode
+    @FXML
+    private Button btnMesFavoris;
 
+    @FXML
+    private void showMesFavoris() {
+        openFXMLWithHostServices("/services/MesFavoris.fxml", "Mes Favoris");
+    }
     /**
      * Ouvre la page d'affichage des crédits
      */

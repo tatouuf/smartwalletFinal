@@ -1,8 +1,9 @@
 package controller.service;
 
-import controller.acceuilservice.AcceuilServiceClient;
 import entities.service.Services;
 import entities.service.Statut;
+import entities.user.User;
+import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +18,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.locationtech.jts.geom.Point;
 import services.service.ServiceServices;
+import services.service.FavoriService;
+import utils.Session;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -27,19 +30,18 @@ import java.util.Map;
 public class AfficherServiceClient {
 
     @FXML private Button retouritafser;
+    @FXML private Button btnMesFavoris; // Nouveau bouton
     @FXML private HBox cardaffserv;
     @FXML private ImageView imgLogoList;
 
     private final ServiceServices ss = new ServiceServices();
+    private final FavoriService fs = new FavoriService();
     private final Map<Integer, Services> addedServices = new HashMap<>();
+    private HostServices hostServices;
+    private final Map<Integer, Boolean> etatFavoris = new HashMap<>(); // Pour suivre l'état des favoris
 
-    // Variable pour stocker HostServices
-    private javafx.application.HostServices hostServices;
-
-    // Setter pour HostServices (au cas où on veut l'injecter)
-    public void setHostServices(javafx.application.HostServices hostServices) {
+    public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
-        System.out.println("✅ HostServices injecté dans AfficherServiceClient");
     }
 
     // ================= RETOUR =================
@@ -50,19 +52,37 @@ public class AfficherServiceClient {
                     getClass().getResource("/acceuilservices/AcceuilServiceClient.fxml")
             );
             Parent root = loader.load();
-
-            // Passer HostServices au contrôleur suivant
-            AcceuilServiceClient controller = loader.getController();
-            if (controller != null && hostServices != null) {
-                controller.setHostServices(hostServices);
-            }
-
             Stage stage = (Stage) retouritafser.getScene().getWindow();
             stage.setScene(new Scene(root, 900, 500));
             stage.setTitle("Main ALC");
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'écran principal !");
+        }
+    }
+
+    // ================= MES FAVORIS =================
+    @FXML
+    private void goToMesFavoris() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/services/MesFavoris.fxml")
+            );
+            Parent root = loader.load();
+
+            // Passer HostServices au contrôleur des favoris
+            MesFavorisController controller = loader.getController();
+            if (controller != null && hostServices != null) {
+                controller.setHostServices(hostServices);
+            }
+
+            Stage stage = (Stage) btnMesFavoris.getScene().getWindow();
+            stage.setScene(new Scene(root, 900, 500));
+            stage.setTitle("Mes Favoris");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la page des favoris");
         }
     }
 
@@ -80,23 +100,7 @@ public class AfficherServiceClient {
         } catch (Exception e) {
             System.out.println("Logo non trouvé");
         }
-
-        // Initialiser HostServices depuis MyApp
-        initHostServices();
-
         loadAvailableServices();
-    }
-
-    // ================= INIT HOST SERVICES =================
-    private void initHostServices() {
-        if (hostServices == null) {
-            hostServices = MyApp.getHostServicesInstance();
-            if (hostServices != null) {
-                System.out.println("✅ HostServices récupéré depuis MyApp");
-            } else {
-                System.err.println("⚠️ HostServices toujours null après tentative de récupération");
-            }
-        }
     }
 
     // ================= LOAD SERVICES =================
@@ -105,6 +109,16 @@ public class AfficherServiceClient {
             List<Services> services = ss.recupererServices();
             if (cardaffserv == null) return;
             cardaffserv.getChildren().clear();
+
+            // Vérifier l'état des favoris pour chaque service
+            for (Services s : services) {
+                try {
+                    boolean estFavori = fs.estEnFavori(s.getId());
+                    etatFavoris.put(s.getId(), estFavori);
+                } catch (SQLException e) {
+                    etatFavoris.put(s.getId(), false);
+                }
+            }
 
             for (Services s : services) {
                 if (s.getStatut() != Statut.DISPONIBLE && !addedServices.containsKey(s.getId()))
@@ -167,36 +181,15 @@ public class AfficherServiceClient {
             mapImage.setImage(new Image(mapUrl, true));
         } catch (Exception e) {
             mapImage.setStyle("-fx-background-color:#bdc3c7;");
-            System.err.println("Erreur chargement carte: " + e.getMessage());
         }
 
-        Tooltip.install(mapImage, new Tooltip(String.format("Lat: %.4f, Lng: %.4f\nCliquez pour ouvrir dans OpenStreetMap", latValue, lngValue)));
+        Tooltip.install(mapImage, new Tooltip(String.format("%.4f, %.4f", latValue, lngValue)));
 
-        // ===== ACTION AU CLIC SUR LA CARTE =====
         mapImage.setOnMouseClicked(e -> {
-            // Réinitialiser HostServices au moment du clic
-            initHostServices();
-
             if (hostServices != null) {
                 String url = "https://www.openstreetmap.org/?mlat=" + latValue +
                         "&mlon=" + lngValue + "#map=18/" + latValue + "/" + lngValue;
-
-                System.out.println("🌍 Ouverture OpenStreetMap: " + url);
                 hostServices.showDocument(url);
-            } else {
-                System.err.println("❌ HostServices non disponible!");
-
-                // Fallback: essayer d'ouvrir avec Desktop
-                try {
-                    java.awt.Desktop.getDesktop().browse(
-                            new java.net.URI("https://www.openstreetmap.org/?mlat=" + latValue +
-                                    "&mlon=" + lngValue + "#map=18/" + latValue + "/" + lngValue)
-                    );
-                    System.out.println("✅ Ouverture avec Desktop API");
-                } catch (Exception ex) {
-                    showAlert(Alert.AlertType.WARNING, "Attention",
-                            "Impossible d'ouvrir la carte.\nCoordonnées: " + latValue + ", " + lngValue);
-                }
             }
         });
 
@@ -208,7 +201,85 @@ public class AfficherServiceClient {
         Text localisationText = new Text("Adresse: " + (s.getAdresse() != null ? s.getAdresse() : "Non spécifiée"));
         Text typeService = new Text("Service Type: " + s.getTypeServiceString());
 
-        // ===== BUTTONS =====
+        // ===== BOUTON FAVORI (COEUR) =====
+        Button btnFavori = new Button();
+        btnFavori.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 20px;");
+
+        // Initialiser l'état du cœur
+        boolean estFavori = etatFavoris.getOrDefault(s.getId(), false);
+        if (estFavori) {
+            btnFavori.setText("❤️"); // Cœur rouge
+            btnFavori.setStyle(btnFavori.getStyle() + "-fx-text-fill: red;");
+        } else {
+            btnFavori.setText("🤍"); // Cœur vide
+        }
+
+        Tooltip.install(btnFavori, new Tooltip(estFavori ? "Retirer des favoris" : "Ajouter aux favoris"));
+
+        btnFavori.setOnAction(event -> {
+            try {
+                User currentUser = Session.getCurrentUser();
+                if (currentUser == null) {
+                    showAlert(Alert.AlertType.WARNING, "Non connecté", "Veuillez vous connecter pour ajouter aux favoris.");
+                    return;
+                }
+
+                if (etatFavoris.getOrDefault(s.getId(), false)) {
+                    // Supprimer des favoris
+                    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmAlert.setTitle("Confirmation");
+                    confirmAlert.setHeaderText("Retirer des favoris");
+                    confirmAlert.setContentText("Voulez-vous retirer ce service de vos favoris ?");
+
+                    confirmAlert.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            try {
+                                boolean supprime = fs.supprimerFavori(s.getId());
+                                if (supprime) {
+                                    etatFavoris.put(s.getId(), false);
+                                    btnFavori.setText("🤍");
+                                    btnFavori.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 20px;");
+                                    Tooltip.install(btnFavori, new Tooltip("Ajouter aux favoris"));
+                                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Service retiré des favoris !");
+                                }
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retirer des favoris.");
+                            }
+                        }
+                    });
+                } else {
+                    // Ajouter aux favoris
+                    boolean ajoute = fs.ajouterFavori(s.getId());
+                    if (ajoute) {
+                        etatFavoris.put(s.getId(), true);
+                        btnFavori.setText("❤️");
+                        btnFavori.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 20px; -fx-text-fill: red;");
+                        Tooltip.install(btnFavori, new Tooltip("Retirer des favoris"));
+
+                        // Option pour ajouter une note personnelle
+                        TextInputDialog noteDialog = new TextInputDialog();
+                        noteDialog.setTitle("Note personnelle");
+                        noteDialog.setHeaderText("Ajouter une note pour ce favori (optionnel)");
+                        noteDialog.setContentText("Note:");
+
+                        noteDialog.showAndWait().ifPresent(note -> {
+                            if (!note.trim().isEmpty()) {
+                                // Ici vous pouvez sauvegarder la note si vous avez un champ note_personnelle
+                                System.out.println("Note ajoutée: " + note);
+                            }
+                        });
+
+                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Service ajouté aux favoris !");
+                    }
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de gérer les favoris.");
+            }
+        });
+
+        // ===== BUTTONS (PAYPAL ET AUTRES) =====
         Button btnAdd = new Button("Ajouter");
         Button btnCancel = new Button("Annuler");
         styleButtons(btnAdd, btnCancel);
@@ -224,7 +295,7 @@ public class AfficherServiceClient {
                 try {
                     int dureeVal = Integer.parseInt(duree);
                     if (dureeVal <= 0) {
-                        showAlert(Alert.AlertType.WARNING, "Invalide", "La durée doit être positive !");
+                        showAlert(Alert.AlertType.WARNING, "Invalide", "Durée doit être positive !");
                         return;
                     }
 
@@ -239,7 +310,7 @@ public class AfficherServiceClient {
                             " avec une durée de " + dureeVal + " jours");
                     confirmationText.setStyle("-fx-font-weight: bold; -fx-fill: #27ae60;");
 
-                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Service ajouté avec succès !");
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Service ajouté !");
                 } catch (NumberFormatException ex) {
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Durée invalide !");
                 } catch (SQLException ex) {
@@ -263,19 +334,33 @@ public class AfficherServiceClient {
                     confirmationText.setText("✗ Service annulé");
                     confirmationText.setStyle("-fx-font-weight: bold; -fx-fill: #c0392b;");
 
-                    showAlert(Alert.AlertType.INFORMATION, "Annulé", "Service annulé et durée réinitialisée !");
+                    showAlert(Alert.AlertType.INFORMATION, "Annulé", "Service annulé !");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'annulation du service!");
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'annulation!");
             }
         });
 
-        HBox buttonBox = new HBox(10, btnAdd, btnCancel);
+        // HBox pour les boutons (Favori + Actions)
+        HBox topButtons = new HBox(10, btnFavori);
+        topButtons.setStyle("-fx-alignment: center-right;");
+
+        HBox actionButtons = new HBox(10, btnAdd, btnCancel);
+        actionButtons.setStyle("-fx-alignment: center;");
 
         card.getChildren().addAll(
-                confirmationText, imageView, id, prix, type, typeService, statutText,
-                localisationText, mapImage, buttonBox
+                topButtons,
+                confirmationText,
+                imageView,
+                id,
+                prix,
+                type,
+                typeService,
+                statutText,
+                localisationText,
+                mapImage,
+                actionButtons
         );
 
         return card;

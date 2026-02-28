@@ -31,7 +31,7 @@ public class ServiceServices implements IServiceServices {
             pst.setInt(1, nouvelleDuree);
             pst.setInt(2, serviceId);
             pst.executeUpdate();
-        } // la connexion globale cnx reste ouverte
+        }
     }
 
     // ================= AJOUTER =================
@@ -136,61 +136,29 @@ public class ServiceServices implements IServiceServices {
              ResultSet rs = st.executeQuery(req)) {
 
             while (rs.next()) {
-                Services s = new Services();
-
-                s.setId(rs.getInt("id"));
-                s.setPrix(rs.getFloat("prix"));
-                s.setDescription(rs.getString("description"));
-                s.setType(rs.getString("type"));
-                s.setAdresse(rs.getString("adresse"));
-                s.setImage(rs.getString("image"));
-                s.setDuree(rs.getInt("duree"));
-                // ===== statut =====
-                try {
-                    String statutStr = rs.getString("statut");
-                    s.setStatut(
-                            statutStr != null ? Statut.valueOf(statutStr) : null
-                    );
-                } catch (Exception ignored) {}
-
-                // ===== type service =====
-                try {
-                    String typeServiceStr = rs.getString("TypeService");
-                    s.setTypeService(
-                            typeServiceStr != null ? TypeService.valueOf(typeServiceStr) : null
-                    );
-                } catch (Exception ignored) {}
-
-                // ===== user =====
-                User u = new User();
-                u.setId(rs.getInt("id_user"));
-                s.setUser(u);
-
-                // ===== localisation =====
-                String loc = rs.getString("loc");
-                if (loc != null && loc.startsWith("POINT")) {
-                    try {
-                        loc = loc.replace("POINT(", "").replace(")", "");
-                        String[] coords = loc.split(" ");
-
-                        double lng = Double.parseDouble(coords[0]);
-                        double lat = Double.parseDouble(coords[1]);
-
-                        Point p = geometryFactory.createPoint(
-                                new Coordinate(lng, lat)
-                        );
-                        s.setLocalisation(p);
-
-                    } catch (Exception e) {
-                        System.err.println("Erreur parsing POINT: " + loc);
-                    }
-                }
-
+                Services s = extractServiceFromResultSet(rs);
                 list.add(s);
             }
         }
 
         return list;
+    }
+
+    // ================= RECUPERER SERVICE PAR ID =================
+    public Services recupererServiceParId(int serviceId) throws SQLException {
+        String req = "SELECT *, ST_AsText(localisation) AS loc FROM services WHERE id = ?";
+
+        try (PreparedStatement ps = cnx.prepareStatement(req)) {
+            ps.setInt(1, serviceId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return extractServiceFromResultSet(rs);
+                }
+            }
+        }
+
+        return null;
     }
 
     // ================= MODIFIER STATUT =================
@@ -204,5 +172,71 @@ public class ServiceServices implements IServiceServices {
             ps.setInt(2, s.getId());
             ps.executeUpdate();
         }
+    }
+
+    // ================= METHODE PUBLIQUE POUR EXTRAIRE UN SERVICE =================
+    public Services extractServiceFromResultSet(ResultSet rs) throws SQLException {
+        Services s = new Services();
+
+        s.setId(rs.getInt("id"));
+        s.setPrix(rs.getFloat("prix"));
+        s.setDescription(rs.getString("description"));
+        s.setType(rs.getString("type"));
+        s.setAdresse(rs.getString("adresse"));
+        s.setImage(rs.getString("image"));
+        s.setDuree(rs.getInt("duree"));
+
+        // ===== statut =====
+        try {
+            String statutStr = rs.getString("statut");
+            s.setStatut(
+                    statutStr != null ? Statut.valueOf(statutStr) : null
+            );
+        } catch (Exception ignored) {}
+
+        // ===== type service =====
+        try {
+            String typeServiceStr = rs.getString("TypeService");
+            s.setTypeService(
+                    typeServiceStr != null ? TypeService.valueOf(typeServiceStr) : null
+            );
+        } catch (Exception ignored) {}
+
+        // ===== user =====
+        User u = new User();
+        u.setId(rs.getInt("id_user"));
+        s.setUser(u);
+
+        // ===== localisation =====
+        String loc = rs.getString("loc");
+        if (loc != null && loc.startsWith("POINT")) {
+            try {
+                loc = loc.replace("POINT(", "").replace(")", "");
+                String[] coords = loc.split(" ");
+
+                // Gérer les espaces supplémentaires
+                List<String> coordList = new ArrayList<>();
+                for (String coord : coords) {
+                    if (!coord.trim().isEmpty()) {
+                        coordList.add(coord.trim());
+                    }
+                }
+
+                if (coordList.size() >= 2) {
+                    double lng = Double.parseDouble(coordList.get(0));
+                    double lat = Double.parseDouble(coordList.get(1));
+
+                    Point p = geometryFactory.createPoint(
+                            new Coordinate(lng, lat)
+                    );
+                    s.setLocalisation(p);
+                }
+
+            } catch (Exception e) {
+                System.err.println("Erreur parsing POINT: " + loc);
+            }
+        }
+
+        return s;
     }
 }
