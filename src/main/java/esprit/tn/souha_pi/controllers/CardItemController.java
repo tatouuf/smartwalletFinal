@@ -51,7 +51,7 @@ public class CardItemController {
         isNumberVisible = !isNumberVisible;
         updateNumberVisibility();
     }
-<<<<<<< HEAD
+
     @FXML
     private void sendFromCard() {
         // Sauvegarder la carte sélectionnée
@@ -59,8 +59,7 @@ public class CardItemController {
         // Ouvrir la page d'envoi
         WalletLayoutController.instance.loadPage("wallet/send.fxml");
     }
-=======
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
 
     private void updateNumberVisibility() {
         if (isNumberVisible) {
@@ -74,25 +73,20 @@ public class CardItemController {
         }
     }
 
-<<<<<<< HEAD
 
-    // Dans CardItemController.java - La méthode topUp() est correcte
-    @FXML
-    private void topUp() {
-=======
+
+
+
     @FXML
     private void topUp() {
         // Ouvrir la page de rechargement
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
         TopUpController.setSelectedCard(card);
         WalletLayoutController.instance.loadPage("wallet/topup.fxml");
-    }
-
-<<<<<<< HEAD
+    };
 
 
-=======
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
     @FXML
     private void delete() {
         if (DialogUtil.confirm("Confirmation", "Voulez-vous vraiment supprimer cette carte ?")) {

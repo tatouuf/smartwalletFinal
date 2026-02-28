@@ -1,6 +1,6 @@
 package esprit.tn.souha_pi.controllers.loan;
 
-<<<<<<< HEAD
+
 import entities.User; // IMPORTANT → on utilise TON user du login/session
 import esprit.tn.souha_pi.entities.LoanRequest;
 import esprit.tn.souha_pi.services.LoanRequestService;
@@ -8,7 +8,7 @@ import esprit.tn.souha_pi.services.ia.ICreditScoringService;
 import esprit.tn.souha_pi.services.ia.impl.CreditScoringService;
 import esprit.tn.souha_pi.utils.DialogUtil;
 
-=======
+
 import esprit.tn.souha_pi.entities.User;
 import esprit.tn.souha_pi.entities.LoanRequest;
 import esprit.tn.souha_pi.services.LoanRequestService;
@@ -17,7 +17,7 @@ import esprit.tn.souha_pi.services.ia.ICreditScoringService;
 import esprit.tn.souha_pi.services.ia.impl.CreditScoringService;
 
 import esprit.tn.souha_pi.utils.DialogUtil;
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
