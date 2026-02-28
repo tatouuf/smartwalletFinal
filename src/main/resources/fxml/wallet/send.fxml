@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<<<<<<< HEAD
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -8,10 +9,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+=======
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 <StackPane xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="esprit.tn.souha_pi.controllers.SendController"
+<<<<<<< HEAD
            style="-fx-background-color: #f5f7fb; -fx-padding: 30;">
 
     <VBox alignment="CENTER" spacing="25" maxWidth="500">
@@ -63,6 +69,37 @@
         <!-- Footer -->
         <Label text="© 2026 SmartWallet - Transferts sécurisés"
                style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+=======
+           styleClass="page-bg">
+
+    <VBox spacing="18" alignment="CENTER" maxWidth="400">
+
+        <Label text="Envoyer de l'argent" styleClass="page-header"/>
+
+        <VBox styleClass="card" spacing="14">
+
+            <!-- Informations sur la carte source -->
+            <Label fx:id="infoLabel" text="Sélectionnez une carte depuis le dashboard"
+                   style="-fx-text-fill: #f59e0b; -fx-font-size: 12px;" wrapText="true"/>
+
+            <!-- RIB destinataire -->
+            <TextField fx:id="ribField" promptText="RIB du destinataire" styleClass="modern-field"/>
+
+            <!-- Montant -->
+            <TextField fx:id="amountField" promptText="Montant (TND)" styleClass="modern-field"/>
+
+            <!-- Solde disponible -->
+            <Label fx:id="balanceLabel" text="Solde: 0.00 TND"
+                   style="-fx-text-fill: #334155; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+            <!-- Bouton d'envoi -->
+            <Button text="Envoyer"
+                    onAction="#send"
+                    styleClass="primary-btn"/>
+
+        </VBox>
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
     </VBox>
 
 </StackPane>

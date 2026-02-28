@@ -173,6 +173,7 @@ public class WalletService {
         }
     }
 
+<<<<<<< HEAD
     // ================== VERIFIER SI UN WALLET EXISTE POUR UN UTILISATEUR ==================
     public boolean walletExiste(int userId) {
         String sql = "SELECT id FROM wallet WHERE user_id = ?";
@@ -186,6 +187,8 @@ public class WalletService {
         }
     }
 
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
     /* ================= FIX CONNECTION ================= */
     private Connection fixConnection() {
         try {

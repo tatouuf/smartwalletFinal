@@ -1,6 +1,9 @@
 package esprit.tn.souha_pi.controllers.loan;
 
+<<<<<<< HEAD
 import entities.User;
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import esprit.tn.souha_pi.entities.*;
 import esprit.tn.souha_pi.services.*;
 
@@ -12,10 +15,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
 import esprit.tn.souha_pi.utils.DialogUtil;
+<<<<<<< HEAD
 import services.ServiceUser;
 import utils.Session;
 
 import java.sql.SQLException;
+=======
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import java.util.List;
 
 public class LoanDetailsController {
@@ -31,6 +38,7 @@ public class LoanDetailsController {
 
     private LoanService loanService = new LoanService();
     private LoanPaymentService paymentService = new LoanPaymentService();
+<<<<<<< HEAD
 
     // CORRECTION: Utilisez le même nom de variable partout
     private ServiceUser userService = new ServiceUser();  // Renommé de ServiceUser à userService
@@ -38,6 +46,12 @@ public class LoanDetailsController {
     private Loan currentLoan;
     private User currentUser = Session.getCurrentUser();
     private int currentUserId = currentUser != null ? currentUser.getId() : 0;
+=======
+    private UserService userService = new UserService();
+
+    private Loan currentLoan;
+    private int currentUserId = 1;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
     /* ================= LOAD LOAN ================= */
     public static boolean confirm(String title, String message){
@@ -82,10 +96,20 @@ public class LoanDetailsController {
         }
     }
 
+<<<<<<< HEAD
     /* ================= REFRESH ================= */
     private void refresh(){
         try {
             // CORRECTION: Utilisez userService au lieu de ServiceUser
+=======
+
+    /* ================= REFRESH ================= */
+
+    private void refresh(){
+
+        try {
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             User lender = userService.getById(currentLoan.getLenderId());
             User borrower = userService.getById(currentLoan.getBorrowerId());
 
@@ -100,25 +124,42 @@ public class LoanDetailsController {
             amountLabel.setText("Total Amount: " + currentLoan.getPrincipalAmount() + " TND");
             remainingLabel.setText("Remaining: " + currentLoan.getRemainingAmount() + " TND");
 
+<<<<<<< HEAD
             // Mettre à jour le statut si présent
             if (statusLabel != null) {
                 statusLabel.setText("Status: " + currentLoan.getStatus());
             }
 
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             loadPaymentCards();
 
         }catch(Exception e){
             DialogUtil.error("Refresh Error",
+<<<<<<< HEAD
                     "Unable to refresh loan information.\n" + e.getMessage());
             e.printStackTrace();
+=======
+                    "Unable to refresh loan information.");
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         }
     }
 
     /* ================= PAYMENT CARDS ================= */
+<<<<<<< HEAD
     private void loadPaymentCards(){
         paymentsContainer.getChildren().clear();
 
         try{
+=======
+
+    private void loadPaymentCards(){
+
+        paymentsContainer.getChildren().clear();
+
+        try{
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             List<LoanPayment> payments = paymentService.getByLoan(currentLoan.getId());
 
             if(payments == null || payments.isEmpty()){
@@ -135,11 +176,16 @@ public class LoanDetailsController {
 
         }catch(Exception e){
             DialogUtil.error("Payment Error",
+<<<<<<< HEAD
                     "Unable to load payment history.\n" + e.getMessage());
+=======
+                    "Unable to load payment history.");
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         }
     }
 
     /* ================= CARD UI ================= */
+<<<<<<< HEAD
     private VBox createPaymentCard(LoanPayment payment) throws SQLException {
         // CORRECTION: Utilisez userService au lieu de ServiceUser
         User payer = userService.getById(payment.getPayerId());
@@ -153,6 +199,19 @@ public class LoanDetailsController {
 
         Label payerLabel = new Label("From: " + payerName);
         Label receiverLabel = new Label("To: " + receiverName);
+=======
+
+    private VBox createPaymentCard(LoanPayment payment){
+
+        User payer = userService.getById(payment.getPayerId());
+        User receiver = userService.getById(payment.getReceiverId());
+
+        Label amount = new Label(payment.getAmountPaid() + " TND");
+        amount.setStyle("-fx-font-size:18px; -fx-font-weight:bold; -fx-text-fill:#2ecc71;");
+
+        Label payerLabel = new Label("From: " + payer.getFullname());
+        Label receiverLabel = new Label("To: " + receiver.getFullname());
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         Label date = new Label("Date: " + payment.getPaymentDate());
 
         VBox info = new VBox(5, payerLabel, receiverLabel, date);
@@ -178,10 +237,21 @@ public class LoanDetailsController {
     }
 
     /* ================= PAY LOAN ================= */
+<<<<<<< HEAD
     @FXML
     private void payLoan(){
         try{
             /* ---------- INPUT VALIDATION ---------- */
+=======
+
+    @FXML
+    private void payLoan(){
+
+        try{
+
+            /* ---------- INPUT VALIDATION ---------- */
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             String text = amountField.getText();
 
             if(text == null || text.isBlank()){
@@ -190,6 +260,10 @@ public class LoanDetailsController {
             }
 
             double amount;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             try{
                 amount = Double.parseDouble(text);
             }catch(NumberFormatException ex){
@@ -210,6 +284,10 @@ public class LoanDetailsController {
             }
 
             /* ---------- CONFIRMATION DIALOG ---------- */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             boolean confirmed = DialogUtil.confirm(
                     "Confirm Payment",
                     "You are about to pay " + amount + " TND for this loan.\n\n" +
@@ -222,16 +300,28 @@ public class LoanDetailsController {
             }
 
             /* ---------- PROCESS PAYMENT ---------- */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             loanService.payLoan(currentLoan.getId(), currentUserId, amount);
 
             DialogUtil.success("Payment Completed",
                     "Payment of " + amount + " TND was successfully processed.");
 
             amountField.clear();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             loadLoan(currentLoan.getId());
 
         }catch(Exception e){
             DialogUtil.error("Payment Failed", e.getMessage());
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca

@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<<<<<<< HEAD
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+=======
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 <VBox fx:id="rootCard"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="esprit.tn.souha_pi.controllers.CardItemController"
+<<<<<<< HEAD
       spacing="15"
       style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 5); -fx-min-width: 320; -fx-max-width: 320;">
 
@@ -61,4 +67,39 @@
                 HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
     </HBox>
 
+=======
+      spacing="12"
+      styleClass="bank-card">
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Label fx:id="typeLabel" styleClass="card-type"/>
+        <Button fx:id="eyeBtn" text="👁" onAction="#toggleCardView" styleClass="eye-btn"/>
+    </HBox>
+
+    <!-- CARD NUMBER -->
+    <Label fx:id="numberLabel" styleClass="card-number"/>
+
+    <!-- RIB (NOUVEAU) -->
+    <Label fx:id="ribLabel" text="RIB: " styleClass="card-rib"/>
+
+    <!-- BALANCE (HIDDEN INITIALLY) -->
+    <Label fx:id="balanceLabel" text="Balance" visible="false" styleClass="card-balance"/>
+
+    <HBox spacing="20">
+        <VBox>
+            <Label text="CARD HOLDER" styleClass="card-small"/>
+            <Label fx:id="holderLabel" styleClass="card-holder"/>
+        </VBox>
+        <VBox>
+            <Label text="EXPIRES" styleClass="card-small"/>
+            <Label fx:id="expiryLabel" styleClass="card-holder"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="10">
+        <Button text="Top Up" onAction="#topUp" styleClass="btn-primary"/>
+        <Button text="Remove" onAction="#delete" styleClass="btn-danger"/>
+    </HBox>
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 </VBox>

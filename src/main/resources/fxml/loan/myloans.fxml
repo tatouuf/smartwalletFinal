@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<<<<<<< HEAD
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -34,8 +35,34 @@
 
             <!-- Container pour les cartes de prêts -->
             <VBox fx:id="cardsContainer" spacing="20"/>
+=======
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fitToWidth="true"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.souha_pi.controllers.loan.MyLoansController">
+
+    <content>
+        <VBox spacing="15">
+
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="My Loans"
+                   style="-fx-font-size:24px; -fx-font-weight:bold;"/>
+
+            <!-- cards container -->
+            <VBox fx:id="cardsContainer" spacing="15"/>
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
         </VBox>
     </content>
 
+<<<<<<< HEAD
 </ScrollPane>
+=======
+</ScrollPane>
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca

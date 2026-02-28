@@ -6,8 +6,11 @@ import esprit.tn.souha_pi.utils.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+<<<<<<< HEAD
 import utils.Session;
 
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import java.util.UUID;
 
 public class CardAddController {
@@ -52,6 +55,7 @@ public class CardAddController {
 
         // Générer un RIB unique
         String rib = genererRIB();
+<<<<<<< HEAD
         entities.User currentUser = Session.getCurrentUser();
 
         // Récupérer l'utilisateur connecté
@@ -59,6 +63,14 @@ public class CardAddController {
 
         BankCard card = new BankCard(
                 currentUserId.getId(),
+=======
+
+        // Récupérer l'utilisateur connecté
+        int currentUserId = WalletLayoutController.instance.getCurrentUser().getId();
+
+        BankCard card = new BankCard(
+                currentUserId,
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
                 holder,
                 number,
                 expiry,

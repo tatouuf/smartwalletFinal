@@ -2,13 +2,20 @@ package esprit.tn.souha_pi.controllers;
 
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.entities.Transaction;
+<<<<<<< HEAD
+=======
+import esprit.tn.souha_pi.entities.User;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import esprit.tn.souha_pi.services.WalletService;
 import esprit.tn.souha_pi.services.TransactionService;
 import esprit.tn.souha_pi.utils.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+<<<<<<< HEAD
 import utils.Session;
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 public class TopUpController {
 
@@ -19,6 +26,7 @@ public class TopUpController {
     private TransactionService transactionService = new TransactionService();
 
     private static BankCard selectedCard;  // Carte sélectionnée
+<<<<<<< HEAD
     entities.User currentUser = Session.getCurrentUser();
 
 
@@ -38,6 +46,19 @@ public class TopUpController {
         } else {
             cardLabel.setText("Aucune carte sélectionnée");
             System.out.println("⚠️ Aucune carte sélectionnée");
+=======
+    private User currentUser;
+
+    @FXML
+    public void initialize() {
+        currentUser = WalletLayoutController.instance.getCurrentUser();
+
+        if (selectedCard != null) {
+            cardLabel.setText("Carte: " + selectedCard.getCardType() + " - " +
+                    selectedCard.getCardNumber().substring(12));
+        } else {
+            cardLabel.setText("Aucune carte sélectionnée");
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         }
     }
 

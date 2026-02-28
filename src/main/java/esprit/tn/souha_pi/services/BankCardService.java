@@ -3,7 +3,10 @@ package esprit.tn.souha_pi.services;
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.utils.MyDataBase;
 import esprit.tn.souha_pi.controllers.WalletLayoutController;
+<<<<<<< HEAD
 import utils.Session;
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -94,7 +97,11 @@ public class BankCardService {
     // Récupérer l'ID de l'utilisateur connecté
     private int getCurrentUserId() {
         // À implémenter selon votre système de session
+<<<<<<< HEAD
         return Session.getCurrentUser().getId();
+=======
+        return WalletLayoutController.instance.getCurrentUser().getId();
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
     }
 
     // delete

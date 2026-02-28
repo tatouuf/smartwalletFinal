@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<<<<<<< HEAD
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -8,10 +9,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+=======
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="esprit.tn.souha_pi.controllers.CardAddController"
+<<<<<<< HEAD
       spacing="20"
       alignment="CENTER"
       style="-fx-background-color: #f5f7fb; -fx-padding: 30;">
@@ -49,3 +59,24 @@
     </VBox>
 
 </VBox>
+=======
+      spacing="18"
+      alignment="CENTER"
+      styleClass="card-page">
+
+    <Label text="Add Bank Card" styleClass="page-title"/>
+
+    <TextField fx:id="holderField" promptText="Card Holder Name" styleClass="input"/>
+
+    <TextField fx:id="numberField" promptText="Card Number (16 digits)" styleClass="input"/>
+
+    <TextField fx:id="expiryField" promptText="Expiry (MM/YY)" styleClass="input"/>
+
+    <TextField fx:id="cvvField" promptText="CVV" styleClass="input"/>
+
+    <ChoiceBox fx:id="typeChoice" styleClass="input"/>
+
+    <Button text="Save Card" onAction="#save" styleClass="btn-primary"/>
+
+</VBox>
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca

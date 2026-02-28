@@ -1,18 +1,28 @@
 package esprit.tn.souha_pi.controllers;
 
+<<<<<<< HEAD
+=======
+import esprit.tn.souha_pi.entities.User;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import esprit.tn.souha_pi.entities.Wallet;
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.services.WalletService;
 import esprit.tn.souha_pi.services.BankCardService;
+<<<<<<< HEAD
 import esprit.tn.souha_pi.utils.EventBus;
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import esprit.tn.souha_pi.utils.DialogUtil;
+<<<<<<< HEAD
 import tests.MainFxml;
 import utils.Session;
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 public class DashboardController {
 
@@ -26,7 +36,11 @@ public class DashboardController {
     private static DashboardController instance;
     private WalletService walletService = new WalletService();
     private BankCardService cardService = new BankCardService();
+<<<<<<< HEAD
     entities.User currentUser = Session.getCurrentUser();
+=======
+    private User currentUser;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
     public DashboardController(){
         instance = this;
@@ -34,7 +48,11 @@ public class DashboardController {
 
     @FXML
     public void initialize(){
+<<<<<<< HEAD
         entities.User currentUser = Session.getCurrentUser();
+=======
+        currentUser = WalletLayoutController.instance.getCurrentUser();
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
         if (currentUser != null) {
             welcomeLabel.setText("Bienvenue " + currentUser.getFullname());
@@ -140,6 +158,7 @@ public class DashboardController {
         return cardBox;
     }
 
+<<<<<<< HEAD
 
     // Dans DashboardController.java - Remplacer la méthode ouvrirEnvoi
     private void ouvrirEnvoi(BankCard carte) {
@@ -195,6 +214,14 @@ public class DashboardController {
 
         return null;
     }
+=======
+    private void ouvrirEnvoi(BankCard carte) {
+        // Ouvrir la page d'envoi avec la carte sélectionnée
+        SendController.setCarteSource(carte);
+        WalletLayoutController.instance.goSend();
+    }
+
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
     private void afficherDetails(BankCard carte) {
         String message = String.format(
                 "Détails de la carte:\n\n" +
@@ -214,9 +241,36 @@ public class DashboardController {
         DialogUtil.success("Détails de la carte", message);
     }
 
+<<<<<<< HEAD
 
 
 
+=======
+    @FXML
+    private void createWallet() {
+        WalletLayoutController.instance.openInscription();
+    }
+
+    @FXML
+    private void addCard() {
+        WalletLayoutController.instance.goCards();
+    }
+
+    @FXML
+    private void goSend() {
+        WalletLayoutController.instance.goSend();
+    }
+
+    @FXML
+    private void goReceive() {
+        WalletLayoutController.instance.goReceive();
+    }
+
+    @FXML
+    private void goHistory() {
+        WalletLayoutController.instance.goHistory();
+    }
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
     public static void refreshStatic(){
         if(instance != null){

@@ -1,14 +1,23 @@
 package esprit.tn.souha_pi.controllers.wallet;
 
+<<<<<<< HEAD
 import entities.User;
 import esprit.tn.souha_pi.controllers.WalletLayoutController;
+=======
+import esprit.tn.souha_pi.controllers.WalletLayoutController;
+import esprit.tn.souha_pi.entities.User;
+import esprit.tn.souha_pi.services.UserService;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+<<<<<<< HEAD
 import services.ServiceUser;
+=======
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 import java.io.File;
 import java.net.URL;
@@ -71,7 +80,11 @@ public class InscriptionWalletController implements Initializable {
     private File justificatifFile;
 
     // ======================= SERVICES =======================
+<<<<<<< HEAD
     private ServiceUser userService = new ServiceUser();
+=======
+    private UserService userService = new UserService();
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

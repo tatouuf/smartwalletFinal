@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<<<<<<< HEAD
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -19,6 +20,22 @@
             <Label text="SmartWallet" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label text="My Bank Cards" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+=======
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.souha_pi.controllers.CardListController">
+
+    <top>
+        <HBox alignment="CENTER_RIGHT" spacing="15" styleClass="page-header">
+            <Label text="My Bank Cards" styleClass="page-title"/>
+            <Button text="+ Add Card" onAction="#addCard" styleClass="btn-primary"/>
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         </HBox>
     </top>
 
@@ -26,6 +43,7 @@
         <FlowPane fx:id="cardsContainer"
                   hgap="20"
                   vgap="20"
+<<<<<<< HEAD
                   style="-fx-background-color: #f5f7fb; -fx-padding: 30;"
                   prefWrapLength="900"/>
     </center>
@@ -38,3 +56,10 @@
     </bottom>
 
 </BorderPane>
+=======
+                  styleClass="cards-area"
+                  prefWrapLength="900"/>
+    </center>
+
+</BorderPane>
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca

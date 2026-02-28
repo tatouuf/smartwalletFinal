@@ -1,7 +1,11 @@
 package esprit.tn.souha_pi.services;
 
+<<<<<<< HEAD
 import entities.User;
 
+=======
+import esprit.tn.souha_pi.entities.User;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;

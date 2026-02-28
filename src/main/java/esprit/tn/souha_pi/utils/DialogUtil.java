@@ -2,6 +2,7 @@ package esprit.tn.souha_pi.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+<<<<<<< HEAD
 import javafx.stage.Modality;
 
 import java.util.Optional;
@@ -52,3 +53,36 @@ public class DialogUtil {
         alert.showAndWait();
     }
 }
+=======
+
+public class DialogUtil {
+
+    public static void success(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.showAndWait();
+    }
+
+    public static void error(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.showAndWait();
+    }
+
+    public static void info(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.showAndWait();
+    }
+
+    public static boolean confirm(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION, msg, ButtonType.OK, ButtonType.CANCEL);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        return a.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
+    }
+}
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca

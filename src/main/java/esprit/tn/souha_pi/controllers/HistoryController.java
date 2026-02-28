@@ -1,16 +1,28 @@
 package esprit.tn.souha_pi.controllers;
 
 import esprit.tn.souha_pi.entities.Transaction;
+<<<<<<< HEAD
 import esprit.tn.souha_pi.services.TransactionService;
+=======
+import esprit.tn.souha_pi.entities.User;
+import esprit.tn.souha_pi.services.TransactionService;
+import esprit.tn.souha_pi.services.UserService;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
+<<<<<<< HEAD
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import services.ServiceUser;
 import utils.Session;
+=======
+import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -38,16 +50,27 @@ public class HistoryController implements Initializable {
     @FXML private ComboBox<String> periodFilter;
     @FXML private VBox noHistoryBox;
     @FXML private Label noHistoryLabel;
+<<<<<<< HEAD
     
 
     private TransactionService transactionService = new TransactionService();
     private ServiceUser userService = new ServiceUser();
     entities.User currentUser = Session.getCurrentUser();
+=======
+
+    private TransactionService transactionService = new TransactionService();
+    private UserService userService = new UserService();
+    private User currentUser;
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
     private List<Transaction> allTransactions;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+<<<<<<< HEAD
         entities.User currentUser = Session.getCurrentUser();
+=======
+        currentUser = WalletLayoutController.instance.getCurrentUser();
+>>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
         configurerColonnes();
         configurerFiltres();
