@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
+
 import java.io.IOException;
 
 public class MainLayoutController {
@@ -12,33 +13,20 @@ public class MainLayoutController {
     private StackPane contentArea;
 
     @FXML
-    public void initialize() {
-        loadPage("dashboard.fxml");
-    }
+    void handleIA() {
 
-    private void loadPage(String fxml) {
         try {
-            Parent page = FXMLLoader.load(
-                    getClass().getResource("/fxml/wallet/" + fxml)
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/IAassistant.fxml")
             );
-            contentArea.getChildren().setAll(page);
+
+            Parent view = loader.load();
+
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(view);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void showDashboard() {
-        loadPage("dashboard.fxml");
-    }
-
-    @FXML
-    private void showDepenses() {
-        loadPage("depenses.fxml");
-    }
-
-    @FXML
-    private void showPlanning() {
-        loadPage("plannings.fxml");   // ✅ avec S
     }
 }

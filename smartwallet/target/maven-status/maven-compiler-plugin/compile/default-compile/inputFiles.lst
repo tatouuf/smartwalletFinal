@@ -64,6 +64,7 @@ C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\entities\Statut
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\controllers\admin\AdminDashboardController.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\chayma\controllers\PlanningsController.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\chayma\utils\DialogUtil.java
+C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\chayma\controllers\NotificationsController.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\chayma\entities\Notification.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\entities\Transaction.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\services\ia\impl\PredictionService.java
@@ -86,6 +87,8 @@ C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\utils\Session.j
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\controllers\TopUpController.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\entities\Transaction.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\Controllers\DashboardAdminController.java
+C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\controllers\AdvisorController.java
+C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\chayma\controllers\NotificationCell.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\entities\credit\StatutCredit.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\controller\service\ModifierService.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\utils\DialogUtil.java
@@ -112,6 +115,7 @@ C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\entities\User.j
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\controllers\SignupController.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\services\EmailService.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\controller\acceuilservice\AcceuilService.java
+C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\chayma\controllers\IAassistantController.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\controller\credit\ModifierCredit.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\entities\Notification.java
 C:\Users\lolil\maiiii\smartwalletFinal\smartwallet\src\main\java\esprit\tn\souha_pi\controllers\wallet\InscriptionWalletController.java

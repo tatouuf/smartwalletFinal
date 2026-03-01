@@ -3,44 +3,92 @@ package esprit.tn.chayma.entities;
 import java.time.LocalDateTime;
 
 public class Notification {
+
     private int id;
     private int userId;
-    private String type; // ex: depassement_budget, info, etc.
+    private String title;
     private String message;
-    private boolean isRead;
+    private String type;
+    private String status;
     private LocalDateTime createdAt;
-    private Integer relatedId; // id lié (ex: budget id)
+    private boolean isRead;
 
-    public Notification() {}
-
-    public Notification(int userId, String type, String message, Integer relatedId) {
+    // Constructeur avec tous les paramètres
+    public Notification(int userId, String title, String message, String type) {
         this.userId = userId;
-        this.type = type;
+        this.title = title;
         this.message = message;
-        this.relatedId = relatedId;
-        this.isRead = false;
-        this.createdAt = LocalDateTime.now();
+        this.type = type;
+        this.status = "UNREAD";  // Par défaut, une notification est non lue
+        this.isRead = false;     // Notification non lue
+        this.createdAt = LocalDateTime.now();  // Heure de création de la notification
     }
 
-    // Getters & Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Constructeur vide pour d'autres usages (par exemple, pour la lecture depuis la DB)
+    public Notification() {}
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    // Getters et Setters
+    public int getId() {
+        return id;
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public int getUserId() {
+        return userId;
+    }
 
-    public boolean isRead() { return isRead; }
-    public void setRead(boolean read) { isRead = read; }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getTitle() {
+        return title;
+    }
 
-    public Integer getRelatedId() { return relatedId; }
-    public void setRelatedId(Integer relatedId) { this.relatedId = relatedId; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean isRead) {
+        this.isRead = isRead;
+    }
 }

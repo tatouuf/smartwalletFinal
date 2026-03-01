@@ -1,5 +1,11 @@
 package esprit.tn.chayma.controllers;
-
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Node;
+import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import java.io.IOException;
 import esprit.tn.chayma.entities.Budget;
 import esprit.tn.chayma.entities.Depense;
 import esprit.tn.chayma.entities.Planning;
@@ -96,7 +102,23 @@ public class DashboardDepensController {
             logger.log(Level.SEVERE, "Erreur initialisation dashboard", e);
         }
     }
+    @FXML
+    private void handleIA(javafx.event.ActionEvent event) {
 
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/IAassistant.fxml")
+            );
+
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new javafx.scene.Scene(root));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     // Public method to refresh charts/labels from other controllers
     public void refreshData() {
         Platform.runLater(() -> {

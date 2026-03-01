@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.chayma.controllers.IAassistantController"
+            prefWidth="950" prefHeight="650"
+            style="-fx-background-color: linear-gradient(to bottom right, #0F172A, #1E293B);">
+
+    <!-- ===== HEADER ===== -->
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              style="-fx-padding:20;
+                     -fx-background-color:#111827;
+                     -fx-border-color:#1F2937;
+                     -fx-border-width:0 0 1 0;">
+
+            <Label text="🤖 AI Financial Assistant"
+                   style="-fx-text-fill:#F8FAFC;
+                          -fx-font-size:22px;
+                          -fx-font-weight:bold;"/>
+        </HBox>
+    </top>
+
+    <!-- ===== CENTER CHAT AREA ===== -->
+    <center>
+        <VBox spacing="15" style="-fx-padding:25;">
+
+            <TextArea fx:id="chatArea"
+                      editable="false"
+                      wrapText="true"
+                      prefHeight="450"
+                      style="-fx-control-inner-background:#1E293B;
+                             -fx-text-fill:#E2E8F0;
+                             -fx-font-size:14px;
+                             -fx-background-radius:15;
+                             -fx-border-radius:15;
+                             -fx-border-color:#334155;
+                             -fx-padding:15;"/>
+
+            <!-- ===== INPUT AREA ===== -->
+            <HBox spacing="10" alignment="CENTER">
+
+                <TextField fx:id="inputField"
+                           promptText="Écrire votre message..."
+                           HBox.hgrow="ALWAYS"
+                           style="-fx-background-color:#1E293B;
+                                  -fx-text-fill:#F1F5F9;
+                                  -fx-prompt-text-fill:#94A3B8;
+                                  -fx-background-radius:20;
+                                  -fx-border-radius:20;
+                                  -fx-border-color:#334155;
+                                  -fx-padding:10 15 10 15;"/>
+
+                <Button text="Envoyer"
+                        onAction="#handleSend"
+                        style="-fx-background-color: linear-gradient(to right, #6366F1, #8B5CF6);
+                               -fx-text-fill:white;
+                               -fx-font-weight:bold;
+                               -fx-background-radius:20;
+                               -fx-padding:10 20 10 20;
+                               -fx-cursor:hand;"/>
+
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

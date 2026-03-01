@@ -6,48 +6,25 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="esprit.tn.chayma.controllers.MainLayoutController"
-            prefWidth="1200"
-            prefHeight="750">
+            prefWidth="1000" prefHeight="700">
 
-    <!-- MENU -->
+    <!-- MENU LEFT -->
     <left>
-        <VBox spacing="20"
-              prefWidth="220"
-              style="-fx-background-color:#1F1F2E; -fx-padding:30;">
+        <VBox spacing="10" style="-fx-background-color:#0F172A; -fx-padding:20;">
 
-            <Button text="📊 Dashboard"
-                    onAction="#showDashboard"
-                    maxWidth="Infinity"/>
-
-            <Button text="💰 Dépenses"
-                    onAction="#showDepenses"
-                    maxWidth="Infinity"/>
-
-            <Button text="📅 Planning"
-                    onAction="#showPlanning"
-                    maxWidth="Infinity"/>
-            <Button text="📅 Notifications"
-                    onAction="#showNotifications"
-                    maxWidth="Infinity"/>
-            <Button text="⚙️ Paramètres"
-                    onAction="#showSettings"
-                    maxWidth="Infinity"/>
-            <Button text=" 🧑‍💼 Advisor"
-                    onAction="#showAdvisor"
-                    maxWidth="Infinity"/>
-            <Button text="🚪 Logout"
-                    onAction="#handleLogout"
+            <Button text="⚙ IA"
+                    onAction="#handleIA"
                     maxWidth="Infinity"
-                    style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
-
-
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: #FBCFE8;
+                           -fx-font-size: 15px;"/>
         </VBox>
-
     </left>
 
-    <!-- CONTENU QUI CHANGE -->
+    <!-- CONTENT AREA -->
     <center>
-        <StackPane fx:id="contentArea"/>
+        <StackPane fx:id="contentArea"
+                   style="-fx-background-color:#1E293B;"/>
     </center>
 
 </BorderPane>

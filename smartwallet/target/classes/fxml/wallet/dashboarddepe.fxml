@@ -80,15 +80,25 @@
                            -fx-font-size: 15px;
                            -fx-background-radius: 12;
                            -fx-padding: 12 15;"/>
-                <Button text="🔔 Notifications"
-                    onAction="#handleNotifications"
+            <Button text="⚙ IA "
+                    onAction="#handleIA"
                     maxWidth="Infinity"
                     style="-fx-background-color: transparent;
                            -fx-text-fill: #FBCFE8;
                            -fx-font-size: 15px;
                            -fx-background-radius: 12;
                            -fx-padding: 12 15;"/>
-                <Region VBox.vgrow="ALWAYS"/>
+            <Button text="🔔 Notifications"
+                    onAction="#handleNotifications"
+                    maxWidth="Infinity"
+
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: #FBCFE8;
+                           -fx-font-size: 15px;
+                           -fx-background-radius: 12;
+                           -fx-padding: 12 15;"/>
+
+
 
             <Button text="🔒 Logout"
                     onAction="#handleLogout"
@@ -98,14 +108,7 @@
                            -fx-font-size: 15px;
                            -fx-background-radius: 12;
                            -fx-padding: 12 15;"/>
-            <Button text="Advisor"
-                    onAction="#handleAdvisor"
-                    maxWidth="Infinity"
-                    style="-fx-background-color: #6A1B9A;
-               -fx-text-fill: white;
-               -fx-font-size: 15px;
-               -fx-background-radius: 12;
-               -fx-padding: 12 15;"/>
+
 
         </VBox>
     </left>

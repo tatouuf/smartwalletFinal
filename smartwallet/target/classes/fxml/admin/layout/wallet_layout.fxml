@@ -36,6 +36,8 @@
 
             <Separator/>
 
+            <Button text="Advisor" styleClass="sidebar-btn" onAction="#goAdvisor" />
+
             <Button text="Retour Acceuil" styleClass="sidebar-btn-highlight" onAction="#openInscription"/>
 
             <Region VBox.vgrow="ALWAYS"/>

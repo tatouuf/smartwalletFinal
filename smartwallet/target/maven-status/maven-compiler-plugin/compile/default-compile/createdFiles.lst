@@ -33,6 +33,7 @@ esprit\tn\chayma\controllers\BudgetController.class
 esprit\tn\souha_pi\controllers\CardListController.class
 Controllers\AmitieController$AmitieDisplay.class
 entities\credit\Credit.class
+esprit\tn\chayma\controllers\IAassistantController.class
 entities\ReclamationStatuts.class
 services\IService.class
 controller\service\AfficherService.class
@@ -42,6 +43,7 @@ controller\service\ModifierService.class
 esprit\tn\souha_pi\controllers\LoginController.class
 Controllers\NotificationController.class
 esprit\tn\souha_pi\services\NotificationHistoryService.class
+esprit\tn\souha_pi\controllers\AdvisorController.class
 services\service\ServiceServices.class
 esprit\tn\souha_pi\services\LoanPaymentService.class
 controller\assurance\AfficherAssuranceClient.class
@@ -76,6 +78,7 @@ entities\User.class
 utils\EmailConfig.class
 services\ServiceDashboardAdmin.class
 entities\Notification.class
+esprit\tn\chayma\controllers\NotificationCell.class
 services\ServiceUser.class
 entities\Role.class
 esprit\tn\souha_pi\services\IWalletService.class
@@ -108,6 +111,7 @@ entities\Amitie.class
 esprit\tn\chayma\controllers\BudgetController$1.class
 esprit\tn\souha_pi\services\ILoanService.class
 esprit\tn\souha_pi\services\ia\impl\CreditScoringService.class
+esprit\tn\chayma\controllers\NotificationsController.class
 Controllers\AmitieController.class
 esprit\tn\souha_pi\controllers\HistoryController$1.class
 services\assurances\IServiceAssurance.class

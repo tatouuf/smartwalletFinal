@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.chayma.controllers.NotificationsController"
+            style="-fx-background-color:#0F172A;">
+
+    <top>
+        <Label text="🔔 Notifications"
+               style="-fx-text-fill:white;
+                      -fx-font-size:22px;
+                      -fx-padding:20;"/>
+    </top>
+
+    <center>
+        <ListView fx:id="notificationList"
+                  style="-fx-background-color:#1E293B;
+                         -fx-text-fill:white;
+                         -fx-padding:15;
+                         -fx-control-inner-background:#1E293B;"/>
+    </center>
+
+</BorderPane>
