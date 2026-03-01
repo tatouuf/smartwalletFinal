@@ -1,14 +1,9 @@
 package esprit.tn.souha_pi.controllers;
 
-<<<<<<< HEAD
 import entities.User;
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.entities.Transaction;
-=======
-import esprit.tn.souha_pi.entities.BankCard;
-import esprit.tn.souha_pi.entities.Transaction;
-import esprit.tn.souha_pi.entities.User;
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
 import esprit.tn.souha_pi.services.BankCardService;
 import esprit.tn.souha_pi.services.TransactionService;
 import esprit.tn.souha_pi.services.WalletService;
@@ -16,10 +11,7 @@ import esprit.tn.souha_pi.utils.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-<<<<<<< HEAD
 import utils.Session;
-=======
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 public class SendController {
 
@@ -33,13 +25,11 @@ public class SendController {
     private TransactionService transactionService = new TransactionService();
 
     private static BankCard carteSource;
-<<<<<<< HEAD
     private User currentUser = Session.getCurrentUser();
     private int currentUserId;
-=======
     private int currentUserId;
     private User currentUser;
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
 
     public static void setCarteSource(BankCard carte) {
         carteSource = carte;
@@ -47,11 +37,10 @@ public class SendController {
 
     @FXML
     public void initialize() {
-<<<<<<< HEAD
-=======
+
         currentUser = WalletLayoutController.instance.getCurrentUser();
 
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
         if (currentUser == null) {
             DialogUtil.error("Erreur", "Vous devez être connecté");
             return;
@@ -64,7 +53,6 @@ public class SendController {
             balanceLabel.setText(String.format("Solde: %.2f TND", balance));
 
             if (carteSource != null) {
-<<<<<<< HEAD
                 infoLabel.setText("Envoi depuis: " + carteSource.getCardType() + " - **** " +
                         carteSource.getCardNumber().substring(12) +
                         "\nRIB: " + carteSource.getRib());
@@ -72,13 +60,11 @@ public class SendController {
             } else {
                 infoLabel.setText("⚠️ Veuillez sélectionner une carte depuis le dashboard");
                 infoLabel.setStyle("-fx-text-fill: #f59e0b; -fx-background-color: #fffbeb; -fx-border-color: #fcd34d;");
-=======
                 infoLabel.setText("Envoi depuis: " + carteSource.getCardType() + " - " +
                         carteSource.getCardNumber().substring(12) +
                         "\nRIB: " + carteSource.getRib());
             } else {
                 infoLabel.setText("Sélectionnez une carte depuis le dashboard pour envoyer de l'argent");
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             }
         } catch (Exception e) {
             balanceLabel.setText("Solde: 0.00 TND");
@@ -160,10 +146,7 @@ public class SendController {
             initialize();
             ribField.clear();
             amountField.clear();
-<<<<<<< HEAD
-=======
-            carteSource = null;
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+     carteSource = null;
 
         } catch (NumberFormatException e) {
             DialogUtil.error("Erreur", "Montant invalide");
@@ -171,13 +154,10 @@ public class SendController {
             DialogUtil.error("Erreur", e.getMessage());
         }
     }
-<<<<<<< HEAD
-=======
 
     @FXML
     private void cancel() {
         carteSource = null;
         WalletLayoutController.instance.goDashboard();
     }
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 }

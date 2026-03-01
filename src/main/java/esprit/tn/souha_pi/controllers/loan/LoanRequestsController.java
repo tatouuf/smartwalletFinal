@@ -104,10 +104,8 @@ public class LoanRequestsController {
     }
 
     /* ================= IA INSIGHTS ================= */
-<<<<<<< HEAD
-=======
 
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
     private void loadIAInsights() {
         if (iaInsightsContainer == null) return;
 
@@ -166,11 +164,8 @@ public class LoanRequestsController {
                 HBox insightRow = new HBox(10);
                 insightRow.setStyle("-fx-padding: 8; -fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-border-radius: 5;");
 
-<<<<<<< HEAD
                 Label nameLabel = new Label(borrowerName + ":");
-=======
                 Label nameLabel = new Label(borrower.getFullname() + ":");
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
                 nameLabel.setStyle("-fx-font-weight:bold; -fx-min-width: 100;");
 
                 Label scoreLabel = new Label(String.format("%.0f/100", score.getScore()));
@@ -449,7 +444,6 @@ public class LoanRequestsController {
 
     private void acceptRequest(LoanRequest request){
 
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         boolean confirmed = DialogUtil.confirm(
                 "Accept Loan Request",
                 "You are about to ACCEPT this loan request.\n\n"
@@ -461,10 +455,8 @@ public class LoanRequestsController {
         if(!confirmed) return;
 
         try{
-<<<<<<< HEAD
-=======
 
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+
             requestService.acceptRequest(request.getId());
 
             DialogUtil.success(
@@ -483,13 +475,10 @@ public class LoanRequestsController {
     }
 
     /* ================= REJECT ================= */
-<<<<<<< HEAD
     private void rejectRequest(LoanRequest request){
-=======
 
     private void rejectRequest(LoanRequest request){
 
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         boolean confirmed = DialogUtil.confirm(
                 "Reject Loan Request",
                 "Are you sure you want to reject this loan request?"
@@ -498,10 +487,7 @@ public class LoanRequestsController {
         if(!confirmed) return;
 
         try{
-<<<<<<< HEAD
-=======
 
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             requestService.rejectRequest(request.getId());
 
             DialogUtil.success(

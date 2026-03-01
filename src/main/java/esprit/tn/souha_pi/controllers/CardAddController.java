@@ -1,17 +1,13 @@
 package esprit.tn.souha_pi.controllers;
 
 import esprit.tn.souha_pi.entities.BankCard;
+import esprit.tn.souha_pi.entities.User;
 import esprit.tn.souha_pi.services.BankCardService;
 import esprit.tn.souha_pi.utils.DialogUtil;
+import esprit.tn.souha_pi.utils.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-<<<<<<< HEAD
-import utils.Session;
-
-=======
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
-import java.util.UUID;
 
 public class CardAddController {
 
@@ -21,7 +17,7 @@ public class CardAddController {
     @FXML private TextField cvvField;
     @FXML private ChoiceBox<String> typeChoice;
 
-    private BankCardService cardService = new BankCardService();
+    private final BankCardService cardService = new BankCardService();
 
     @FXML
     public void initialize() {
@@ -31,46 +27,42 @@ public class CardAddController {
 
     @FXML
     private void save() {
+
         String holder = holderField.getText().trim();
         String number = numberField.getText().trim().replace(" ", "");
         String expiry = expiryField.getText().trim();
         String cvv = cvvField.getText().trim();
         String type = typeChoice.getValue();
 
-        // Validations
+        // ================= VALIDATIONS =================
         if (holder.isEmpty() || number.isEmpty() || expiry.isEmpty() || cvv.isEmpty()) {
             DialogUtil.error("Erreur", "Tous les champs sont obligatoires");
             return;
         }
 
-        if (number.length() != 16 || !number.matches("\\d+")) {
+        if (!number.matches("\\d{16}")) {
             DialogUtil.error("Erreur", "Le numéro de carte doit contenir 16 chiffres");
             return;
         }
 
-        if (cvv.length() != 3 || !cvv.matches("\\d+")) {
+        if (!cvv.matches("\\d{3}")) {
             DialogUtil.error("Erreur", "Le CVV doit contenir 3 chiffres");
             return;
         }
 
-        // Générer un RIB unique
+        // ================= USER CONNECTÉ =================
+        User currentUser = Session.getCurrentUser();
+
+        if (currentUser == null) {
+            DialogUtil.error("Erreur", "Utilisateur non connecté");
+            return;
+        }
+
+        // ================= GÉNÉRATION RIB =================
         String rib = genererRIB();
-<<<<<<< HEAD
-        entities.User currentUser = Session.getCurrentUser();
-
-        // Récupérer l'utilisateur connecté
-        entities.User  currentUserId =Session.getCurrentUser();
 
         BankCard card = new BankCard(
-                currentUserId.getId(),
-=======
-
-        // Récupérer l'utilisateur connecté
-        int currentUserId = WalletLayoutController.instance.getCurrentUser().getId();
-
-        BankCard card = new BankCard(
-                currentUserId,
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+                currentUser.getId(),
                 holder,
                 number,
                 expiry,
@@ -92,12 +84,15 @@ public class CardAddController {
         // Format RIB Tunisien: TN59 + 20 chiffres
         String timestamp = String.valueOf(System.currentTimeMillis());
         String chiffres = timestamp.replaceAll("[^0-9]", "");
+
         while (chiffres.length() < 20) {
             chiffres = "0" + chiffres;
         }
+
         if (chiffres.length() > 20) {
             chiffres = chiffres.substring(0, 20);
         }
+
         return "TN59" + chiffres;
     }
 

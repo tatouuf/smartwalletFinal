@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<<<<<<< HEAD
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -12,31 +11,10 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-=======
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.geometry.Insets?>
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 <StackPane xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="esprit.tn.souha_pi.controllers.HistoryController"
-<<<<<<< HEAD
-           style="-fx-background-color: #f5f7fb;">
-
-    <VBox spacing="20" alignment="CENTER" maxWidth="1200">
-        <padding>
-            <Insets top="30" right="30" bottom="30" left="30"/>
-        </padding>
-
-        <!-- Header -->
-        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-background-radius: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3); -fx-padding: 20 25;">
-            <Label text="📊" style="-fx-font-size: 40px; -fx-text-fill: white;"/>
-            <Label text="Transaction History" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="totalLabel" text="Total: 0.00 TND"
-                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
-=======
            styleClass="page-bg">
 
     <VBox spacing="18" alignment="CENTER" maxWidth="1000">
@@ -54,39 +32,11 @@
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="totalLabel" text="Total: 0.00 TND"
                    style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         </HBox>
 
         <Separator/>
 
         <!-- Filtres -->
-<<<<<<< HEAD
-        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 3);">
-            <Label fx:id="userInfoLabel" style="-fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
-
-            <Label text="Filtrer par:" style="-fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
-            <ComboBox fx:id="typeFilter" promptText="Type" prefWidth="150"
-                      style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 10; -fx-background-radius: 10;"/>
-            <ComboBox fx:id="periodFilter" promptText="Période" prefWidth="150"
-                      style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 10; -fx-background-radius: 10;"/>
-            <Button text="Appliquer" styleClass="primary-btn" onAction="#appliquerFiltres" prefWidth="120"/>
-            <Button text="Réinitialiser" styleClass="secondary-btn" onAction="#reinitialiserFiltres" prefWidth="120"/>
-        </HBox>
-
-        <!-- Statistiques rapides -->
-        <HBox spacing="20" alignment="CENTER">
-            <VBox style="-fx-background-color: #f0fdf4; -fx-background-radius: 15; -fx-padding: 15; -fx-min-width: 180; -fx-border-color: #86efac; -fx-border-radius: 15; -fx-border-width: 1;">
-                <Label text="Crédits (+)" style="-fx-text-fill: #22c55e; -fx-font-weight: bold;"/>
-                <Label fx:id="totalCreditsLabel" text="0.00 TND" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #166534;"/>
-            </VBox>
-            <VBox style="-fx-background-color: #fef2f2; -fx-background-radius: 15; -fx-padding: 15; -fx-min-width: 180; -fx-border-color: #fecaca; -fx-border-radius: 15; -fx-border-width: 1;">
-                <Label text="Débits (-)" style="-fx-text-fill: #ef4444; -fx-font-weight: bold;"/>
-                <Label fx:id="totalDebitsLabel" text="0.00 TND" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #991b1b;"/>
-            </VBox>
-            <VBox style="-fx-background-color: #eff6ff; -fx-background-radius: 15; -fx-padding: 15; -fx-min-width: 150; -fx-border-color: #bfdbfe; -fx-border-radius: 15; -fx-border-width: 1;">
-                <Label text="Nombre" style="-fx-text-fill: #3b82f6; -fx-font-weight: bold;"/>
-                <Label fx:id="countLabel" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;"/>
-=======
         <HBox spacing="15" alignment="CENTER_LEFT" maxWidth="900">
             <Label text="Filtrer par:" style="-fx-font-weight: bold;"/>
             <ComboBox fx:id="typeFilter" promptText="Type" prefWidth="120" styleClass="input"/>
@@ -108,18 +58,12 @@
             <VBox styleClass="stat-card-mini">
                 <Label text="Nombre" style="-fx-text-fill: #3b82f6;"/>
                 <Label fx:id="countLabel" text="0" style="-fx-font-weight: bold;"/>
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
             </VBox>
         </HBox>
 
         <!-- Tableau des transactions -->
-<<<<<<< HEAD
-        <VBox style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5);">
-            <TableView fx:id="table" prefHeight="400" style="-fx-background-radius: 15;">
-=======
         <VBox styleClass="card" maxWidth="900">
             <TableView fx:id="table" styleClass="modern-table" prefHeight="400">
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
                 <columns>
                     <TableColumn text="Date" fx:id="colDate" prefWidth="150"/>
                     <TableColumn text="Type" fx:id="colType" prefWidth="100"/>
@@ -132,18 +76,12 @@
         </VBox>
 
         <!-- Message si pas d'historique -->
-<<<<<<< HEAD
-        <VBox fx:id="noHistoryBox" spacing="15" alignment="CENTER" visible="false" managed="false"
-              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 40; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 3);">
-            <Label text="📭" style="-fx-font-size: 80px;"/>
-            <Label fx:id="noHistoryLabel" text="" style="-fx-font-size: 18px; -fx-text-fill: #64748b;"/>
-=======
         <VBox fx:id="noHistoryBox" spacing="15" alignment="CENTER" visible="false" managed="false">
             <Label text="📭" style="-fx-font-size: 60px;"/>
             <Label fx:id="noHistoryLabel" text="" style="-fx-font-size: 16px; -fx-text-fill: #64748b;"/>
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
         </VBox>
 
     </VBox>
 
 </StackPane>
+

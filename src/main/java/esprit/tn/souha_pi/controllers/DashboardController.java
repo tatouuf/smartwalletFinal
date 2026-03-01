@@ -1,28 +1,17 @@
 package esprit.tn.souha_pi.controllers;
 
-<<<<<<< HEAD
-=======
 import esprit.tn.souha_pi.entities.User;
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 import esprit.tn.souha_pi.entities.Wallet;
 import esprit.tn.souha_pi.entities.BankCard;
 import esprit.tn.souha_pi.services.WalletService;
 import esprit.tn.souha_pi.services.BankCardService;
-<<<<<<< HEAD
-import esprit.tn.souha_pi.utils.EventBus;
-=======
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+import esprit.tn.souha_pi.utils.DialogUtil;
+import esprit.tn.souha_pi.utils.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import esprit.tn.souha_pi.utils.DialogUtil;
-<<<<<<< HEAD
-import tests.MainFxml;
-import utils.Session;
-=======
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
 public class DashboardController {
 
@@ -34,13 +23,9 @@ public class DashboardController {
     @FXML private Button createWalletButton;
 
     private static DashboardController instance;
-    private WalletService walletService = new WalletService();
-    private BankCardService cardService = new BankCardService();
-<<<<<<< HEAD
-    entities.User currentUser = Session.getCurrentUser();
-=======
+    private final WalletService walletService = new WalletService();
+    private final BankCardService cardService = new BankCardService();
     private User currentUser;
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
     public DashboardController(){
         instance = this;
@@ -48,11 +33,7 @@ public class DashboardController {
 
     @FXML
     public void initialize(){
-<<<<<<< HEAD
-        entities.User currentUser = Session.getCurrentUser();
-=======
-        currentUser = WalletLayoutController.instance.getCurrentUser();
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
+        currentUser = Session.getCurrentUser();
 
         if (currentUser != null) {
             welcomeLabel.setText("Bienvenue " + currentUser.getFullname());
@@ -157,71 +138,14 @@ public class DashboardController {
         cardBox.getChildren().addAll(typeLabel, numberLabel, ribLabel, infoBox, actionsBox);
         return cardBox;
     }
+    // ...existing code...
 
-<<<<<<< HEAD
-
-    // Dans DashboardController.java - Remplacer la méthode ouvrirEnvoi
-    private void ouvrirEnvoi(BankCard carte) {
-        System.out.println("📨 Demande d'envoi avec carte: " + carte.getCardNumber());
-
-        // Utiliser MainFxml pour ouvrir directement la page d'envoi
-        MainFxml.getInstance().openSendWithCard(carte);
-    }
-
-    // Modifier aussi les autres méthodes de navigation
-    @FXML
-    private void addCard() {
-        MainFxml.getInstance().openWalletLayoutWithSection("CARDS");
-    }
-
-    @FXML
-    private void goSend() {
-        MainFxml.getInstance().openWalletLayoutWithSection("SEND");
-    }
-
-    @FXML
-    private void goReceive() {
-        MainFxml.getInstance().openWalletLayoutWithSection("RECEIVE");
-    }
-
-    @FXML
-    private void goHistory() {
-        MainFxml.getInstance().openWalletLayoutWithSection("HISTORY");
-    }
-
-    @FXML
-    private void createWallet() {
-        MainFxml.getInstance().openWalletLayoutWithSection("DASHBOARD");
-    }
-
-    // Méthode utilitaire pour trouver le WalletLayoutController
-    private WalletLayoutController findWalletController(javafx.scene.Parent root) {
-        // Vérifier si le root lui-même est un WalletLayoutController
-        Object controller = root.getProperties().get("controller");
-        if (controller instanceof WalletLayoutController) {
-            return (WalletLayoutController) controller;
-        }
-
-        // Parcourir les enfants si c'est un VBox, HBox, etc.
-        if (root instanceof javafx.scene.layout.Pane) {
-            for (javafx.scene.Node child : ((javafx.scene.layout.Pane) root).getChildren()) {
-                if (child instanceof javafx.scene.Parent) {
-                    WalletLayoutController found = findWalletController((javafx.scene.Parent) child);
-                    if (found != null) return found;
-                }
-            }
-        }
-
-        return null;
-    }
-=======
     private void ouvrirEnvoi(BankCard carte) {
         // Ouvrir la page d'envoi avec la carte sélectionnée
         SendController.setCarteSource(carte);
         WalletLayoutController.instance.goSend();
     }
 
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
     private void afficherDetails(BankCard carte) {
         String message = String.format(
                 "Détails de la carte:\n\n" +
@@ -241,11 +165,7 @@ public class DashboardController {
         DialogUtil.success("Détails de la carte", message);
     }
 
-<<<<<<< HEAD
 
-
-
-=======
     @FXML
     private void createWallet() {
         WalletLayoutController.instance.openInscription();
@@ -270,7 +190,6 @@ public class DashboardController {
     private void goHistory() {
         WalletLayoutController.instance.goHistory();
     }
->>>>>>> 25810eff966ac1c5ab947b24304a065e2ce44cca
 
     public static void refreshStatic(){
         if(instance != null){
