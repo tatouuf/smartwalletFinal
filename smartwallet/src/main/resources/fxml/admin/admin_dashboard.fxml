@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.admin.AdminDashboardController"
+           styleClass="page-bg">
+
+    <VBox spacing="25" alignment="TOP_CENTER">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <!-- Header avec titre et rôle admin -->
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Label text="👑" style="-fx-font-size: 40px;"/>
+            <VBox>
+                <Label text="Dashboard Administrateur" styleClass="page-header"/>
+                <Label fx:id="adminNameLabel" text="Admin: " styleClass="label-small"/>
+            </VBox>
+        </HBox>
+
+        <Separator/>
+
+        <!-- Statistiques globales (4 cards) -->
+        <HBox spacing="20" alignment="CENTER">
+            <!-- Total utilisateurs -->
+            <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label text="👥 Utilisateurs" styleClass="stat-label"/>
+                <Label fx:id="totalUsersLabel" text="0" styleClass="stat-value"/>
+            </VBox>
+
+            <!-- Total wallets -->
+            <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label text="💰 Wallets" styleClass="stat-label"/>
+                <Label fx:id="totalWalletsLabel" text="0" styleClass="stat-value"/>
+            </VBox>
+
+            <!-- Total transactions -->
+            <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label text="📊 Transactions" styleClass="stat-label"/>
+                <Label fx:id="totalTransactionsLabel" text="0" styleClass="stat-value"/>
+            </VBox>
+
+            <!-- Montant total -->
+            <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label text="💵 Total (TND)" styleClass="stat-label"/>
+                <Label fx:id="totalAmountLabel" text="0" styleClass="stat-value"/>
+            </VBox>
+        </HBox>
+
+        <!-- Onglets de gestion -->
+        <TabPane styleClass="modern-tab" tabClosingPolicy="UNAVAILABLE" prefHeight="400">
+
+            <!-- ==================== ONGLET 1 : DEMANDES EN ATTENTE ==================== -->
+            <Tab text="⏳ Demandes en attente" closable="false">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Inscriptions en attente de validation"
+                               style="-fx-font-weight: bold; -fx-text-fill: #f59e0b; -fx-font-size: 14px;"/>
+                    </HBox>
+
+                    <!-- Tableau des demandes -->
+                    <TableView fx:id="demandesTable" styleClass="modern-table" prefHeight="300">
+                        <!-- Les colonnes sont ajoutées dynamiquement par le controller -->
+                    </TableView>
+
+                    <Label text="Total: " fx:id="totalDemandesLabel" style="-fx-font-weight: bold;"/>
+                </VBox>
+            </Tab>
+
+            <!-- ==================== ONGLET 2 : UTILISATEURS ==================== -->
+            <Tab text="👥 Utilisateurs" closable="false">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <!-- Barre de recherche et boutons d'action -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="searchUserField" promptText="Rechercher par nom, email ou téléphone..."
+                                   styleClass="input" prefWidth="350" HBox.hgrow="ALWAYS">
+                            <HBox.margin>
+                                <Insets right="10"/>
+                            </HBox.margin>
+                        </TextField>
+                        <Button text="🔍 Rechercher" styleClass="primary-btn" onAction="#rechercherUser" prefWidth="120"/>
+                        <Button text="➕ Ajouter" styleClass="success-btn" onAction="#ajouterUser" prefWidth="100"/>
+                    </HBox>
+
+                    <!-- Tableau des utilisateurs -->
+                    <TableView fx:id="usersTable" styleClass="modern-table" prefHeight="300">
+                        <!-- Les colonnes sont ajoutées dynamiquement par le controller -->
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- ==================== ONGLET 3 : WALLETS ==================== -->
+            <Tab text="💰 Wallets" closable="false">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <!-- Tableau des wallets -->
+                    <TableView fx:id="walletsTable" styleClass="modern-table" prefHeight="300">
+                        <!-- Les colonnes sont ajoutées dynamiquement par le controller -->
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- ==================== ONGLET 4 : TRANSACTIONS ==================== -->
+            <Tab text="📊 Transactions" closable="false">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <!-- Tableau des transactions -->
+                    <TableView fx:id="transactionsTable" styleClass="modern-table" prefHeight="300">
+                        <!-- Les colonnes sont ajoutées dynamiquement par le controller -->
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- ==================== ONGLET 5 : STATISTIQUES ==================== -->
+            <Tab text="📈 Statistiques" closable="false">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <HBox spacing="30" alignment="CENTER">
+                        <!-- Graphique camembert des rôles -->
+                        <VBox styleClass="stat-card" spacing="10" alignment="CENTER" prefWidth="350" prefHeight="250">
+                            <Label text="Répartition des rôles" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                            <PieChart fx:id="roleChart" prefWidth="300" prefHeight="200"
+                                      legendVisible="true" labelsVisible="true"
+                                      title="Administrateurs vs Utilisateurs"/>
+                        </VBox>
+
+                        <!-- Carte de résumé -->
+                        <VBox styleClass="stat-card" spacing="15" alignment="CENTER_LEFT" prefWidth="300" prefHeight="250">
+                            <Label text="Résumé" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                            <GridPane hgap="20" vgap="10">
+                                <Label text="Total utilisateurs:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="totalUsersStatLabel" text="0" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                <Label text="Administrateurs:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="totalAdminsStatLabel" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                <Label text="Utilisateurs:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="totalUsersStatLabel2" text="0" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                                <Label text="En attente:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #f59e0b;"/>
+                                <Label fx:id="totalEnAttenteLabel" text="0" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-text-fill: #f59e0b;"/>
+
+                                <Label text="Total wallets:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="totalWalletsStatLabel" text="0" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                                <Label text="Total transactions:" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="totalTransactionsStatLabel" text="0" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                            </GridPane>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </Tab>
+            <!-- Ajoutez ces deux onglets dans votre TabPane -->
+            <Tab text="📝 Demandes de compte" closable="false">
+                <VBox spacing="15">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <Label text="Utilisateurs en attente de validation" style="-fx-font-weight: bold; -fx-text-fill: #f59e0b;"/>
+                    <TableView fx:id="demandesCompteTable" styleClass="modern-table" prefHeight="300"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="💰 Demandes de wallet" closable="false">
+                <VBox spacing="15">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <Label text="Utilisateurs avec compte approuvé - En attente de wallet" style="-fx-font-weight: bold; -fx-text-fill: #3b82f6;"/>
+                    <TableView fx:id="demandesWalletTable" styleClass="modern-table" prefHeight="300"/>
+                </VBox>
+            </Tab>
+        </TabPane>
+
+
+        <!-- Footer -->
+        <HBox alignment="CENTER_RIGHT">
+            <Label text="© 2026 Souha Wallet - Administration" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;"/>
+        </HBox>
+    </VBox>
+</StackPane>

@@ -43,7 +43,7 @@ public class AcceuilServiceClient {
     // ================== BUTTON ACTIONS ==================
     @FXML
     private void showAfficherService() {
-        openFXMLInSameStage("/esprit/tn/chayma/services/AfficherServiceClient.fxml", "Afficher Tous les Services");
+        openFXMLInSameStage("/services/AfficherServiceClient.fxml", "Afficher Tous les Services");
     }
 
     @FXML

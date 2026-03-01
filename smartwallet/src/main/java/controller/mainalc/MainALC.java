@@ -1,68 +1,39 @@
 package controller.mainalc;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import tests.services.MainFXML;
+import tests.MainFxml;
 
 public class MainALC {
 
     @FXML
-    private void userseract() {
-        openAccueilServiceclient();
-    }
-
-    @FXML
-    private void buttonadminser() {
-        openAccueilService();
-    }
-    @FXML
     private ImageView imgLogo;
 
+    // ================= INITIALIZE =================
     @FXML
     public void initialize() {
         try {
-            // Charger le logo depuis les ressources
-            imgLogo.setImage(new Image(getClass().getResourceAsStream("/icons/logoservices.png")));
+            imgLogo.setImage(new Image(
+                    getClass().getResourceAsStream("/icons/logoservices.png")
+            ));
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Logo non trouvé : /icons/logoservices.png");
         }
     }
 
-    private void openAccueilService() {
-        try {
-            // Charger AccueilService.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/acceuilservices/AcceuilService.fxml"));
-            Parent root = loader.load();
-
-            // Remplacer la scène principale
-            Stage stage = MainFXML.getPrimaryStage();
-            stage.setScene(new Scene(root, 900, 500));
-            stage.setTitle("Accueil Services");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Erreur : Impossible d'ouvrir AccueilService.fxml");
-        }
+    // ================= USER ACCESS =================
+    @FXML
+    private void userseract() {
+        // ouvre la page service client
+        MainFxml.getInstance().showServiceClient();
     }
-    private void openAccueilServiceclient() {
-        try {
-            // Charger AccueilService.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/acceuilservices/AcceuilServiceClient.fxml"));
-            Parent root = loader.load();
 
-            // Remplacer la scène principale
-            Stage stage = MainFXML.getPrimaryStage();
-            stage.setScene(new Scene(root, 900, 500));
-            stage.setTitle("Accueil Services");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Erreur : Impossible d'ouvrir AccueilService.fxml");
-        }
+    // ================= ADMIN ACCESS =================
+    @FXML
+    private void buttonadminser() {
+        // ouvre la page service admin
+        MainFxml.getInstance().showServiceAdmin();
     }
 }

@@ -1,0 +1,142 @@
+/* ==================== ROOT ==================== */
+.root {
+    -fx-background-color: #F0F2F8;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* ==================== TOP BAR ==================== */
+.top-bar {
+    -fx-background-color: linear-gradient(to right, #1E88E5, #7C4DFF, #FF8CEC);
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);
+}
+
+.dashboard-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* ==================== STAT CARDS ==================== */
+.stat-card {
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-background-radius: 12;
+    -fx-padding: 10 20 10 20;
+    -fx-min-width: 130;
+}
+
+.card-title {
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.card-value {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn-secondary {
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+    -fx-border-color: rgba(255,255,255,0.4);
+    -fx-border-radius: 8;
+}
+.btn-secondary:hover {
+    -fx-background-color: rgba(255,255,255,0.35);
+}
+
+.btn-danger {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+.btn-danger:hover {
+    -fx-background-color: #dc2626;
+}
+
+/* ==================== CHART BOX ==================== */
+.chart-box {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 3);
+}
+
+/* ==================== SECTION TITLE ==================== */
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7C4DFF;
+}
+
+/* ==================== TABLES ==================== */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to right, #1E88E5, #7C4DFF);
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell:odd  { -fx-background-color: #ffffff; }
+.table-row-cell:even { -fx-background-color: #F3E5F5; }
+.table-row-cell:hover {
+    -fx-background-color: #ede9fe;
+}
+.table-row-cell:selected {
+    -fx-background-color: #7C4DFF;
+}
+.table-row-cell:selected .text {
+    -fx-fill: white;
+}
+
+.table-view .placeholder .label {
+    -fx-text-fill: #9ca3af;
+    -fx-font-style: italic;
+}
+
+/* ==================== SCROLLBAR ==================== */
+.scroll-bar .thumb {
+    -fx-background-color: linear-gradient(to bottom, #7C4DFF, #FF8CEC);
+    -fx-background-radius: 6;
+}
+/* ==================== NOTIFICATION BADGE ==================== */
+.notification-badge {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 2 6 2 6;
+    -fx-min-width: 20px;
+    -fx-alignment: center;
+}
+
+.btn-warning {
+    -fx-background-color: #f59e0b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 6 16 6 16;
+}
+.btn-warning:hover {
+    -fx-background-color: #d97706;
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="esprit.tn.souha_pi.controllers.CardAddController"
+      spacing="18"
+      alignment="CENTER"
+      styleClass="card-page">
+
+    <Label text="Add Bank Card" styleClass="page-title"/>
+
+    <TextField fx:id="holderField" promptText="Card Holder Name" styleClass="input"/>
+
+    <TextField fx:id="numberField" promptText="Card Number (16 digits)" styleClass="input"/>
+
+    <TextField fx:id="expiryField" promptText="Expiry (MM/YY)" styleClass="input"/>
+
+    <TextField fx:id="cvvField" promptText="CVV" styleClass="input"/>
+
+    <ChoiceBox fx:id="typeChoice" styleClass="input"/>
+
+    <Button text="Save Card" onAction="#save" styleClass="btn-primary"/>
+
+</VBox>

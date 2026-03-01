@@ -23,6 +23,7 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
+
 public class AfficherService {
 
     @FXML private Button retouritafser;
@@ -50,7 +51,7 @@ public class AfficherService {
     @FXML
     private void retourAjouter() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/chayma/services/AjouterService.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/services/AjouterService.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) retouritafser.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -265,7 +266,7 @@ public class AfficherService {
     private void showModifierService(Services service) {
         try {
             FXMLLoader loader =
-                    new FXMLLoader(getClass().getResource("/esprit/tn/chayma/services/ModifierService.fxml"));
+                    new FXMLLoader(getClass().getResource("/services/ModifierService.fxml"));
             Parent root = loader.load();
 
             ModifierService controller = loader.getController();

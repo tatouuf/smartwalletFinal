@@ -419,7 +419,7 @@
    *
    * A set of methods shared between event-powered classes (like `Map` and `Marker`). Generally, events allow you to execute some function when something happens with an object (e.g. the user clicks on the map, causing the map to fire `'click'` event).
    *
-   * @example
+   * @com.example
    *
    * ```js
    * map.on('click', function(e) {
@@ -760,7 +760,7 @@
    *
    * Represents a point with `x` and `y` coordinates in pixels.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var point = L.point(200, 300);
@@ -981,7 +981,7 @@
    *
    * Represents a rectangular area in pixel coordinates.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var p1 = L.point(10, 10),
@@ -989,7 +989,7 @@
    * bounds = L.bounds(p1, p2);
    * ```
    *
-   * All Leaflet methods that accept `Bounds` objects also accept them in a simple Array form (unless noted otherwise), so the bounds example above can be passed like this:
+   * All Leaflet methods that accept `Bounds` objects also accept them in a simple Array form (unless noted otherwise), so the bounds com.example above can be passed like this:
    *
    * ```js
    * otherBounds.intersects([[10, 10], [40, 60]]);
@@ -1153,7 +1153,7 @@
 
   	// @method pad(bufferRatio: Number): Bounds
   	// Returns bounds created by extending or retracting the current bounds by a given ratio in each direction.
-  	// For example, a ratio of 0.5 extends the bounds by 50% in each direction.
+  	// For com.example, a ratio of 0.5 extends the bounds by 50% in each direction.
   	// Negative values will retract the bounds.
   	pad: function (bufferRatio) {
   		var min = this.min,
@@ -1199,7 +1199,7 @@
    *
    * Represents a rectangular geographical area on a map.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var corner1 = L.latLng(40.712, -74.227),
@@ -1207,7 +1207,7 @@
    * bounds = L.latLngBounds(corner1, corner2);
    * ```
    *
-   * All Leaflet methods that accept LatLngBounds objects also accept them in a simple Array form (unless noted otherwise), so the bounds example above can be passed like this:
+   * All Leaflet methods that accept LatLngBounds objects also accept them in a simple Array form (unless noted otherwise), so the bounds com.example above can be passed like this:
    *
    * ```js
    * map.fitBounds([
@@ -1275,7 +1275,7 @@
 
   	// @method pad(bufferRatio: Number): LatLngBounds
   	// Returns bounds created by extending or retracting the current bounds by a given ratio in each direction.
-  	// For example, a ratio of 0.5 extends the bounds by 50% in each direction.
+  	// For com.example, a ratio of 0.5 extends the bounds by 50% in each direction.
   	// Negative values will retract the bounds.
   	pad: function (bufferRatio) {
   		var sw = this._southWest,
@@ -1448,7 +1448,7 @@
    *
    * Represents a geographical point with a certain latitude and longitude.
    *
-   * @example
+   * @com.example
    *
    * ```
    * var latlng = L.latLng(50.5, 30.5);
@@ -1630,7 +1630,7 @@
 
   	// @method scale(zoom: Number): Number
   	// Returns the scale used when transforming projected coordinates into
-  	// pixel coordinates for a particular zoom. For example, it returns
+  	// pixel coordinates for a particular zoom. For com.example, it returns
   	// `256 * 2^zoom` for Mercator-based CRS.
   	scale: function (zoom) {
   		return 256 * Math.pow(2, zoom);
@@ -1791,7 +1791,7 @@
    * for transforming a point of a form `(x, y)` into `(a*x + b, c*y + d)` and doing
    * the reverse. Used by Leaflet in its projections code.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var transformation = L.transformation(2, 5, -1, 10),
@@ -1888,7 +1888,7 @@
 
   // @function create(name: String): SVGElement
   // Returns a instance of [SVGElement](https://developer.mozilla.org/docs/Web/API/SVGElement),
-  // corresponding to the class name passed. For example, using 'line' will return
+  // corresponding to the class name passed. For com.example, using 'line' will return
   // an instance of [SVGLineElement](https://developer.mozilla.org/docs/Web/API/SVGLineElement).
   function svgCreate(name) {
   	return document.createElementNS('http://www.w3.org/2000/svg', name);
@@ -1923,7 +1923,7 @@
    *
    * A namespace with static properties for browser/feature detection used by Leaflet internally.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * if (L.Browser.ielt9) {
@@ -3020,7 +3020,7 @@
    * @inherits Evented
    * Used internally for panning animations, utilizing CSS3 Transitions for modern browsers and a timer fallback for IE6-9.
    *
-   * @example
+   * @com.example
    * ```js
    * var myPositionMarker = L.marker([48.864716, 2.294694]).addTo(map);
    *
@@ -3130,7 +3130,7 @@
    *
    * The central class of the API — it is used to create a map on a page and manipulate it.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * // initialize the map on the "map" div with a given center and zoom
@@ -5037,9 +5037,9 @@
    * @aka L.Control.Layers
    * @inherits Control
    *
-   * The layers control gives users the ability to switch between different base layers and switch overlays on/off (check out the [detailed example](https://leafletjs.com/examples/layers-control/)). Extends `Control`.
+   * The layers control gives users the ability to switch between different base layers and switch overlays on/off (check out the [detailed com.example](https://leafletjs.com/examples/layers-control/)). Extends `Control`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var baseLayers = {
@@ -5618,7 +5618,7 @@
    *
    * A simple scale control that shows the scale of the current center of screen in metric (m/km) and imperial (mi/ft) systems. Extends `Control`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * L.control.scale().addTo(map);
@@ -5958,7 +5958,7 @@
    * Used internally for map and marker dragging. Only works for elements
    * that were positioned with [`L.DomUtil.setPosition`](#domutil-setposition).
    *
-   * @example
+   * @com.example
    * ```js
    * var draggable = new L.Draggable(elementToDrag);
    * draggable.enable();
@@ -6794,7 +6794,7 @@
    * A set of methods from the Layer base class that all Leaflet layers use.
    * Inherits all methods, options and events from `L.Evented`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var layer = L.marker(latlng).addTo(map);
@@ -7066,7 +7066,7 @@
    * any layers added or removed from the group will be added/removed on the map as
    * well. Extends `Layer`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * L.layerGroup([marker1, marker2])
@@ -7225,7 +7225,7 @@
    * and custom events.
    *  * Has `layeradd` and `layerremove` events
    *
-   * @example
+   * @com.example
    *
    * ```js
    * L.featureGroup([marker1, marker2, polyline])
@@ -7311,7 +7311,7 @@
    *
    * Represents an icon to provide when creating a marker.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var myIcon = L.icon({
@@ -7691,7 +7691,7 @@
    * @aka L.Marker
    * L.Marker is used to display clickable/draggable icons on the map. Extends `Layer`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * L.marker([50.5, 30.5]).addTo(map);
@@ -8355,7 +8355,7 @@
    *
    * It's an approximation and starts to diverge from a real circle closer to poles (due to projection distortion).
    *
-   * @example
+   * @com.example
    *
    * ```js
    * L.circle([50.5, 30.5], {radius: 200}).addTo(map);
@@ -8459,7 +8459,7 @@
    *
    * A class for drawing polyline overlays on a map. Extends `Path`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * // create a red polyline from an array of LatLng points
@@ -8762,7 +8762,7 @@
    * Note that points you pass when creating a polygon shouldn't have an additional last point equal to the first one — it's better to filter out such points.
    *
    *
-   * @example
+   * @com.example
    *
    * ```js
    * // create a red polygon from an array of LatLng points
@@ -8913,7 +8913,7 @@
    * Represents a GeoJSON object or an array of GeoJSON objects. Allows you to parse
    * GeoJSON data and display it on the map. Extends `FeatureGroup`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * L.geoJSON(data, {
@@ -9352,7 +9352,7 @@
    *
    * Used to load and display a single image over specific bounds of the map. Extends `Layer`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var imageUrl = 'https://maps.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
@@ -9620,7 +9620,7 @@
    * A video overlay uses the [`<video>`](https://developer.mozilla.org/docs/Web/HTML/Element/video)
    * HTML5 element.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var videoUrl = 'https://www.mapbox.com/bites/00188/patricia_nasa.webm',
@@ -9722,7 +9722,7 @@
    *
    * An SVG overlay uses the [`<svg>`](https://developer.mozilla.org/docs/Web/SVG/Element/svg) element.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -10109,7 +10109,7 @@
    * open popups while making sure that only one popup is open at one time
    * (recommended for usability), or use [Map.addLayer](#map-addlayer) to open as many as you want.
    *
-   * @example
+   * @com.example
    *
    * If you want to just bind a popup to marker click and then open it, it's really easy:
    *
@@ -10461,7 +10461,7 @@
 
   /*
    * @namespace Layer
-   * @section Popup methods example
+   * @section Popup methods com.example
    *
    * All layers share a set of methods convenient for binding popups to it.
    *
@@ -10605,7 +10605,7 @@
    * @aka L.Tooltip
    * Used to display small texts on top of map layers.
    *
-   * @example
+   * @com.example
    * If you want to just bind a tooltip to marker:
    *
    * ```js
@@ -10846,7 +10846,7 @@
 
   /*
    * @namespace Layer
-   * @section Tooltip methods example
+   * @section Tooltip methods com.example
    *
    * All layers share a set of methods convenient for binding tooltips to it.
    *
@@ -11043,7 +11043,7 @@
    * Represents a lightweight icon for markers that uses a simple `<div>`
    * element instead of an image. Inherits from `Icon` but ignores the `iconUrl` and shadow options.
    *
-   * @example
+   * @com.example
    * ```js
    * var myIcon = L.divIcon({className: 'my-div-icon'});
    * // you can set .my-div-icon styles in CSS
@@ -11118,7 +11118,7 @@
    *
    *
    * @section Synchronous usage
-   * @example
+   * @com.example
    *
    * To create a custom layer, extend GridLayer and implement the `createTile()` method, which will be passed a `Point` object with the `x`, `y`, and `z` (zoom level) coordinates to draw your tile.
    *
@@ -11143,7 +11143,7 @@
    * ```
    *
    * @section Asynchronous usage
-   * @example
+   * @com.example
    *
    * Tile creation can also be asynchronous, this is useful when using a third-party drawing library. Once the tile is finished drawing it can be passed to the `done()` callback.
    *
@@ -12030,14 +12030,14 @@
    * @aka L.TileLayer
    * Used to load and display tile layers on the map. Note that most tile servers require attribution, which you can set under `Layer`. Extends `GridLayer`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
    * ```
    *
    * @section URL template
-   * @example
+   * @com.example
    *
    * A string of the following form:
    *
@@ -12313,7 +12313,7 @@
    * @aka L.TileLayer.WMS
    * Used to display [WMS](https://en.wikipedia.org/wiki/Web_Map_Service) services as tile layers on the map. Extends `TileLayer`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * var nexrad = L.tileLayer.wms("http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi", {
@@ -12458,7 +12458,7 @@
    * Do not use this class directly, use `SVG` and `Canvas` instead.
    *
    * @event update: Event
-   * Fired when the renderer updates its bounds, center and zoom, for example when
+   * Fired when the renderer updates its bounds, center and zoom, for com.example when
    * its map has moved
    */
 
@@ -12580,7 +12580,7 @@
    * available in all web browsers, notably IE8, and overlapping geometries might
    * not display properly in some edge cases.
    *
-   * @example
+   * @com.example
    *
    * Use Canvas by default for all paths in the map:
    *
@@ -13213,7 +13213,7 @@
    * (a now deprecated technology), and the SVG renderer will fall back to VML in
    * this case.
    *
-   * @example
+   * @com.example
    *
    * Use SVG by default for all paths in the map:
    *
@@ -13447,7 +13447,7 @@
    *
    * A class for drawing rectangle overlays on a map. Extends `Polygon`.
    *
-   * @example
+   * @com.example
    *
    * ```js
    * // define rectangle geographical bounds
@@ -13690,7 +13690,7 @@
   //
   // Map properties include interaction handlers that allow you to control
   // interaction behavior in runtime, enabling or disabling certain features such
-  // as dragging or touch zoom (see `Handler` methods). For example:
+  // as dragging or touch zoom (see `Handler` methods). For com.example:
   //
   // ```js
   // map.doubleClickZoom.disable();

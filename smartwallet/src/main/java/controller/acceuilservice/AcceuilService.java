@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import netscape.javascript.JSObject;
 
 import java.util.Objects;
 
@@ -45,7 +44,7 @@ public class AcceuilService {
     // ================== BUTTON ACTIONS ==================
     @FXML
     private void showAfficherService() {
-        openFXMLInSameStage("/esprit/tn/chayma/services/AfficherService.fxml", "Afficher Tous les Services");
+        openFXMLInSameStage("/services/AfficherService.fxml", "Afficher Tous les Services");
     }
 
     @FXML

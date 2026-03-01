@@ -1,10 +1,10 @@
 package controller.service;
 
+import entities.User;
 import entities.service.Services;
 import entities.service.Statut;
 import entities.service.TypeService;
-import entities.user.User;
-import javafx.application.Platform;
+ import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +23,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import services.service.ServiceServices;
+import utils.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -403,7 +404,7 @@ public class AjouterService {
 
             // Utilisateur (à adapter)
             User currentUser = new User();
-            currentUser.setId(1);
+            currentUser = Session.getCurrentUser() ;
 
             // Créer le service
             Services service = new Services(
@@ -437,7 +438,7 @@ public class AjouterService {
     @FXML
     private void retourMain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/chayma/services/AfficherService.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/services/AfficherService.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) btnAjouterserrr.getScene().getWindow();
             stage.setScene(new Scene(root));
