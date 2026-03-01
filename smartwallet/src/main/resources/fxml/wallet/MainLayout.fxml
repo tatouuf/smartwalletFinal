@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.chayma.controllers.MainLayoutController"
+            prefWidth="1200"
+            prefHeight="750">
+
+    <!-- MENU -->
+    <left>
+        <VBox spacing="20"
+              prefWidth="220"
+              style="-fx-background-color:#1F1F2E; -fx-padding:30;">
+
+            <Button text="📊 Dashboard"
+                    onAction="#showDashboard"
+                    maxWidth="Infinity"/>
+
+            <Button text="💰 Dépenses"
+                    onAction="#showDepenses"
+                    maxWidth="Infinity"/>
+
+            <Button text="📅 Planning"
+                    onAction="#showPlanning"
+                    maxWidth="Infinity"/>
+            <Button text="📅 Notifications"
+                    onAction="#showNotifications"
+                    maxWidth="Infinity"/>
+            <Button text="⚙️ Paramètres"
+                    onAction="#showSettings"
+                    maxWidth="Infinity"/>
+            <Button text=" 🧑‍💼 Advisor"
+                    onAction="#showAdvisor"
+                    maxWidth="Infinity"/>
+            <Button text="🚪 Logout"
+                    onAction="#handleLogout"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+
+
+        </VBox>
+
+    </left>
+
+    <!-- CONTENU QUI CHANGE -->
+    <center>
+        <StackPane fx:id="contentArea"/>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.SignupController"
+           styleClass="page-bg">
+
+    <VBox alignment="CENTER" spacing="30" maxWidth="500">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <!-- Carte d'inscription -->
+        <VBox spacing="25" styleClass="card" alignment="CENTER" prefWidth="400">
+
+            <!-- Logo et titre -->
+            <VBox alignment="CENTER" spacing="10">
+                <Label text="📝" style="-fx-font-size: 60px;"/>
+                <Label text="Créer un compte" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+                <Label text="Rejoignez Souha Wallet" style="-fx-text-fill: #64748b;"/>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Formulaire d'inscription -->
+            <VBox spacing="15">
+
+                <!-- Nom et Prénom (2 colonnes) -->
+                <HBox spacing="10">
+                    <TextField fx:id="nomField" promptText="Nom" styleClass="input" prefHeight="40" HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="prenomField" promptText="Prénom" styleClass="input" prefHeight="40" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- Email -->
+                <TextField fx:id="emailField" promptText="Email" styleClass="input" prefHeight="40"/>
+
+                <!-- Téléphone -->
+                <TextField fx:id="telephoneField" promptText="Téléphone" styleClass="input" prefHeight="40"/>
+
+                <!-- Adresse -->
+                <TextField fx:id="adresseField" promptText="Adresse" styleClass="input" prefHeight="40"/>
+
+                <!-- Mot de passe -->
+                <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="input" prefHeight="40"/>
+
+                <!-- Confirmation mot de passe -->
+                <PasswordField fx:id="confirmPasswordField" promptText="Confirmer mot de passe" styleClass="input" prefHeight="40"/>
+
+                <!-- Rôle caché (toujours UTILISATEUR) -->
+                <Label text="Rôle: Utilisateur" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+            </VBox>
+
+            <!-- Boutons -->
+            <VBox spacing="10">
+                <Button text="S'inscrire" styleClass="primary-btn" onAction="#signup" prefHeight="40" maxWidth="Infinity"/>
+
+                <HBox alignment="CENTER" spacing="5">
+                    <Label text="Déjà un compte?" style="-fx-text-fill: #64748b;"/>
+                    <Button text="Se connecter" styleClass="link-btn" onAction="#goToLogin"/>
+                </HBox>
+            </VBox>
+
+            <!-- Message d'erreur -->
+            <Label fx:id="errorLabel" text="" style="-fx-text-fill: #ef4444; -fx-font-size: 12px;" wrapText="true"/>
+        </VBox>
+
+        <!-- Footer -->
+        <Label text="© 2026 Souha Wallet - Tous droits réservés" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;"/>
+    </VBox>
+</StackPane>

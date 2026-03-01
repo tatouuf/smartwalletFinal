@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import netscape.javascript.JSObject;
 
 import java.util.Objects;
 

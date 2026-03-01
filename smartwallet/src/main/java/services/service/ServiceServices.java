@@ -1,10 +1,10 @@
 package services.service;
 
+import entities.User;
 import entities.service.Services;
 import entities.service.Statut;
 import entities.service.TypeService;
-import entities.user.User;
-import org.locationtech.jts.geom.Coordinate;
+ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import utils.MyDataBase;

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.SendController"
+           styleClass="page-bg">
+
+    <VBox spacing="18" alignment="CENTER" maxWidth="400">
+
+        <Label text="Envoyer de l'argent" styleClass="page-header"/>
+
+        <VBox styleClass="card" spacing="14">
+
+            <!-- Informations sur la carte source -->
+            <Label fx:id="infoLabel" text="Sélectionnez une carte depuis le dashboard"
+                   style="-fx-text-fill: #f59e0b; -fx-font-size: 12px;" wrapText="true"/>
+
+            <!-- RIB destinataire -->
+            <TextField fx:id="ribField" promptText="RIB du destinataire" styleClass="modern-field"/>
+
+            <!-- Montant -->
+            <TextField fx:id="amountField" promptText="Montant (TND)" styleClass="modern-field"/>
+
+            <!-- Solde disponible -->
+            <Label fx:id="balanceLabel" text="Solde: 0.00 TND"
+                   style="-fx-text-fill: #334155; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+            <!-- Bouton d'envoi -->
+            <Button text="Envoyer"
+                    onAction="#send"
+                    styleClass="primary-btn"/>
+
+        </VBox>
+
+    </VBox>
+
+</StackPane>

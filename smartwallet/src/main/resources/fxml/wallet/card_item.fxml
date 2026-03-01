@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootCard"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="esprit.tn.souha_pi.controllers.CardItemController"
+      spacing="12"
+      styleClass="bank-card">
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Label fx:id="typeLabel" styleClass="card-type"/>
+        <Button fx:id="eyeBtn" text="👁" onAction="#toggleCardView" styleClass="eye-btn"/>
+    </HBox>
+
+    <!-- CARD NUMBER -->
+    <Label fx:id="numberLabel" styleClass="card-number"/>
+
+    <!-- RIB (NOUVEAU) -->
+    <Label fx:id="ribLabel" text="RIB: " styleClass="card-rib"/>
+
+    <!-- BALANCE (HIDDEN INITIALLY) -->
+    <Label fx:id="balanceLabel" text="Balance" visible="false" styleClass="card-balance"/>
+
+    <HBox spacing="20">
+        <VBox>
+            <Label text="CARD HOLDER" styleClass="card-small"/>
+            <Label fx:id="holderLabel" styleClass="card-holder"/>
+        </VBox>
+        <VBox>
+            <Label text="EXPIRES" styleClass="card-small"/>
+            <Label fx:id="expiryLabel" styleClass="card-holder"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="10">
+        <Button text="Top Up" onAction="#topUp" styleClass="btn-primary"/>
+        <Button text="Remove" onAction="#delete" styleClass="btn-danger"/>
+    </HBox>
+</VBox>

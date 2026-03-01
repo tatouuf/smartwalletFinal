@@ -1,7 +1,7 @@
 package entities.service;
 
-import entities.user.User;
-import org.locationtech.jts.geom.Point;
+ import entities.User;
+ import org.locationtech.jts.geom.Point;
 
 
 public class Services {
