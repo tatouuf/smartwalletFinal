@@ -11,7 +11,7 @@
     <HBox spacing="10" styleClass="header">
         <VBox>
             <Label text="Financial Health Dashboard" styleClass="title"/>
-            <Label text="Score, forecast and AI insights" styleClass="subtitle"/>
+            <Label text="Score and forecast" styleClass="subtitle"/>
         </VBox>
         <Region HBox.hgrow="ALWAYS"/>
         <Button text="Go to Recurring" onAction="#goRecurring" styleClass="btnSecondary"/>
@@ -39,14 +39,7 @@
     </HBox>
 
     <VBox spacing="10" styleClass="card">
-        <HBox spacing="10">
-            <Label text="AI Insights" styleClass="sectionTitle"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="Generate AI Tips" onAction="#generateAI" styleClass="btnPrimary"/>
-        </HBox>
-
         <Label fx:id="headlineLabel" text="-" styleClass="titleSmall"/>
-        <ListView fx:id="tipsList" prefHeight="160" styleClass="list"/>
     </VBox>
 
 </VBox>
