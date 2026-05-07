@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="esprit.tn.souha_pi.controllers.EquipeAddController">
+
+    <children>
+
+        <VBox spacing="15" alignment="CENTER"
+              AnchorPane.topAnchor="20"
+              AnchorPane.leftAnchor="20"
+              AnchorPane.rightAnchor="20">
+
+            <Label text="Ajouter une équipe" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+            <!-- Nom -->
+            <TextField fx:id="nomField" promptText="Nom de l'équipe" />
+
+            <!-- Logo -->
+            <TextField fx:id="logoField" promptText="Logo (URL ou chemin)" />
+
+            <!-- Game -->
+            <TextField fx:id="gameField" promptText="Jeu (ex: Valorant)" />
+
+            <!-- Catégorie -->
+            <TextField fx:id="categorieField" promptText="Catégorie (Pro, Amateur...)" />
+
+            <!-- Coach ID -->
+            <TextField fx:id="coachIdField" promptText="Coach ID" />
+
+            <!-- Bouton -->
+            <Button text="Ajouter" onAction="#addEquipe"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+
+        </VBox>
+
+    </children>
+</AnchorPane>

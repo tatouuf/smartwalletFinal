@@ -1,97 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="650" prefWidth="850"
-            stylesheets="@css/amitie.css"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.AmitieController">
+<AnchorPane prefHeight="650" prefWidth="850" stylesheets="@css/amitie.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AmitieController">
 
-    <VBox spacing="20"
-          AnchorPane.topAnchor="10"
-          AnchorPane.bottomAnchor="10"
-          AnchorPane.leftAnchor="20"
-          AnchorPane.rightAnchor="20">
+    <VBox spacing="20" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="10">
 
         <!-- HEADER -->
         <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label styleClass="header-label" text="Manage Friend Requests" HBox.hgrow="ALWAYS"/>
-            <Button text="← Back to Friends"
-                    styleClass="primary-button"
-                    prefWidth="150"
-                    onAction="#handleBack"/>
-            <Button text="🚪 Logout"
-                    styleClass="btn-logout"
-                    onAction="#handleLogout"/>
+            <Label styleClass="header-label" text="👥 Manage Friend Requests" HBox.hgrow="ALWAYS" />
+            <BorderPane prefHeight="16.0" prefWidth="266.0" />
+            <Button onAction="#handleBack" prefWidth="150" styleClass="primary-button" text="← Back to Friends" />
         </HBox>
 
         <!-- SEND FRIEND REQUEST SECTION -->
         <VBox spacing="8" styleClass="section-box">
-            <Label styleClass="section-title" text="Send Friend Request"/>
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <TextField fx:id="searchField"
-                           promptText="Search by name..."
-                           prefWidth="500"
-                           styleClass="input-field"/>
-                <Button text="🔍 Search"
-                        styleClass="btn-primary"
-                        onAction="#handleSearch"/>
+            <Label styleClass="section-title" text="🔍 Search User by Email" />
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <TextField fx:id="searchField" onAction="#handleSearch" promptText="Enter email address (e.g., user@example.com)" styleClass="input-field" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleSearch" prefWidth="100" styleClass="btn-primary" text="🔍 Search" />
             </HBox>
 
             <TableView fx:id="tableUsers" prefHeight="180">
                 <columns>
-                    <TableColumn fx:id="colUserNom"
-                                 prefWidth="385" text="Last Name"/>
-                    <TableColumn fx:id="colUserPrenom"
-                                 prefWidth="385" text="First Name"/>
+                    <TableColumn fx:id="colUserEmail" prefWidth="770" text="Email" />
                 </columns>
-                <placeholder><Label text="Search for users to add."/></placeholder>
+                <placeholder><Label text="Search for users by email to add as friends." /></placeholder>
             </TableView>
 
             <HBox alignment="CENTER_RIGHT">
-                <Button fx:id="btnSendRequest"
-                        text="➕ Send Request"
-                        styleClass="btn-primary"
-                        onAction="#handleSendRequest"/>
+                <Button fx:id="btnSendRequest" onAction="#handleSendRequest" styleClass="btn-primary" text="➕ Send Friend Request" />
             </HBox>
         </VBox>
 
         <!-- INCOMING REQUESTS SECTION -->
         <VBox spacing="8" styleClass="section-box" VBox.vgrow="ALWAYS">
-            <Label styleClass="section-title" text="Incoming Friend Requests"/>
+            <Label styleClass="section-title" text="📬 Incoming Friend Requests" />
 
             <TableView fx:id="tableAmitie" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colRequester"
-                                 prefWidth="270" text="Last Name"/>
-                    <TableColumn fx:id="colStatut"
-                                 prefWidth="270" text="First Name"/>
-                    <TableColumn fx:id="colDate"
-                                 prefWidth="250" text="Date"/>
+                    <TableColumn fx:id="colRequester" prefWidth="520" text="Email" />
+                    <TableColumn fx:id="colDate" prefWidth="240" text="Date" />
                 </columns>
-                <placeholder><Label text="No incoming friend requests."/></placeholder>
+                <placeholder><Label text="No incoming friend requests." /></placeholder>
             </TableView>
 
-            <HBox spacing="15" alignment="CENTER_RIGHT">
-                <Button fx:id="btnAccept"
-                        onAction="#acceptRequest"
-                        prefWidth="120" prefHeight="32"
-                        styleClass="btn-primary"
-                        text="✔ Accept"/>
-                <Button fx:id="btnDelete"
-                        onAction="#deleteRequest"
-                        prefWidth="120" prefHeight="32"
-                        styleClass="btn-danger"
-                        text="✖ Refuse"/>
+            <HBox alignment="CENTER_RIGHT" spacing="15">
+                <Button fx:id="btnAccept" onAction="#acceptRequest" prefHeight="32" prefWidth="120" styleClass="btn-primary" text="✔ Accept" />
+                <Button fx:id="btnDelete" onAction="#deleteRequest" prefHeight="32" prefWidth="120" styleClass="btn-danger" text="✖ Refuse" />
             </HBox>
         </VBox>
 

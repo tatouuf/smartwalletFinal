@@ -5,154 +5,392 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
 
-<BorderPane stylesheets="@css/DashboardAdmin.css"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.DashboardAdminController">
+<StackPane prefWidth="1000.0" prefHeight="700.0" stylesheets="@css/DashboardAdmin.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DashboardAdminController" styleClass="page-bg">
+    <BorderPane prefHeight="700">
+        <!-- HEADER AVEC GRADIENT -->
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="20"
+                  style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);"
+                  prefHeight="80">
+                <padding>
+                    <Insets top="15" right="25" bottom="15" left="25"/>
+                </padding>
 
-    <!-- ═══════════════ TOP BAR ═══════════════ -->
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-bar">
-            <padding>
-                <Insets bottom="15" left="20" right="20" top="15"/>
-            </padding>
+                <!-- LABELS POUR LES STATISTIQUES (CACHÉS) -->
+                <Label fx:id="totalServicesLabel" text="0" visible="false" managed="false" />
+                <Label fx:id="activeServicesLabel" text="0" visible="false" managed="false" />
+                <Label fx:id="servicesRevenueLabel" text="0 TND" visible="false" managed="false" />
+                <Label fx:id="pendingCountLabel" text="0 en attente" visible="false" managed="false" />
+                <Label fx:id="pendingWalletsCountLabel" text="0 en attente" visible="false" managed="false" />
 
-            <Label styleClass="dashboard-title" text="⚡ Admin Dashboard"/>
-            <Region HBox.hgrow="ALWAYS"/>
+                <Label text="⚡" style="-fx-font-size: 36px; -fx-text-fill: white;"/>
+                <Label text="SmartWallet Admin" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblAdminName" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: 600; -fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 20; -fx-padding: 8 20;"/>
+                <Button fx:id="btnLogout" onAction="#logout" text="Déconnexion"
+                        style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20;"/>
+            </HBox>
+        </top>
 
-            <!-- STAT CARDS -->
-            <VBox alignment="CENTER" spacing="4" styleClass="stat-card">
-                <Label styleClass="card-title" text="👥 Total Users"/>
-                <Label fx:id="lblTotalUsers" styleClass="card-value" text="0"/>
-            </VBox>
+        <!-- CENTER -->
+        <center>
+            <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+                <VBox spacing="20" minHeight="800" prefHeight="800">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="10"/>
+                    </padding>
 
+                    <!-- Charts - Deux graphiques côte à côte -->
+                    <GridPane hgap="20" vgap="20" minHeight="300">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="250" vgrow="ALWAYS"/>
+                        </rowConstraints>
 
-            <VBox alignment="CENTER" spacing="4" styleClass="stat-card">
-                <Label styleClass="card-title" text="💳 Transactions"/>
-                <Label fx:id="lblTotalTransactions" styleClass="card-value" text="0"/>
-            </VBox>
+                        <!-- Graphique des réclamations -->
+                        <VBox spacing="5" styleClass="chart-box" VBox.vgrow="ALWAYS" minHeight="250" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 15; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4);">
+                            <Label text="📊 Reclamations Status" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                            <PieChart fx:id="pieReclamations" legendVisible="true" labelsVisible="true" VBox.vgrow="ALWAYS" prefHeight="200"/>
+                        </VBox>
 
-            <VBox alignment="CENTER" spacing="4" styleClass="stat-card">
-                <Label styleClass="card-title" text="💰 Benefice"/>
-                <Label fx:id="lblBenefice" styleClass="card-value" text="0.00 DT"/>
-            </VBox>
+                        <!-- Graphique Users Growth -->
+                        <VBox spacing="5" styleClass="chart-box" VBox.vgrow="ALWAYS" minHeight="250" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 15; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4);">
+                            <Label text="📈 Users Growth Over Time" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                            <LineChart fx:id="lineUsers" prefHeight="250" VBox.vgrow="ALWAYS">
+                                <xAxis><CategoryAxis label="Month"/></xAxis>
+                                <yAxis><NumberAxis label="Users"/></yAxis>
+                            </LineChart>
+                        </VBox>
+                    </GridPane>
 
-            <!-- NEW: Notifications badge -->
-            <VBox alignment="CENTER" spacing="4" styleClass="stat-card">
-                <Label styleClass="card-title" text="🔔 Notifications"/>
-                <Label fx:id="lblNotificationCount" styleClass="card-value" text="0"/>
-            </VBox>
+                    <Separator style="-fx-background-color: #e5e7eb;"/>
 
-            <Region HBox.hgrow="ALWAYS"/>
+                    <!-- TabPane avec tous les TableView -->
+                    <TabPane styleClass="modern-tab" tabClosingPolicy="UNAVAILABLE" prefHeight="400" minHeight="400" VBox.vgrow="ALWAYS">
 
-            <!-- NAV BUTTONS -->
-            <Button fx:id="btnManageUsers"
-                    onAction="#handleManageUsers"
-                    styleClass="btn-secondary"
-                    text="👤 Manage Users"/>
+                        <!-- Account Requests -->
+                        <Tab text="📝 Account Requests" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <Label text="Users awaiting account validation" style="-fx-font-weight: bold; -fx-text-fill: #f59e0b; -fx-font-size: 14px;"/>
+                                <TableView fx:id="tableAccountRequests" styleClass="modern-table" VBox.vgrow="ALWAYS" prefHeight="300"/>
+                            </VBox>
+                        </Tab>
 
-            <!-- NEW: Notifications button -->
-            <Button fx:id="btnNotifications"
-                    onAction="#handleNotifications"
-                    styleClass="btn-secondary"
-                    text="🔔 Notifications"/>
+                        <!-- Wallet Requests -->
+                        <Tab text="💰 Wallet Requests" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <Label text="Approved wallet creation" style="-fx-font-weight: bold; -fx-text-fill: #3b82f6; -fx-font-size: 14px;"/>
+                                <TableView fx:id="tableWalletRequests" styleClass="modern-table" VBox.vgrow="ALWAYS" prefHeight="300"/>
+                            </VBox>
+                        </Tab>
 
-            <Button fx:id="btnManageReclamations"
-                    onAction="#handleManageReclamations"
-                    styleClass="btn-secondary"
-                    text="📩 Reclamations"/>
+                        <!-- Users -->
+                        <Tab text="👥 Users" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <TextField fx:id="searchUserField" promptText="Search by name, email or phone..." styleClass="input" prefWidth="350" HBox.hgrow="ALWAYS"/>
+                                    <Button text="🔍 Search" styleClass="primary-btn" onAction="#handleSearchUsers" prefWidth="100"/>
+                                </HBox>
+                                <TableView fx:id="tableUsers" styleClass="modern-table" VBox.vgrow="ALWAYS" prefHeight="300"/>
+                            </VBox>
+                        </Tab>
 
-            <!-- LOGOUT -->
-            <Button fx:id="btnLogout"
-                    onAction="#logout"
-                    styleClass="btn-danger"
-                    text="🚪 Logout"/>
-        </HBox>
-    </top>
+                        <!-- Wallets -->
+                        <Tab text="💰 Wallets" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <TableView fx:id="tableWallets" styleClass="modern-table" VBox.vgrow="ALWAYS" prefHeight="300"/>
+                            </VBox>
+                        </Tab>
 
-    <!-- ═══════════════ CENTER: CHARTS ═══════════════ -->
-    <center>
-        <GridPane hgap="20" vgap="20">
-            <padding>
-                <Insets bottom="20" left="20" right="20" top="20"/>
-            </padding>
+                        <!-- Transactions -->
+                        <Tab text="📊 Transactions" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <TextField fx:id="searchTransactionField" promptText="Search by ID, user ID, type..." styleClass="input" prefWidth="350" HBox.hgrow="ALWAYS"/>
+                                    <Button text="🔍 Search" styleClass="primary-btn" onAction="#handleSearchTransactions" prefWidth="100"/>
+                                </HBox>
+                                <TableView fx:id="tableTransactions" styleClass="modern-table" VBox.vgrow="ALWAYS" prefHeight="300"/>
+                            </VBox>
+                        </Tab>
 
-            <columnConstraints>
-                <ColumnConstraints percentWidth="50"/>
-                <ColumnConstraints percentWidth="50"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="300"/>
-            </rowConstraints>
+                        <!-- Reclamations -->
+                        <Tab text="📩 Reclamations" closable="false">
+                            <VBox spacing="15" alignment="CENTER">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <Button text="Manage Reclamations" styleClass="primary-btn" onAction="#handleManageReclamations" prefWidth="250" prefHeight="45"/>
+                            </VBox>
+                        </Tab>
 
-            <!-- PIE CHART -->
-            <VBox spacing="5" styleClass="chart-box">
-                <Label styleClass="section-title" text="Reclamations Status"/>
-                <PieChart fx:id="pieReclamations"
-                          legendVisible="true"
-                          labelsVisible="true"
-                          VBox.vgrow="ALWAYS"/>
-            </VBox>
+                        <!-- Services -->
+                        <Tab text="🛠️ Services" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <HBox alignment="CENTER_LEFT" spacing="20">
+                                    <ImageView fx:id="imgServiceLogo" fitHeight="50" fitWidth="50" preserveRatio="true"/>
+                                    <Label text="Services Management" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #7C4DFF;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="➕ Add Service" onAction="#showAjouterService" styleClass="success-btn" prefWidth="150"/>
+                                </HBox>
+                                <HBox spacing="20" alignment="CENTER">
+                                    <Button text="View Services" onAction="#showAfficherService" styleClass="primary-btn" prefWidth="200"/>
+                                </HBox>
+                            </VBox>
+                        </Tab>
 
-            <!-- LINE CHART -->
-            <VBox spacing="5" styleClass="chart-box" GridPane.columnIndex="1">
-                <Label styleClass="section-title" text="Users Growth"/>
-                <LineChart fx:id="lineUsers" VBox.vgrow="ALWAYS">
-                    <xAxis><CategoryAxis label="Month"/></xAxis>
-                    <yAxis><NumberAxis label="Users"/></yAxis>
-                </LineChart>
-            </VBox>
+                        <!-- Assurances -->
+                        <Tab text="🔒 Assurances" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <HBox alignment="CENTER_LEFT" spacing="20">
+                                    <ImageView fx:id="imgLogoAssurance" fitHeight="50" fitWidth="50" preserveRatio="true"/>
+                                    <Label text="Insurance Management" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #7C4DFF;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="➕ Add Insurance" onAction="#haamdiah" styleClass="success-btn" prefWidth="150"/>
+                                </HBox>
+                                <HBox spacing="20" alignment="CENTER">
+                                    <Button text="View Insurances" onAction="#showAfficherAssurance" styleClass="primary-btn" prefWidth="200"/>
+                                </HBox>
+                                <ScrollPane hbarPolicy="NEVER" VBox.vgrow="ALWAYS" prefHeight="300" style="-fx-background-color: transparent; -fx-border-color: #7C4DFF; -fx-border-width: 2; -fx-border-radius: 10;">
+                                    <content>
+                                        <FlowPane fx:id="cardAffAssurance" alignment="TOP_LEFT" hgap="15" vgap="15" prefWrapLength="800"/>
+                                    </content>
+                                </ScrollPane>
+                            </VBox>
+                        </Tab>
 
-        </GridPane>
-    </center>
+                        <!-- Crédits -->
+                        <Tab text="💰 Crédits" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <HBox alignment="CENTER_LEFT" spacing="20">
+                                    <ImageView fx:id="imgLogoCredit" fitHeight="50" fitWidth="50" preserveRatio="true"/>
+                                    <Label text="Credit Management" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #7C4DFF;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="➕ Add Credit" onAction="#itafaaction" styleClass="success-btn" prefWidth="150"/>
+                                </HBox>
+                                <HBox spacing="20" alignment="CENTER">
+                                    <Button text="View Credits" onAction="#showAfficherCredit" styleClass="primary-btn" prefWidth="200"/>
+                                    <Button text="Manage" onAction="#showGestionCredit" styleClass="btn-secondary" prefWidth="150"/>
+                                </HBox>
+                            </VBox>
+                        </Tab>
 
-    <!-- ═══════════════ BOTTOM: TABLES ═══════════════ -->
-    <bottom>
-        <HBox spacing="20">
-            <padding>
-                <Insets bottom="15" left="20" right="20" top="10"/>
-            </padding>
+                        <!-- BUDGET & DÉPENSES - VUE ADMIN COMPLÈTE -->
+                        <Tab text="📊 Budget &amp; Dépenses" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
 
-            <!-- USERS TABLE -->
-            <VBox spacing="8" HBox.hgrow="ALWAYS">
-                <Label styleClass="section-title" text="👥 Users"/>
-                <TableView fx:id="tableUsers" prefHeight="200" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="colUserId"  prefWidth="50"  text="ID"/>
-                        <TableColumn fx:id="colNom"     prefWidth="120" text="Last Name"/>
-                        <TableColumn fx:id="colPrenom"  prefWidth="120" text="First Name"/>
-                        <TableColumn fx:id="colEmail"   prefWidth="220" text="Email"/>
-                    </columns>
-                    <placeholder><Label text="No users found."/></placeholder>
-                </TableView>
-            </VBox>
+                                <!-- En-tête -->
+                                <HBox alignment="CENTER_LEFT" spacing="20">
+                                    <Label text="📊" style="-fx-font-size: 32px;"/>
+                                    <Label text="Budget &amp; Dépenses - Vue Admin" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="🔄 Rafraîchir" onAction="#refreshBudgetData"
+                                            style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"/>
+                                </HBox>
 
-            <!-- TRANSACTIONS TABLE -->
-            <VBox spacing="8" HBox.hgrow="ALWAYS">
-                <Label styleClass="section-title" text="💳 Transactions"/>
-                <TableView fx:id="tableTransactions" prefHeight="200" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="colTransactionId" prefWidth="50"  text="ID"/>
-                        <TableColumn fx:id="colAmount"        prefWidth="150" text="Amount"/>
-                        <TableColumn fx:id="colDate"          prefWidth="160" text="Date"/>
-                    </columns>
-                    <placeholder><Label text="No transactions found."/></placeholder>
-                </TableView>
-            </VBox>
+                                <Separator/>
 
-        </HBox>
-    </bottom>
+                                <!-- Filtre par utilisateur -->
+                                <HBox spacing="15" alignment="CENTER_LEFT">
+                                    <Label text="👥 Filtrer par utilisateur:" style="-fx-font-weight: bold;"/>
+                                    <ComboBox fx:id="adminUserFilterCombo" prefWidth="300" onAction="#onUserFilterChange"/>
+                                    <Button text="📊 Tous les utilisateurs" onAction="#showAllUsersBudget"
+                                            style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 15; -fx-cursor: hand;"/>
+                                </HBox>
 
-</BorderPane>
+                                <!-- Statistiques globales -->
+                                <GridPane hgap="20" vgap="20">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="25"/>
+                                        <ColumnConstraints percentWidth="25"/>
+                                        <ColumnConstraints percentWidth="25"/>
+                                        <ColumnConstraints percentWidth="25"/>
+                                    </columnConstraints>
+
+                                    <VBox spacing="5" style="-fx-background-color: linear-gradient(to bottom right, #4f46e5, #6366f1); -fx-background-radius: 15; -fx-padding: 15;" GridPane.columnIndex="0">
+                                        <Label text="💰 Total Budgets" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-opacity: 0.8;"/>
+                                        <Label fx:id="adminTotalBudgetsGlobalLabel" text="0.00 DT" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                                    </VBox>
+
+                                    <VBox spacing="5" style="-fx-background-color: linear-gradient(to bottom right, #ef4444, #f97316); -fx-background-radius: 15; -fx-padding: 15;" GridPane.columnIndex="1">
+                                        <Label text="💸 Total Dépenses" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-opacity: 0.8;"/>
+                                        <Label fx:id="adminTotalDepensesGlobalLabel" text="0.00 DT" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                                    </VBox>
+
+                                    <VBox spacing="5" style="-fx-background-color: linear-gradient(to bottom right, #10b981, #34d399); -fx-background-radius: 15; -fx-padding: 15;" GridPane.columnIndex="2">
+                                        <Label text="📋 Nombre Plannings" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-opacity: 0.8;"/>
+                                        <Label fx:id="adminTotalPlanningsGlobalLabel" text="0" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                                    </VBox>
+
+                                    <VBox spacing="5" style="-fx-background-color: linear-gradient(to bottom right, #8b5cf6, #a78bfa); -fx-background-radius: 15; -fx-padding: 15;" GridPane.columnIndex="3">
+                                        <Label text="👥 Utilisateurs Actifs" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-opacity: 0.8;"/>
+                                        <Label fx:id="adminUsersActifsLabel" text="0" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                                    </VBox>
+                                </GridPane>
+
+                                <!-- Graphiques -->
+                                <GridPane hgap="20" vgap="20">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50"/>
+                                        <ColumnConstraints percentWidth="50"/>
+                                    </columnConstraints>
+
+                                    <!-- Graphique Budget par Catégorie -->
+                                    <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                          style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+                                        <Label text="📊 Budget par Catégorie" style="-fx-font-weight: bold; -fx-text-fill: #4f46e5; -fx-font-size: 14px;"/>
+                                        <BarChart fx:id="adminBudgetChart" prefHeight="250" prefWidth="400">
+                                            <xAxis><CategoryAxis label="Catégorie"/></xAxis>
+                                            <yAxis><NumberAxis label="Montant (DT)"/></yAxis>
+                                        </BarChart>
+                                    </VBox>
+
+                                    <!-- Graphique Dépenses par Catégorie -->
+                                    <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                          style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+                                        <Label text="📊 Dépenses par Catégorie" style="-fx-font-weight: bold; -fx-text-fill: #4f46e5; -fx-font-size: 14px;"/>
+                                        <PieChart fx:id="adminDepensesPieChart" prefHeight="250"/>
+                                    </VBox>
+                                </GridPane>
+
+                                <Separator/>
+
+                                <!-- Onglets pour Budgets, Plannings et Dépenses -->
+                                <TabPane>
+                                    <!-- Onglet Budgets -->
+                                    <Tab text="💰 Budgets des Utilisateurs" closable="false">
+                                        <VBox spacing="15" style="-fx-padding: 15;">
+                                            <TableView fx:id="adminBudgetsTable" prefHeight="350" VBox.vgrow="ALWAYS"/>
+                                        </VBox>
+                                    </Tab>
+
+                                    <!-- Onglet Plannings (TOUS LES PLANNINGS) -->
+                                    <Tab text="📋 Plannings de tous les utilisateurs" closable="false">
+                                        <VBox spacing="15" style="-fx-padding: 15;">
+                                            <TableView fx:id="adminPlanningsTable" prefHeight="350" VBox.vgrow="ALWAYS"/>
+                                        </VBox>
+                                    </Tab>
+
+                                    <!-- Onglet Dépenses -->
+                                    <Tab text="💰 Détail des Dépenses" closable="false">
+                                        <VBox spacing="15" style="-fx-padding: 15;">
+                                            <TableView fx:id="adminDepensesDetailTable" prefHeight="350" VBox.vgrow="ALWAYS"/>
+                                        </VBox>
+                                    </Tab>
+                                </TabPane>
+                            </VBox>
+                        </Tab>
+
+                        <!-- Statistics -->
+                        <Tab text="📈 Statistics" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <GridPane hgap="20" vgap="20">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50"/>
+                                        <ColumnConstraints percentWidth="50"/>
+                                    </columnConstraints>
+                                    <VBox styleClass="stat-card" spacing="15" alignment="CENTER_LEFT" prefWidth="400" prefHeight="250" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                                        <Label text="System Summary" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #4f46e5;"/>
+                                        <GridPane hgap="20" vgap="10">
+                                            <Label text="Total Users:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="lblTotalUsers" text="0" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                            <Label text="Administrators:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="totalAdminsStatLabel" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                            <Label text="Regular Users:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="totalUsersStatLabel2" text="0" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                                            <Label text="Pending Approvals:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #f59e0b;"/>
+                                            <Label fx:id="totalPendingLabel" text="0" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-text-fill: #f59e0b;"/>
+                                        </GridPane>
+                                    </VBox>
+                                    <VBox styleClass="stat-card" spacing="15" alignment="CENTER_LEFT" prefWidth="400" prefHeight="250" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                                        <Label text="Financial Summary" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #4f46e5;"/>
+                                        <GridPane hgap="20" vgap="10">
+                                            <Label text="Total Wallets:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="lblTotalWallets" text="0" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                            <Label text="Total Transactions:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="lblTotalTransactions" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                            <Label text="Total Amount:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                                            <Label fx:id="lblTotalAmount" text="0.00 DT" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                                            <Label text="Benefice:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #10b981;"/>
+                                            <Label fx:id="lblBenefice" text="0.00 DT" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-text-fill: #10b981;"/>
+                                        </GridPane>
+                                    </VBox>
+                                </GridPane>
+                            </VBox>
+                        </Tab>
+
+                        <!-- Cartes Bancaires -->
+                        <Tab text="💳 Cartes Bancaires" closable="false">
+                            <VBox spacing="15">
+                                <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                                <HBox alignment="CENTER_LEFT" spacing="20">
+                                    <Label text="💳" style="-fx-font-size: 32px;"/>
+                                    <Label text="Cartes Bancaires" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="🔄 Rafraîchir" onAction="#refreshBankCards"
+                                            style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"/>
+                                </HBox>
+                                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                            style="-fx-background-color: transparent; -fx-background: transparent;">
+                                    <content>
+                                        <VBox fx:id="bankCardsContainer" spacing="20"
+                                              style="-fx-padding: 10; -fx-background-color: transparent;"/>
+                                    </content>
+                                </ScrollPane>
+                            </VBox>
+                        </Tab>
+                    </TabPane>
+
+                </VBox>
+            </ScrollPane>
+        </center>
+
+        <!-- FOOTER -->
+        <bottom>
+            <HBox alignment="CENTER_RIGHT">
+                <padding><Insets bottom="10" left="20" right="20" top="10"/></padding>
+                <Label text="© 2026 SmartWallet Management System - Administration" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;"/>
+            </HBox>
+        </bottom>
+    </BorderPane>
+
+    <!-- Loading Overlay -->
+    <VBox fx:id="loadingOverlay" styleClass="loading-overlay" visible="false" managed="false">
+        <Label text="⟳" styleClass="loading-spinner"/>
+        <Label text="Loading data..." style="-fx-text-fill: #4f46e5; -fx-font-size: 14px;"/>
+    </VBox>
+</StackPane>

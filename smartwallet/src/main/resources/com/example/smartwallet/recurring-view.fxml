@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.smartwallet.controllers.RecurringPaymentController"
+      spacing="14"
+      prefWidth="1200"
+      prefHeight="650"
+      styleClass="page">
+    
+    <stylesheets>
+        <URL value="@Styles.css" />
+    </stylesheets>
+
+    <!-- Header -->
+    <HBox spacing="10" styleClass="header-gradient">
+        <VBox>
+            <Label text="Recurring Payments" styleClass="title"/>
+            <Label text="Manage subscriptions and scheduled payments" styleClass="subtitle"/>
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="← Dashboard"
+                onAction="#goToDashboard"
+                styleClass="btnSecondary"/>
+    </HBox>
+
+    <!-- Main Content Area -->
+    <HBox spacing="18" VBox.vgrow="ALWAYS">
+        <!-- Sidebar: Form + Payment -->
+        <VBox spacing="14" minWidth="380" maxWidth="400">
+            <!-- Form Card -->
+            <VBox spacing="14" styleClass="card">
+                <Label text="Payment Details" styleClass="sectionTitle"/>
+                <GridPane hgap="12" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="100" prefWidth="100"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="Name" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="fieldLabel"/>
+                    <TextField fx:id="nameField" promptText="e.g. Netflix" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="input"/>
+
+                    <Label text="Amount" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="fieldLabel"/>
+                    <TextField fx:id="amountField" promptText="e.g. 60.00" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="input"/>
+
+                    <Label text="Frequency" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="fieldLabel"/>
+                    <ComboBox fx:id="frequencyBox" promptText="Select frequency" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="input" maxWidth="Infinity"/>
+
+                    <Label text="Next due date" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="fieldLabel"/>
+                    <DatePicker fx:id="datePicker" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="input" maxWidth="Infinity"/>
+                </GridPane>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Button text="Add" onAction="#addPayment" styleClass="btnPrimary"/>
+                    <Button text="Update" onAction="#updatePayment" styleClass="btnSecondary"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Delete" onAction="#deletePayment" styleClass="btnDanger"/>
+                </HBox>
+                <Button text="Clear fields" onAction="#clearFormAction" styleClass="btnGhost" maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Payment Action Card -->
+            <VBox spacing="12" styleClass="card">
+                <Label text="Make a Quick Payment" styleClass="sectionTitle"/>
+                <VBox spacing="8">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="For" styleClass="fieldLabel" minWidth="40"/>
+                        <TextField fx:id="periodsField" promptText="Num" styleClass="input" prefWidth="70" text="1"/>
+                        <ComboBox fx:id="unitBox" prefWidth="130" styleClass="input" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    </HBox>
+                    <Button text="Pay Selected Now" onAction="#payNow" styleClass="btnPrimary" 
+                            maxWidth="Infinity" style="-fx-background-color: #635bff;"/>
+                    <Label fx:id="paymentStatus" text="Select a payment from the list." styleClass="subtitle" wrapText="true"/>
+                </VBox>
+            </VBox>
+        </VBox>
+
+        <!-- Right Side: List + Search -->
+        <VBox spacing="14" HBox.hgrow="ALWAYS">
+            <VBox spacing="14" styleClass="card" VBox.vgrow="ALWAYS">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Your recurring payments" styleClass="sectionTitle"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="searchField" promptText="Search by name..." styleClass="input" prefWidth="220"/>
+                    
+                    <Label text="Frequency:" styleClass="fieldLabel" />
+                    <CheckBox fx:id="monthlyCheck" text="Monthly" selected="true" styleClass="checkbox"/>
+                    <CheckBox fx:id="yearlyCheck" text="Yearly" selected="true" styleClass="checkbox"/>
+                    <CheckBox fx:id="weeklyCheck" text="Weekly" selected="true" styleClass="checkbox"/>
+
+                    <Button text="Export PDF" onAction="#exportToPdf" styleClass="btnSecondary" style="-fx-font-size: 11px;"/>
+                    <Button text="Export Excel" onAction="#exportToExcel" styleClass="btnSecondary" style="-fx-font-size: 11px;"/>
+                </HBox>
+                
+                <Pagination fx:id="pagination" VBox.vgrow="ALWAYS" maxPageIndicatorCount="5"/>
+            </VBox>
+        </VBox>
+    </HBox>
+
+</VBox>

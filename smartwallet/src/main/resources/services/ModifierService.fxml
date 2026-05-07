@@ -1,119 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0"
-            style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #c3cfe2);"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.service.ModifierService">
+<StackPane stylesheets="@css/DashboardAdmin.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.ModifierService">
+    <BorderPane prefHeight="600" prefWidth="900">
 
-    <children>
+        <!-- HEADER -->
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="20"
+                  style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);"
+                  prefHeight="70">
+                <padding>
+                    <Insets top="10" right="25" bottom="10" left="25"/>
+                </padding>
+                <StackPane>
+                    <ImageView fx:id="imgLogoModifier" fitHeight="40" fitWidth="40" preserveRatio="true">
+                        <clip>
+                            <Circle radius="20" centerX="20" centerY="20"/>
+                        </clip>
+                    </ImageView>
+                </StackPane>
+                <Label text="✏️" style="-fx-font-size: 24px; -fx-text-fill: white;"/>
+                <Label text="Modify a Rental Service" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnSave" text="💾 Save Changes" onAction="#enregistrerModifications"
+                        style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 8 20; -fx-cursor: hand;"/>
+                <Button fx:id="retouritafmod" text="← Return" onAction="#retourMain"
+                        style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 8 20; -fx-cursor: hand;"/>
+            </HBox>
+        </top>
 
-        <!-- LEFT FORM -->
-        <Text layoutX="40.0" layoutY="50.0" text="Price" />
-        <TextField fx:id="txtPrix"
-                   layoutX="150.0" layoutY="30.0"
-                   prefWidth="220"
-                   promptText="Enter price" />
+        <!-- CENTER -->
+        <center>
+            <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;">
+                <VBox spacing="20" style="-fx-padding: 20;">
 
-        <Text layoutX="40.0" layoutY="95.0" text="Service Category" />
-        <ComboBox fx:id="txtTypeServiceCategory"
-                  layoutX="150.0" layoutY="75.0"
-                  prefWidth="220.0" />
+                    <!-- Statistiques rapides -->
+                    <HBox spacing="15" alignment="CENTER">
+                        <VBox spacing="3" style="-fx-background-color: linear-gradient(to bottom right, #4f46e5, #ec4899); -fx-background-radius: 12; -fx-padding: 10 20;">
+                            <Label text="Prix actuel" style="-fx-text-fill: white; -fx-font-size: 10px;"/>
+                            <Label fx:id="prixActuelLabel" text="0 DT" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+                        </VBox>
+                        <VBox spacing="3" style="-fx-background-color: linear-gradient(to bottom right, #4f46e5, #ec4899); -fx-background-radius: 12; -fx-padding: 10 20;">
+                            <Label text="Localisation" style="-fx-text-fill: white; -fx-font-size: 10px;"/>
+                            <Label fx:id="localisationLabel" text="36.8065, 10.1815" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                        </VBox>
+                        <VBox spacing="3" style="-fx-background-color: linear-gradient(to bottom right, #4f46e5, #ec4899); -fx-background-radius: 12; -fx-padding: 10 20;">
+                            <Label text="Statut" style="-fx-text-fill: white; -fx-font-size: 10px;"/>
+                            <Label fx:id="statutActuelLabel" text="DISPONIBLE" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                        </VBox>
+                    </HBox>
 
-        <Text layoutX="40.0" layoutY="140.0" text="Service Type" />
-        <TextField fx:id="txtType"
-                   layoutX="150.0" layoutY="120.0"
-                   prefWidth="220"
-                   promptText="Enter type" />
+                    <Separator style="-fx-background-color: #e5e7eb;"/>
 
-        <Text layoutX="40.0" layoutY="185.0" text="Status" />
-        <ComboBox fx:id="txtStatut"
-                  layoutX="150.0" layoutY="165.0"
-                  prefWidth="220.0" />
+                    <!-- FORMULAIRE -->
+                    <HBox spacing="30" VBox.vgrow="ALWAYS">
 
-        <Text layoutX="40.0" layoutY="230.0" text="Location (lat,lng)" />
-        <TextField fx:id="txtLocalisation"
-                   layoutX="150.0" layoutY="210.0"
-                   prefWidth="220"
-                   editable="false"
-                   promptText="Click on map" />
+                        <!-- FORMULAIRE GAUCHE -->
+                        <VBox spacing="15" prefWidth="380" styleClass="modern-card" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4);">
 
-        <Text layoutX="40.0" layoutY="275.0" text="Address" />
-        <TextField fx:id="txtAdresse"
-                   layoutX="150.0" layoutY="255.0"
-                   prefWidth="220"
-                   promptText="Enter address" />
+                            <Label text="📝 Service Details" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
 
-        <Text layoutX="40.0" layoutY="320.0" text="Description" />
-        <TextField fx:id="txtDescription"
-                   layoutX="150.0" layoutY="300.0"
-                   prefWidth="220"
-                   promptText="Enter description" />
+                            <!-- Prix -->
+                            <VBox spacing="3">
+                                <Label text="Price (TND)" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <TextField fx:id="txtPrix" promptText="Enter price" styleClass="input"/>
+                            </VBox>
 
-        <Text layoutX="40.0" layoutY="365.0" text="Image" />
-        <TextField fx:id="txtImage"
-                   layoutX="150.0" layoutY="345.0"
-                   prefWidth="220"
-                   promptText="Select image" />
+                            <!-- Service Category -->
+                            <VBox spacing="3">
+                                <Label text="Service Category" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <ComboBox fx:id="txtTypeServiceCategory" promptText="Select category" prefHeight="40" styleClass="input"/>
+                            </VBox>
 
-        <Button fx:id="btnBrowseImage"
-                layoutX="380.0" layoutY="345.0"
-                onAction="#choisirImage"
-                text="Browse" />
+                            <!-- Service Type -->
+                            <VBox spacing="3">
+                                <Label text="Service Type" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <TextField fx:id="txtType" promptText="Enter type" styleClass="input"/>
+                            </VBox>
 
-        <Button fx:id="btnSave"
-                layoutX="150.0" layoutY="410.0"
-                prefWidth="220"
-                onAction="#enregistrerModifications"
-                style="-fx-background-color: #08010e; -fx-text-fill: white; -fx-font-weight: bold;"
-                text="Save Changes" />
+                            <!-- Status -->
+                            <VBox spacing="3">
+                                <Label text="Status" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <ComboBox fx:id="txtStatut" promptText="Select status" prefHeight="40" styleClass="input"/>
+                            </VBox>
 
-        <Button fx:id="retouritafmod"
-                layoutX="600.0" layoutY="450.0"
-                prefHeight="30" prefWidth="220"
-                onAction="#retourMain"
-                style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;"
-                text="Return" />
+                            <!-- Location (lat,lng) -->
+                            <VBox spacing="3">
+                                <Label text="Location (lat,lng)" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <TextField fx:id="txtLocalisation" editable="false" promptText="Click on map" styleClass="input"/>
+                            </VBox>
 
-        <!-- Separator -->
-        <Rectangle arcHeight="20" arcWidth="20"
-                   fill="#000000"
-                   height="420.0"
-                   layoutX="520.0"
-                   layoutY="40.0"
-                   width="8.0" />
+                            <!-- Address -->
+                            <VBox spacing="3">
+                                <Label text="Address" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <TextField fx:id="txtAdresse" promptText="Enter address" styleClass="input"/>
+                            </VBox>
 
-        <!-- MAP -->
-        <WebView fx:id="mapView"
-                 layoutX="540.0"
-                 layoutY="30.0"
-                 prefHeight="240.0"
-                 prefWidth="340.0"/>
+                            <!-- Description -->
+                            <VBox spacing="3">
+                                <Label text="Description" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <TextField fx:id="txtDescription" promptText="Enter description" styleClass="input"/>
+                            </VBox>
 
-        <!-- LOGO -->
-        <ImageView fx:id="imgLogoModifier"
-                   fitHeight="200.0"
-                   fitWidth="200.0"
-                   layoutX="600.0"
-                   layoutY="270.0"
-                   preserveRatio="true" />
+                            <!-- Image -->
+                            <VBox spacing="3">
+                                <Label text="Image" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <TextField fx:id="txtImage" promptText="Select image" HBox.hgrow="ALWAYS" styleClass="input"/>
+                                    <Button fx:id="btnBrowseImage" text="Browse" onAction="#choisirImage" styleClass="btn-secondary"/>
+                                </HBox>
+                            </VBox>
+                        </VBox>
 
-        <Label alignment="CENTER"
-               layoutX="531.0"
-               layoutY="410.0"
-               prefWidth="380.0"
-               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #08010e;"
-               text="Modify a Rental Service" />
+                        <!-- FORMULAIRE DROIT (CARTE) -->
+                        <VBox spacing="15" VBox.vgrow="ALWAYS" styleClass="modern-card" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4);">
 
-    </children>
-</AnchorPane>
+                            <Label text="🗺️ Location on Map" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+
+                            <!-- Carte interactive -->
+                            <WebView fx:id="mapView" prefHeight="280" prefWidth="380" style="-fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 10;"/>
+
+                            <!-- Informations supplémentaires -->
+                            <VBox spacing="8" style="-fx-background-color: #f9fafb; -fx-background-radius: 10; -fx-padding: 12;">
+                                <Label text="ℹ️ Instructions" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                                <Label text="• Cliquez sur la carte pour déplacer le marqueur" style="-fx-font-size: 11px; -fx-text-fill: #6b7280;"/>
+                                <Label text="• Glissez le marqueur pour ajuster la position" style="-fx-font-size: 11px; -fx-text-fill: #6b7280;"/>
+                                <Label text="• Les coordonnées sont mises à jour automatiquement" style="-fx-font-size: 11px; -fx-text-fill: #6b7280;"/>
+                            </VBox>
+
+                            <!-- Coordonnées actuelles -->
+                            <Label fx:id="coordLabel" text="Latitude: 36.8065 | Longitude: 10.1815"
+                                   style="-fx-background-color: #f9fafb; -fx-border-color: #d1d5db; -fx-border-radius: 8; -fx-padding: 8 12; -fx-font-size: 12px;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+        </center>
+
+        <!-- FOOTER -->
+        <bottom>
+            <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #f9fafb;">
+                <padding><Insets bottom="8" left="20" right="20" top="8"/></padding>
+                <Label text="SmartWallet Service Management - Modify Service" style="-fx-text-fill: #94a3b8; -fx-font-size: 10px;"/>
+            </HBox>
+        </bottom>
+    </BorderPane>
+</StackPane>

@@ -1,0 +1,100 @@
+﻿[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.smartwallet:smartwallet:jar:1.0-SNAPSHOT
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: com.google.code.gson:gson:jar -> duplicate declaration of version 2.10.1 @ line 176, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] --------------------< com.smartwallet:smartwallet >---------------------
+[INFO] Building SmartWallet 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ smartwallet ---
+[INFO] Copying 80 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ smartwallet ---
+[WARNING] Can't extract module name from toolboxfx-21.0.5.jar: Unsupported major.minor version 65.0
+[WARNING] Can't extract module name from countries-21.0.17.jar: Unsupported major.minor version 65.0
+[WARNING] Can't extract module name from heatmap-21.0.5.jar: Unsupported major.minor version 65.0
+[WARNING] Can't extract module name from toolbox-21.0.9.jar: Unsupported major.minor version 65.0
+[WARNING] Can't extract module name from tilesfx-21.0.9.jar: Unsupported major.minor version 65.0
+[WARNING] *******************************************************************************************************************************************************************************************************************************************************
+[WARNING] * Required filename-based automodules detected: [stripe-java-28.4.0.jar, jersey-client-2.8.jar, jbcrypt-0.4.jar, jersey-media-json-jackson-2.8.jar, mysql-connector-j-8.0.33.jar]. Please don't publish this project to a public artifact repository! *
+[WARNING] *******************************************************************************************************************************************************************************************************************************************************
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 169 source files with javac [debug target 17 module-path] to target\classes
+[INFO] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/services/EmailService.java: C:\Users\melek\Desktop\IntegrationFinale\smartwallet\src\main\java\services\EmailService.java uses or overrides a deprecated API.
+[INFO] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/services/EmailService.java: Recompile with -Xlint:deprecation for details.
+[INFO] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/Controllers/DashboardAdminController.java: Some input files use unchecked or unsafe operations.
+[INFO] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/Controllers/DashboardAdminController.java: Recompile with -Xlint:unchecked for details.
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[6,39] package esprit.tn.chayma_pi.controllers does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[172,13] cannot find symbol
+  symbol:   variable WalletLayoutController
+  location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[173,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[180,13] cannot find symbol
+  symbol:   variable WalletLayoutController
+  location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[181,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[188,13] cannot find symbol
+  symbol:   variable WalletLayoutController
+  location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[189,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[196,13] cannot find symbol
+  symbol:   variable WalletLayoutController
+  location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[197,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[204,13] cannot find symbol
+  symbol:   variable WalletLayoutController
+  location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[205,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/tests/MainFxml.java:[154,40] cannot find symbol
+  symbol:   method getUserId()
+  location: class utils.Session
+[INFO] 12 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.460 s
+[INFO] Finished at: 2026-02-28T21:26:35+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project smartwallet: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[6,39] package esprit.tn.chayma_pi.controllers does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[172,13] cannot find symbol
+[ERROR]   symbol:   variable WalletLayoutController
+[ERROR]   location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[173,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[180,13] cannot find symbol
+[ERROR]   symbol:   variable WalletLayoutController
+[ERROR]   location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[181,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[188,13] cannot find symbol
+[ERROR]   symbol:   variable WalletLayoutController
+[ERROR]   location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[189,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[196,13] cannot find symbol
+[ERROR]   symbol:   variable WalletLayoutController
+[ERROR]   location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[197,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[204,13] cannot find symbol
+[ERROR]   symbol:   variable WalletLayoutController
+[ERROR]   location: class esprit.tn.chayma.controllers.DashboardDepensController
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/esprit/tn/chayma/controllers/DashboardDepensController.java:[205,35] package WalletLayoutController does not exist
+[ERROR] /C:/Users/melek/Desktop/IntegrationFinale/smartwallet/src/main/java/tests/MainFxml.java:[154,40] cannot find symbol
+[ERROR]   symbol:   method getUserId()
+[ERROR]   location: class utils.Session
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

@@ -3,57 +3,76 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #cfc0dc, #e4ecf7);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AfficherService">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #f5f7fb;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.service.AfficherService">
 
-   <children>
+    <!-- LEFT PANEL - Gradient Background -->
+    <AnchorPane prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: linear-gradient(to bottom right, #4f46e5, #ec4899);">
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20">
 
-      <!-- ================= TOP HEADER: TITLE CENTER + LOGO RIGHT ================= -->
+            <children>
+                <Label text="🔧" style="-fx-font-size: 80px; -fx-text-fill: white;"/>
+                <Label text="Services Manager" style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+                <Label text="Manage your cars and houses rentals" style="-fx-text-fill: #fce7f3; -fx-font-size: 18px;"/>
+            </children>
+        </VBox>
+    </AnchorPane>
 
-      <HBox layoutX="14.0" layoutY="14.0" prefWidth="860" spacing="10" style="-fx-padding: 10; -fx-alignment: center-left;">
+    <!-- RIGHT PANEL - Services -->
+    <AnchorPane layoutX="400.0" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: white;">
+        <VBox layoutX="30.0" layoutY="30.0" prefHeight="540.0" prefWidth="540.0" spacing="20">
 
-         <children>
-            <!-- Logo à l'extrémité droite -->
-            <ImageView fx:id="imgLogoList" fitHeight="80" fitWidth="80" preserveRatio="true" />
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Available Services" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="← Back to Dashboard"
+                        styleClass="primary-button"
+                        onAction="#backToDashboard"/>
 
-            <!-- Empty region to push the title to center -->
-            <Region fx:id="spacerLeft" prefHeight="80.0" prefWidth="58.0" HBox.hgrow="ALWAYS" />
-
-            <!-- Title centered -->
-            <Label style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #19052b;" text="Cars and houses available for rent" HBox.hgrow="NEVER" />
-
-            <!-- Empty region to balance spacing -->
-            <Region fx:id="spacerRight" HBox.hgrow="ALWAYS" />
-            <Button fx:id="retouritafser" layoutX="600.0" layoutY="400.0" onAction="#retourMain" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: rgba(14,0,36,0.65); -fx-text-fill: white; -fx-font-weight: bold;" text="Return" />
-
-         </children>
-
-      </HBox>
-
-      <!-- ================= SCROLLPANE POUR LES CARDS ================= -->
-
-      <ScrollPane hbarPolicy="AS_NEEDED" layoutX="23.0" layoutY="103.0" prefHeight="343.0" prefWidth="842.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
-
-         <content>
-
-            <HBox fx:id="cardaffserv" alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10;">
-               <!-- Les VBoxes seront ajoutées dynamiquement par le code Java -->
             </HBox>
 
-         </content>
 
-      </ScrollPane>
-      <Button fx:id="btnAjouterserrr"
-              layoutX="762.0"
-              layoutY="460.0"
-              mnemonicParsing="false"
-              onAction="#retourAjouter"
-              style="-fx-background-color: rgba(61,35,103,0.65); -fx-text-fill: white; -fx-font-weight: bold;"
-              text="Add Car / Home" />
 
-   </children>
+            <!-- Search Bar -->
+            <HBox spacing="10">
+                <TextField fx:id="searchServiceField" promptText="Search services..." HBox.hgrow="ALWAYS"
+                           style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 8 12;"/>
+                <Button text="🔍 Search" style="-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 10 20; -fx-cursor: hand;" prefWidth="100"/>
+            </HBox>
+
+            <!-- Filters -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Filter:" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                <Button fx:id="filterAllBtn" text="All" style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-border-color: #4f46e5; -fx-border-radius: 20; -fx-background-radius: 20; -fx-padding: 5 15; -fx-cursor: hand;" onAction="#filterAll"/>
+                <Button fx:id="filterCarsBtn" text="Cars" style="-fx-background-color: white; -fx-text-fill: #4f46e5; -fx-border-color: #4f46e5; -fx-border-radius: 20; -fx-background-radius: 20; -fx-padding: 5 15; -fx-cursor: hand;" onAction="#filterCars"/>
+                <Button fx:id="filterHousesBtn" text="Houses" style="-fx-background-color: white; -fx-text-fill: #4f46e5; -fx-border-color: #4f46e5; -fx-border-radius: 20; -fx-background-radius: 20; -fx-padding: 5 15; -fx-cursor: hand;" onAction="#filterHouses"/>
+                <Button fx:id="filterAvailableBtn" text="Available" style="-fx-background-color: white; -fx-text-fill: #4f46e5; -fx-border-color: #4f46e5; -fx-border-radius: 20; -fx-background-radius: 20; -fx-padding: 5 15; -fx-cursor: hand;" onAction="#filterAvailable"/>
+            </HBox>
+
+            <!-- Services Title -->
+            <Label text="Service List" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4f46e5; -fx-padding: 10 0 5 0;"/>
+
+            <!-- ScrollPane for Cards -->
+            <ScrollPane fitToWidth="true" fitToHeight="true"
+                        style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                <content>
+                    <FlowPane fx:id="cardaffserv" hgap="20" vgap="20"
+                              alignment="TOP_LEFT" prefWrapLength="540"
+                              style="-fx-padding: 10;"/>
+                </content>
+            </ScrollPane>
+
+
+
+        </VBox>
+    </AnchorPane>
+
 </AnchorPane>

@@ -1,28 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <StackPane xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="esprit.tn.souha_pi.controllers.ReceiveController"
-           styleClass="page-bg">
+           style="-fx-background-color: #f5f7fb; -fx-padding: 30;">
 
-    <VBox spacing="18" alignment="CENTER" maxWidth="400">
+    <VBox alignment="CENTER" spacing="25" maxWidth="500">
 
-        <Label text="Receive Money" styleClass="page-header"/>
+        <!-- Carte principale -->
+        <VBox spacing="25" style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 30; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 20, 0, 0, 5); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 25;">
 
-        <VBox styleClass="card" spacing="14">
+            <!-- En-tête -->
+            <HBox alignment="CENTER" spacing="15">
+                <Label text="📥" style="-fx-font-size: 40px; -fx-text-fill: #4f46e5;"/>
+                <Label text="Recevoir de l'argent"
+                       style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+            </HBox>
 
-            <TextField fx:id="senderField" promptText="Sender Name" styleClass="modern-field"/>
-            <TextField fx:id="amountField" promptText="Amount (TND)" styleClass="modern-field"/>
+            <!-- Informations -->
+            <Label fx:id="infoLabel" text="Entrez le RIB de l'expéditeur"
+                   style="-fx-text-fill: #4f46e5; -fx-font-size: 14px; -fx-font-weight: bold; -fx-alignment: center;"/>
 
-            <Button text="Confirm Receive"
-                    onAction="#receive"
-                    styleClass="success-btn"/>
+            <VBox spacing="15">
+                <!-- RIB de l'expéditeur -->
+                <VBox spacing="5">
+                    <Label text="RIB de l'expéditeur" style="-fx-font-weight: 600; -fx-text-fill: #374151; -fx-font-size: 14px;"/>
+                    <TextField fx:id="ribField" promptText="TN59 1000 0000 1234 5678 9012"
+                               style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 12 15; -fx-font-size: 14px;"/>
+                </VBox>
+
+                <!-- Montant -->
+                <VBox spacing="5">
+                    <Label text="Montant à recevoir (TND)" style="-fx-font-weight: 600; -fx-text-fill: #374151; -fx-font-size: 14px;"/>
+                    <TextField fx:id="amountField" promptText="0.00"
+                               style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 12 15; -fx-font-size: 14px;"/>
+                </VBox>
+
+                <!-- Nom de l'expéditeur (optionnel) -->
+                <VBox spacing="5">
+                    <Label text="Nom de l'expéditeur (optionnel)" style="-fx-font-weight: 600; -fx-text-fill: #374151; -fx-font-size: 14px;"/>
+                    <TextField fx:id="senderNameField" promptText="Ex: Mohamed Ben Salem"
+                               style="-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 12 15; -fx-font-size: 14px;"/>
+                </VBox>
+            </VBox>
+
+            <!-- Solde actuel -->
+            <Label fx:id="balanceLabel" text="Solde actuel: 0.00 TND"
+                   style="-fx-text-fill: #4f46e5; -fx-font-size: 16px; -fx-font-weight: bold; -fx-alignment: center; -fx-padding: 10 0 0 0;"/>
+
+            <!-- Boutons -->
+            <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                <Button text="✅ Confirmer la réception" onAction="#receive"
+                        style="-fx-background-color: #22c55e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 12 30; -fx-font-size: 15px; -fx-effect: dropshadow(two-pass-box, rgba(34,197,94,0.3), 10, 0, 0, 3);"
+                        prefWidth="200"/>
+                <Button text="✖ Annuler" onAction="#cancel"
+                        style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 12 30; -fx-font-size: 15px; -fx-effect: dropshadow(two-pass-box, rgba(239,68,68,0.3), 10, 0, 0, 3);"
+                        prefWidth="200"/>
+            </HBox>
 
         </VBox>
 
+        <!-- Footer -->
+        <Label text="© 2026 SmartWallet - Réception sécurisée"
+               style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
     </VBox>
 
 </StackPane>

@@ -14,19 +14,19 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@css/signIn.css"
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@css/signIn.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controllers.SignInController">
 
-    <Pane prefHeight="600.0" prefWidth="450.0" styleClass="left-panel">
+    <Pane prefHeight="700.0" prefWidth="500.0" styleClass="left-panel">
         <children>
-            <Label layoutX="112.0" layoutY="266.0" styleClass="welcome-label" text="Welcome Back" />
-            <Label layoutX="157.0" layoutY="311.0" styleClass="brand-label" text="SmartWallet" />
+            <Label layoutX="137.0" layoutY="316.0" styleClass="welcome-label" text="Welcome Back" />
+            <Label layoutX="182.0" layoutY="361.0" styleClass="brand-label" text="SmartWallet" />
         </children>
     </Pane>
 
-    <VBox alignment="CENTER" layoutX="450.0" prefHeight="600" prefWidth="450"
+    <VBox alignment="CENTER" layoutX="500.0" prefHeight="700" prefWidth="500"
           spacing="20" styleClass="login-panel">
         <padding><Insets left="40" right="40" /></padding>
 

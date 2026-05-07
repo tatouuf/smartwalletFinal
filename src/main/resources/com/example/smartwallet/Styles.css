@@ -1,0 +1,182 @@
+.page {
+    -fx-padding: 18;
+    -fx-background-color: #ffffff;
+    /* fond clair */
+    -fx-font-family: "Segoe UI", "Inter", Arial;
+}
+
+/* Header */
+.header {
+    -fx-padding: 14;
+    -fx-background-color: #0f1b33;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: rgba(255, 255, 255, 0.06);
+}
+
+.header-gradient {
+    -fx-padding: 14;
+    -fx-background-color: linear-gradient(to right, #614ecc, #d54b8a, #ee566d);
+    -fx-background-radius: 14;
+    -fx-alignment: center-left;
+}
+
+.title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+}
+
+.subtitle {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+}
+
+.brand {
+    -fx-text-fill: #2563eb;
+    -fx-font-weight: 700;
+    -fx-font-size: 13px;
+}
+
+/* Cards */
+.card {
+    -fx-padding: 14;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 10, 0, 0, 4);
+}
+
+/* Form */
+.fieldLabel {
+    -fx-text-fill: #374151;
+    -fx-font-size: 12px;
+}
+
+.input {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #111827;
+    -fx-prompt-text-fill: #9ca3af;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #d1d5db;
+    -fx-padding: 10 12 10 12;
+}
+
+/* Buttons */
+.btnPrimary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-font-weight: 700;
+}
+
+.btnSecondary {
+    -fx-background-color: #334155;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-font-weight: 700;
+}
+
+.btnDanger {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-font-weight: 700;
+}
+
+.btnDangerBright {
+    -fx-background-color: #f64547;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    /* more rounded like the mockup */
+    -fx-padding: 8 20 8 20;
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
+}
+
+.btnGhost {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4b5563;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+}
+
+.checkbox {
+    -fx-text-fill: #374151;
+}
+
+/* List */
+.sectionTitle {
+    -fx-text-fill: #111827;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.list {
+    -fx-background-color: transparent;
+}
+
+.list .list-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #111827;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #e5e7eb;
+    -fx-padding: 10 12 10 12;
+    -fx-background-insets: 0 0 10 0;
+    /* espace entre items */
+}
+
+.list .list-cell:selected {
+    -fx-background-color: #1d4ed8;
+    -fx-text-fill: white;
+}
+
+.bigNumber {
+    -fx-text-fill: #111827;
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+}
+
+.titleSmall {
+    -fx-text-fill: #111827;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+/* Transaction List Improvements */
+.status-label {
+    -fx-padding: 4 8 4 8;
+    -fx-background-radius: 6;
+    -fx-font-size: 10px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+}
+
+.status-succeeded {
+    -fx-background-color: #059669;
+    /* Green */
+}
+
+.status-failed {
+    -fx-background-color: #dc2626;
+    /* Red */
+}
+
+.status-pending {
+    -fx-background-color: #d97706;
+    /* Orange */
+}
+
+.transaction-id {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 9px;
+    -fx-font-family: monospace;
+}

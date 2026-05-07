@@ -17,11 +17,6 @@
         <HBox layoutX="14.0" layoutY="14.0" prefWidth="860" spacing="10" style="-fx-padding: 10; -fx-alignment: center-left;">
 
             <children>
-                <!-- Logo à l'extrémité droite -->
-                <ImageView fx:id="imgLogoList" fitHeight="80" fitWidth="80" preserveRatio="true" />
-
-                <!-- Empty region to push the title to center -->
-                <Region fx:id="spacerLeft" prefHeight="80.0" prefWidth="58.0" HBox.hgrow="ALWAYS" />
 
                 <!-- Title centered -->
                 <Label style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #19052b;" text="Cars and houses available for rent" HBox.hgrow="NEVER" />

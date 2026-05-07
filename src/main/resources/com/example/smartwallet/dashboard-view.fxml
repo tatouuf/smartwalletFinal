@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.smartwallet.controllers.DashboardController"
+            fitToWidth="true"
+            prefWidth="1200"
+            prefHeight="650"
+            style="-fx-background-color: transparent; -fx-background: #ffffff; -fx-padding: 0;">
+    <stylesheets>
+        <URL value="@Styles.css" />
+    </stylesheets>
+    <VBox spacing="14" styleClass="page">
+        <!-- Header -->
+        <HBox spacing="10" styleClass="header-gradient">
+            <VBox>
+                <Label text="Financial Health Dashboard" styleClass="title"/>
+                <Label text="Score and forecast" styleClass="subtitle"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Back" onAction="#goBack" styleClass="btnSecondary"/>
+            <Button text="Go to Recurring" onAction="#goRecurring" styleClass="btnSecondary"/>
+        </HBox>
+
+        <!-- Stats Row -->
+        <HBox spacing="12">
+            <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
+                <Label text="Profile" styleClass="sectionTitle"/>
+                <TextField fx:id="incomeField" promptText="Monthly budget (TND)" styleClass="input"/>
+                <TextField fx:id="balanceField" promptText="Savings goal (TND)" styleClass="input"/>
+                <Button text="Save Profile" onAction="#saveProfile" styleClass="btnPrimary"/>
+            </VBox>
+
+            <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
+                <Label text="Score" styleClass="sectionTitle"/>
+                <Label fx:id="scoreLabel" text="--/100" styleClass="bigNumber"/>
+                <Label fx:id="riskLabel" text="Risk: --" styleClass="subtitle"/>
+            </VBox>
+
+            <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
+                <Label text="Forecast" styleClass="sectionTitle"/>
+                <Label fx:id="forecastLabel" text="-- TND" styleClass="bigNumber"/>
+                <Label fx:id="recurringLabel" text="Recurring total: --" styleClass="subtitle"/>
+            </VBox>
+        </HBox>
+
+        <!-- AI Insights -->
+        <VBox spacing="10" styleClass="card" fx:id="aiInsightCard" visible="false" managed="false">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="🤖 AI Financial Insights" styleClass="sectionTitle" style="-fx-text-fill: #a78bfa;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <ProgressIndicator fx:id="aiProgress" prefWidth="20" prefHeight="20" visible="false"/>
+            </HBox>
+            <Label fx:id="aiInsightLabel" text="Analyzing your finances..." wrapText="true" 
+                   style="-fx-font-style: italic; -fx-font-size: 14px; -fx-text-fill: #1f2937; -fx-line-spacing: 4px;"/>
+        </VBox>
+
+        <!-- History -->
+        <VBox spacing="10" styleClass="card">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Transaction History" styleClass="sectionTitle"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Fetch History" onAction="#handleFetchHistory" styleClass="btnSecondary"/>
+            </HBox>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search by ID or amount..." styleClass="input" HBox.hgrow="ALWAYS"/>
+                
+                <Label text="Status:" styleClass="fieldLabel" />
+                <CheckBox fx:id="succeededCheck" text="Succeeded" selected="true" styleClass="checkbox"/>
+                <CheckBox fx:id="failedCheck" text="Failed" selected="true" styleClass="checkbox"/>
+                <CheckBox fx:id="pendingCheck" text="Pending" selected="true" styleClass="checkbox"/>
+
+                <Region HBox.hgrow="ALWAYS" />
+                
+                <Button text="Export PDF" onAction="#exportToPdf" styleClass="btnSecondary" style="-fx-font-size: 11px;"/>
+                <Button text="Export Excel" onAction="#exportToExcel" styleClass="btnSecondary" style="-fx-font-size: 11px;"/>
+            </HBox>
+
+            <ListView fx:id="transactionListView" prefHeight="300" styleClass="list"/>
+        </VBox>
+    </VBox>
+</ScrollPane>

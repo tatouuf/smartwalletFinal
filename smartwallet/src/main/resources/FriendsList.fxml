@@ -39,20 +39,11 @@
                 <Label fx:id="lblNotificationCount" styleClass="badge-count" text="0"/>
             </VBox>
 
-
-
-            <Button text="💰 Wallet"
-                    styleClass="btn-manage"
-                    onAction="#handlewallet"/>
-
-
-
             <Button text="📋 Manage Requests"
                     styleClass="btn-manage"
                     onAction="#handleManageRequests"/>
 
             <!-- NEW: Notifications button -->
-
             <Button text="🔔 Notifications"
                     styleClass="btn-manage"
                     onAction="#handleNotifications"/>
