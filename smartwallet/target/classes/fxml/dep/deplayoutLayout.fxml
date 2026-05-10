@@ -10,85 +10,85 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="esprit.tn.chayma.controllers.DeplayoutController"
             prefWidth="1280" prefHeight="720"
-            style="-fx-background-color: #f1f5f9;">
+            style="-fx-background-color: #faf5ff;">
 
-    <!-- ========== SIDEBAR GAUCHE ========== -->
+    <!-- ========== SIDEBAR GAUCHE (Violette & Rose) ========== -->
     <left>
         <VBox spacing="8"
-              style="-fx-background-color: linear-gradient(to bottom, #0f172a, #1e293b); -fx-padding: 30 15 25 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 3, 0);"
+              style="-fx-background-color: linear-gradient(to bottom, #4c1d95, #7e22ce, #be185d); -fx-padding: 30 15 25 15; -fx-effect: dropshadow(gaussian, rgba(126,34,206,0.4), 20, 0, 4, 2);"
               prefWidth="280">
 
             <!-- Logo / Branding -->
             <VBox spacing="10" alignment="CENTER" style="-fx-padding: 0 0 20 0;">
-                <Circle radius="35" fill="#3b82f6" stroke="white" strokeWidth="2"/>
+                <Circle radius="35" fill="#e879f9" stroke="white" strokeWidth="2"/>
                 <Label text="SmartWallet"
-                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Segoe UI';"/>
+                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);"/>
                 <Label text="Gestion intelligente"
-                       style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;"/>
-                <Separator style="-fx-background-color: #334155; -fx-pref-height: 1;"/>
+                       style="-fx-text-fill: #f3e8ff; -fx-font-size: 11px; -fx-opacity: 0.9;"/>
+                <Separator style="-fx-background-color: #d8b4fe; -fx-pref-height: 1;"/>
             </VBox>
 
-            <!-- Navigation -->
+            <!-- Navigation avec touches roses / violettes -->
             <Button text="🏠 Dashboard" onAction="#goDashboard"
-                    style="-fx-background-color: transparent; -fx-text-fill: #e2e8f0; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
+                    style="-fx-background-color: transparent; -fx-text-fill: #f3e8ff; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
             <Button text="📅 Plannings" onAction="#goPlannings"
-                    style="-fx-background-color: transparent; -fx-text-fill: #e2e8f0; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
+                    style="-fx-background-color: transparent; -fx-text-fill: #f3e8ff; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
             <Button text="💰 Budget" onAction="#goBudget"
-                    style="-fx-background-color: transparent; -fx-text-fill: #e2e8f0; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
+                    style="-fx-background-color: transparent; -fx-text-fill: #f3e8ff; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
             <Button text="📝 Dépenses" onAction="#goDepenses"
-                    style="-fx-background-color: transparent; -fx-text-fill: #e2e8f0; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
+                    style="-fx-background-color: transparent; -fx-text-fill: #f3e8ff; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
             <Button text="🔔 Notifications" onAction="#goNotifications"
-                    style="-fx-background-color: transparent; -fx-text-fill: #e2e8f0; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
+                    style="-fx-background-color: transparent; -fx-text-fill: #f3e8ff; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
             <Button text="🧑‍💼 Advisor" onAction="#goAdvisor"
-                    style="-fx-background-color: transparent; -fx-text-fill: #e2e8f0; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
+                    style="-fx-background-color: transparent; -fx-text-fill: #f3e8ff; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
             <Button text="⚙️ Settings" onAction="#goSettings"
-                    style="-fx-background-color: transparent; -fx-text-fill: #e2e8f0; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
+                    style="-fx-background-color: transparent; -fx-text-fill: #f3e8ff; -fx-font-size: 14px; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-font-family: 'Segoe UI';"/>
 
             <Region VBox.vgrow="ALWAYS"/>
 
             <!-- Pied de sidebar -->
             <VBox spacing="12">
-                <Separator style="-fx-background-color: #334155;"/>
+                <Separator style="-fx-background-color: #d8b4fe;"/>
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Circle radius="6" fill="#10b981"/>
+                    <Circle radius="6" fill="#f0a3d7"/>
                     <Label text="Statut : connecté"
-                           style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;"/>
+                           style="-fx-text-fill: #f3e8ff; -fx-font-size: 11px;"/>
                 </HBox>
                 <Button text="⬅ Se déconnecter" onAction="#goBack"
-                        style="-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12;"/>
+                        style="-fx-background-color: linear-gradient(to right, #d946ef, #c026d3); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-graphic-text-gap: 12; -fx-effect: dropshadow(gaussian, rgba(192,38,211,0.4), 8, 0, 0, 2);"/>
                 <Label text="Version 3.2.0"
-                       style="-fx-text-fill: #64748b; -fx-font-size: 10px; -fx-alignment: center;"/>
+                       style="-fx-text-fill: #e9d5ff; -fx-font-size: 10px; -fx-alignment: center;"/>
             </VBox>
         </VBox>
     </left>
 
-    <!-- ========== ZONE CENTRALE ========== -->
+    <!-- ========== ZONE CENTRALE (Accents roses et violets) ========== -->
     <center>
         <VBox spacing="0">
-            <!-- Header supérieur -->
+            <!-- Header supérieur avec touche violette -->
             <HBox alignment="CENTER_LEFT" spacing="15" prefHeight="70"
-                  style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2); -fx-padding: 0 30;">
+                  style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(139,92,246,0.12), 12, 0, 0, 3); -fx-border-color: transparent transparent #f3e8ff transparent; -fx-border-width: 0 0 2 0; -fx-padding: 0 30;">
                 <Label fx:id="pageTitle" text="Dashboard"
-                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0f172a; -fx-font-family: 'Segoe UI';"/>
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #6b21a5; -fx-font-family: 'Segoe UI';"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <HBox spacing="10" alignment="CENTER">
-                    <Circle radius="6" fill="#22c55e"/>
+                    <Circle radius="6" fill="#e879f9"/>
                     <Label text="En ligne"
-                           style="-fx-text-fill: #475569; -fx-font-size: 13px;"/>
-                    <Circle radius="16" fill="#3b82f6" stroke="#e2e8f0" strokeWidth="2"/>
+                           style="-fx-text-fill: #7e22ce; -fx-font-size: 13px;"/>
+                    <Circle radius="16" fill="#c084fc" stroke="#f3e8ff" strokeWidth="2"/>
                     <Label text="Admin"
-                           style="-fx-text-fill: #475569; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+                           style="-fx-text-fill: #6b21a5; -fx-font-size: 13px; -fx-font-weight: bold;"/>
                 </HBox>
             </HBox>
 
-            <!-- Contenu dynamique avec carte -->
+            <!-- Contenu dynamique avec carte aux reflets violets -->
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
                         style="-fx-background-color: transparent; -fx-background: transparent;">
                 <VBox spacing="20" style="-fx-padding: 25;">
                     <StackPane fx:id="contentArea"
-                               style="-fx-background-color: white; -fx-background-radius: 24; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 12, 0, 0, 3); -fx-padding: 25;">
+                               style="-fx-background-color: white; -fx-background-radius: 28; -fx-effect: dropshadow(gaussian, rgba(139,92,246,0.15), 18, 0, 0, 6); -fx-padding: 30; -fx-border-color: #fae8ff; -fx-border-radius: 28; -fx-border-width: 1;">
                         <Label text="Bienvenue dans SmartWallet"
-                               style="-fx-text-fill: #94a3b8; -fx-font-size: 14px;"/>
+                               style="-fx-text-fill: #a855f7; -fx-font-size: 16px; -fx-font-weight: 500; -fx-font-family: 'Segoe UI';"/>
                     </StackPane>
                 </VBox>
             </ScrollPane>

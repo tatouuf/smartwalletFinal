@@ -10,12 +10,8 @@ import esprit.tn.chayma.utils.ToastNotification;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import utils.DataChangeNotifier;
 import utils.Session;
 
@@ -28,7 +24,6 @@ import java.util.stream.Collectors;
 
 public class DepensesClientController {
 
-    // ================= FXML COMPOSANTS =================
     @FXML private TextField montantField;
     @FXML private TextField descriptionField;
     @FXML private DatePicker dateDepenseField;
@@ -36,7 +31,6 @@ public class DepensesClientController {
     @FXML private Button ajouterBtn;
     @FXML private Button modifierBtn;
     @FXML private Button supprimerBtn;
-    @FXML private Button btnRetourDashboard;
     @FXML private ListView<Depense> depensesList;
     @FXML private Label totalDepensesLabel;
     @FXML private Label depensesMoisLabel;
@@ -47,119 +41,80 @@ public class DepensesClientController {
     @FXML private ComboBox<Integer> filterAnneeCombo;
     @FXML private Label bienvenueLabel;
 
-    // ================= SERVICES =================
     private DepenseService depenseService = new DepenseService();
     private NotificationService notificationService = new NotificationService();
     private ObservableList<Depense> depensesObservable = FXCollections.observableArrayList();
     private int currentUserId;
-    private double budgetMensuel = 1000; // Budget mensuel par défaut (peut venir de la base)
-
-    // Callback pour mettre à jour le module notifications
+    private double budgetMensuel = 1000;
     private Consumer<Void> notificationCallback = null;
 
     @FXML
     public void initialize() {
-        // Récupérer l'utilisateur connecté
         if (Session.getCurrentUser() != null) {
             currentUserId = Session.getCurrentUser().getId();
-            String userName = Session.getCurrentUser().getNom();
-            if (bienvenueLabel != null) {
-                bienvenueLabel.setText("👋 Bonjour, " + userName + " !");
-            }
+            bienvenueLabel.setText("👋 Bonjour, " + Session.getCurrentUser().getNom() + " !");
         } else {
-            currentUserId = 1; // Fallback pour test
+            currentUserId = 1;
         }
 
-        // Initialiser les catégories
+        // Catégories avec emojis
         categorieCombo.getItems().addAll(
-                "🍽️ Alimentation",
-                "🚗 Transport",
-                "🏠 Logement",
-                "🎬 Loisirs",
-                "🏥 Santé",
-                "📚 Éducation",
-                "👕 Vêtements",
-                "💡 Factures",
-                "📱 Télécom",
-                "💰 Épargne",
-                "🎁 Cadeaux",
-                "✈️ Voyages",
-                "🔄 Autres"
+                "🍽️ Alimentation", "🚗 Transport", "🏠 Logement", "🎬 Loisirs",
+                "🏥 Santé", "📚 Éducation", "👕 Vêtements", "💡 Factures",
+                "📱 Télécom", "💰 Épargne", "🎁 Cadeaux", "✈️ Voyages", "🔄 Autres"
         );
 
-        // Initialiser les mois pour le filtre
-        filterMoisCombo.getItems().addAll(
-                "Tous", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-                "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-        );
+        // Filtres mois
+        filterMoisCombo.getItems().addAll("Tous", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+                "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre");
         filterMoisCombo.setValue("Tous");
 
-        // Initialiser les années pour le filtre
         int currentYear = LocalDate.now().getYear();
         filterAnneeCombo.getItems().addAll(currentYear - 2, currentYear - 1, currentYear, currentYear + 1);
         filterAnneeCombo.setValue(currentYear);
 
-        // Charger les données
         loadDepenses();
 
-        // Configurer la recherche
-        if (searchField != null) {
-            searchField.textProperty().addListener((obs, old, newVal) -> filterDepenses());
-        }
-
-        // Configurer les filtres
+        searchField.textProperty().addListener((obs, old, newVal) -> filterDepenses());
         filterMoisCombo.valueProperty().addListener((obs, old, newVal) -> filterDepenses());
         filterAnneeCombo.valueProperty().addListener((obs, old, newVal) -> filterDepenses());
 
-        // Actions boutons
         ajouterBtn.setOnAction(e -> onAjouter());
         supprimerBtn.setOnAction(e -> onSupprimer());
         modifierBtn.setOnAction(e -> onModifier());
 
-        // Sélection dans la liste
         depensesList.getSelectionModel().selectedItemProperty().addListener((obs, old, sel) -> {
             if (sel != null) populateForm(sel);
         });
 
-        // Mettre à jour les statistiques
         updateStats();
-
-        System.out.println("[DepensesClientController] Initialisation complète pour utilisateur: " + currentUserId);
     }
 
     private void loadDepenses() {
-        List<Depense> list = depenseService.getAllByUser(currentUserId);
-        depensesObservable.setAll(list);
+        depensesObservable.setAll(depenseService.getAllByUser(currentUserId));
         depensesList.setItems(depensesObservable);
         updateTotal();
         updateChart();
     }
 
     private void filterDepenses() {
-        String searchText = searchField != null ? searchField.getText().toLowerCase() : "";
+        String searchText = searchField.getText().toLowerCase();
         String selectedMois = filterMoisCombo.getValue();
         Integer selectedAnnee = filterAnneeCombo.getValue();
 
         List<Depense> filtered = depenseService.getAllByUser(currentUserId).stream()
                 .filter(d -> {
-                    // Filtre par recherche
-                    boolean matchesSearch = searchText.isEmpty() ||
+                    boolean matchSearch = searchText.isEmpty() ||
                             d.getDescription().toLowerCase().contains(searchText) ||
                             (d.getCategorie() != null && d.getCategorie().toLowerCase().contains(searchText));
-
-                    // Filtre par mois
-                    boolean matchesMois = "Tous".equals(selectedMois) ||
+                    boolean matchMois = "Tous".equals(selectedMois) ||
                             (d.getDateDepense() != null &&
                                     getMoisName(d.getDateDepense().getMonthValue()).equals(selectedMois));
-
-                    // Filtre par année
-                    boolean matchesAnnee = selectedAnnee == null ||
+                    boolean matchAnnee = selectedAnnee == null ||
                             (d.getDateDepense() != null && d.getDateDepense().getYear() == selectedAnnee);
-
-                    return matchesSearch && matchesMois && matchesAnnee;
+                    return matchSearch && matchMois && matchAnnee;
                 })
                 .collect(Collectors.toList());
-
         depensesObservable.setAll(filtered);
         updateTotal();
         updateChart();
@@ -171,24 +126,16 @@ public class DepensesClientController {
 
     private void updateTotal() {
         double total = depensesObservable.stream().mapToDouble(Depense::getMontant).sum();
-        if (totalDepensesLabel != null) {
-            totalDepensesLabel.setText(String.format("%.2f DT", total));
-        }
+        totalDepensesLabel.setText(String.format("%.2f DT", total));
 
-        // Dépenses du mois en cours
         LocalDate now = LocalDate.now();
         double totalMois = depensesObservable.stream()
                 .filter(d -> d.getDateDepense() != null &&
                         d.getDateDepense().getMonthValue() == now.getMonthValue() &&
                         d.getDateDepense().getYear() == now.getYear())
-                .mapToDouble(Depense::getMontant)
-                .sum();
+                .mapToDouble(Depense::getMontant).sum();
+        depensesMoisLabel.setText(String.format("%.2f DT", totalMois));
 
-        if (depensesMoisLabel != null) {
-            depensesMoisLabel.setText(String.format("%.2f DT", totalMois));
-        }
-
-        // Budget restant
         double budgetRestant = budgetMensuel - totalMois;
         if (budgetRestantLabel != null) {
             if (budgetRestant < 0) {
@@ -202,27 +149,15 @@ public class DepensesClientController {
     }
 
     private void updateChart() {
-        if (depensesChart == null) return;
-
         depensesChart.getData().clear();
-
-        // Regrouper par catégorie
         java.util.Map<String, Double> sumByCat = depensesObservable.stream()
                 .filter(d -> d.getCategorie() != null)
-                .collect(Collectors.groupingBy(
-                        d -> d.getCategorie(),
-                        Collectors.summingDouble(Depense::getMontant)
-                ));
-
-        for (java.util.Map.Entry<String, Double> e : sumByCat.entrySet()) {
-            PieChart.Data data = new PieChart.Data(e.getKey() + " (" + String.format("%.2f", e.getValue()) + " DT)", e.getValue());
-            depensesChart.getData().add(data);
+                .collect(Collectors.groupingBy(Depense::getCategorie, Collectors.summingDouble(Depense::getMontant)));
+        for (var e : sumByCat.entrySet()) {
+            depensesChart.getData().add(new PieChart.Data(e.getKey() + " (" + String.format("%.2f", e.getValue()) + " DT)", e.getValue()));
         }
-
-        if (depensesChart.getData().isEmpty()) {
-            PieChart.Data emptyData = new PieChart.Data("Aucune donnée", 1);
-            depensesChart.getData().add(emptyData);
-        }
+        if (depensesChart.getData().isEmpty())
+            depensesChart.getData().add(new PieChart.Data("Aucune donnée", 1));
     }
 
     private void updateStats() {
@@ -252,100 +187,55 @@ public class DepensesClientController {
             LocalDate date = dateDepenseField.getValue();
             String categorie = categorieCombo.getValue();
 
-            if (montant <= 0) {
-                ToastNotification.error("Erreur", "Le montant doit être positif");
-                return;
-            }
+            if (montant <= 0) { ToastNotification.error("Erreur", "Montant positif requis"); return; }
+            if (categorie == null) { ToastNotification.error("Erreur", "Choisissez une catégorie"); return; }
 
-            if (categorie == null || categorie.isEmpty()) {
-                ToastNotification.error("Erreur", "Veuillez choisir une catégorie");
-                return;
-            }
-
-            // Nettoyer la catégorie (enlever l'emoji si présent)
             String cleanCategorie = categorie.replaceAll("^[^A-Za-zÀ-ÿ]+", "").trim();
-
             Depense d = new Depense(montant, description, date != null ? date : LocalDate.now(), cleanCategorie, currentUserId);
-
-            // CORRECTION: Passer les 2 paramètres
             AddResponse response = depenseService.addWithMessage(d, cleanCategorie);
 
             if (response.getResult() == AddResult.FAILED) {
-                ToastNotification.error("❌ Erreur", "Impossible d'ajouter la dépense: " + response.getMessage());
+                ToastNotification.error("Erreur", "Ajout impossible: " + response.getMessage());
                 return;
             }
 
-            // Ajouter à la liste
             depensesObservable.add(0, d);
             updateStats();
             clearForm();
-
-            // Notification
-            if (notificationCallback != null) {
-                notificationCallback.accept(null);
-            }
-
-            // 🔔 NOTIFIER LE DASHBOARD QU'UNE MODIFICATION A EU LIEU
+            if (notificationCallback != null) notificationCallback.accept(null);
             DataChangeNotifier.notifyDataChanged();
 
             if (response.getResult() == AddResult.ADDED_EXCEEDED) {
-                ToastNotification.error("⚠️ ALERTE DÉPASSEMENT", response.getMessage());
-                DialogUtil.error("⚠️ ALERTE BUDGET",
-                        "ATTENTION! Vous avez dépassé votre budget pour la catégorie: " + categorie + "\n\n" +
-                                response.getMessage() + "\n\n✓ Une notification a été créée.");
+                DialogUtil.error("⚠️ ALERTE DÉPASSEMENT",
+                        "Attention! Vous avez dépassé votre budget pour " + categorie + "\n" + response.getMessage());
             } else {
-                ToastNotification.success("✓ Succès", "Dépense ajoutée: " + montant + " DT");
+                ToastNotification.success("Succès", "Dépense ajoutée: " + montant + " DT");
             }
-
         } catch (NumberFormatException e) {
-            ToastNotification.error("❌ Erreur", "Montant invalide");
-        } catch (Exception e) {
-            ToastNotification.error("❌ Erreur", "Une erreur s'est produite: " + e.getMessage());
-            e.printStackTrace();
+            ToastNotification.error("Erreur", "Montant invalide");
         }
     }
 
     private void onSupprimer() {
         Depense sel = depensesList.getSelectionModel().getSelectedItem();
-        if (sel == null) {
-            ToastNotification.warning("Attention", "Veuillez sélectionner une dépense");
-            return;
-        }
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirmation");
-        confirm.setHeaderText("Supprimer la dépense");
-        confirm.setContentText("Voulez-vous vraiment supprimer cette dépense ?");
-
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                boolean ok = depenseService.delete(sel.getId());
-                if (ok) {
-                    depensesObservable.remove(sel);
-                    updateStats();
-                    clearForm();
-                    ToastNotification.success("✓ Succès", "Dépense supprimée");
-
-                    if (notificationCallback != null) {
-                        notificationCallback.accept(null);
-                    }
-
-                    // 🔔 NOTIFIER LE DASHBOARD
-                    DataChangeNotifier.notifyDataChanged();
-                } else {
-                    ToastNotification.error("❌ Erreur", "Impossible de supprimer");
-                }
+        if (sel == null) return;
+        if (DialogUtil.confirm("Confirmation", "Supprimer cette dépense ?")) {
+            if (depenseService.delete(sel.getId())) {
+                depensesObservable.remove(sel);
+                updateStats();
+                clearForm();
+                if (notificationCallback != null) notificationCallback.accept(null);
+                DataChangeNotifier.notifyDataChanged();
+                ToastNotification.success("Succès", "Dépense supprimée");
+            } else {
+                ToastNotification.error("Erreur", "Suppression impossible");
             }
-        });
+        }
     }
 
     private void onModifier() {
         Depense sel = depensesList.getSelectionModel().getSelectedItem();
-        if (sel == null) {
-            ToastNotification.warning("Attention", "Veuillez sélectionner une dépense");
-            return;
-        }
-
+        if (sel == null) return;
         try {
             double montant = Double.parseDouble(montantField.getText().trim());
             String description = descriptionField.getText().trim();
@@ -357,51 +247,19 @@ public class DepensesClientController {
             sel.setDateDepense(date);
             sel.setCategorie(categorie);
 
-            boolean ok = depenseService.update(sel);
-            if (ok) {
+            if (depenseService.update(sel)) {
                 depensesList.refresh();
                 updateStats();
                 clearForm();
-                ToastNotification.success("✓ Succès", "Dépense mise à jour");
-
-                if (notificationCallback != null) {
-                    notificationCallback.accept(null);
-                }
-
-                // 🔔 NOTIFIER LE DASHBOARD
+                if (notificationCallback != null) notificationCallback.accept(null);
                 DataChangeNotifier.notifyDataChanged();
+                ToastNotification.success("Succès", "Dépense modifiée");
             } else {
-                ToastNotification.error("❌ Erreur", "Impossible de modifier");
+                ToastNotification.error("Erreur", "Modification impossible");
             }
         } catch (Exception e) {
-            ToastNotification.error("❌ Erreur", "Données invalides");
+            ToastNotification.error("Erreur", "Données invalides");
         }
-    }
-
-    @FXML
-    private void setBudgetMensuel() {
-        TextInputDialog dialog = new TextInputDialog(String.valueOf(budgetMensuel));
-        dialog.setTitle("Budget mensuel");
-        dialog.setHeaderText("Définir votre budget mensuel");
-        dialog.setContentText("Budget mensuel (DT):");
-
-        dialog.showAndWait().ifPresent(result -> {
-            try {
-                budgetMensuel = Double.parseDouble(result);
-                updateTotal();
-                ToastNotification.success("✓ Succès", "Budget mis à jour: " + budgetMensuel + " DT");
-            } catch (NumberFormatException e) {
-                ToastNotification.error("❌ Erreur", "Montant invalide");
-            }
-        });
-    }
-
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     public void setNotificationCallback(Consumer<Void> callback) {
