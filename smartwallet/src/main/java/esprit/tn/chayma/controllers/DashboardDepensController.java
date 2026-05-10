@@ -2,6 +2,7 @@ package esprit.tn.chayma.controllers;
 
 import esprit.tn.chayma.entities.Depense;
 import esprit.tn.chayma.entities.Planning;
+import esprit.tn.chayma.services.DepenseService;
 import esprit.tn.chayma.services.PlanningService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,9 +10,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import utils.DataChangeNotifier;
 import utils.Session;
 
 import java.time.LocalDate;
@@ -22,248 +26,140 @@ import java.util.stream.Collectors;
 
 public class DashboardDepensController {
 
-    @FXML private Label totalDepensesLabel;
-    @FXML private Label totalPlanningsLabel;
-    @FXML private Label totalBudgetsLabel;
-    @FXML private Label bienvenueLabel;
-    @FXML private ComboBox<String> filterUserCombo;
-    @FXML private TableView<PlanningAdminView> planningsTable;
-    @FXML private PieChart depensesChart;
+    // ========== FXML (d'après votre fichier .fxml) ==========
+    @FXML private Label totalDepensesLabel;       // Total général des dépenses
+    @FXML private Label depensesMoisLabel;        // Dépenses du mois en cours
+    @FXML private Label totalPlanningsLabel;      // Nombre de plannings (optionnel)
+    @FXML private PieChart depensesCategorieChart; // PieChart des catégories
+    @FXML private LineChart<String, Number> evolutionDepensesChart; // LineChart évolution
     @FXML private Button btnRetourDashboard;
 
+    // Services
+    private DepenseService depenseService = new DepenseService();
     private PlanningService planningService = PlanningService.getInstance();
     private int currentUserId;
 
     @FXML
     public void initialize() {
-        // Vérifier que tous les champs FXML sont bien injectés
-        if (totalBudgetsLabel == null || totalDepensesLabel == null || totalPlanningsLabel == null) {
-            System.err.println("[DashboardDepens] ERREUR: Certains labels FXML sont null!");
-            return;
-        }
-
+        // Récupérer l'utilisateur connecté
         if (Session.getCurrentUser() != null) {
             currentUserId = Session.getCurrentUser().getId();
-            String userName = Session.getCurrentUser().getNom();
-            if (bienvenueLabel != null) {
-                bienvenueLabel.setText("👋 Bonjour, " + userName + " !");
-            }
         } else {
-            currentUserId = 1;
-            if (bienvenueLabel != null) {
-                bienvenueLabel.setText("👋 Bonjour !");
+            currentUserId = 1; // fallback
+        }
+
+        // S'abonner aux notifications de changement (dépenses modifiées)
+        DataChangeNotifier.addListener(this::refreshAll);
+
+        // Premier chargement
+        refreshAll();
+    }
+
+    /**
+     * Rafraîchit tout le tableau de bord : cartes, pie chart et line chart.
+     */
+    private void refreshAll() {
+        updateSummaryCards();
+        updatePieChart();
+        updateEvolutionChart();
+    }
+
+    /**
+     * Met à jour les trois cartes : total dépenses, dépenses du mois, nombre de plannings.
+     */
+    private void updateSummaryCards() {
+        List<Depense> allDepenses = depenseService.getAllByUser(currentUserId);
+
+        // Total général
+        double total = allDepenses.stream()
+                .mapToDouble(Depense::getMontant)
+                .sum();
+        totalDepensesLabel.setText(String.format("%.2f DT", total));
+
+        // Dépenses du mois en cours
+        LocalDate now = LocalDate.now();
+        double monthTotal = allDepenses.stream()
+                .filter(d -> d.getDateDepense() != null)
+                .filter(d -> d.getDateDepense().getYear() == now.getYear()
+                        && d.getDateDepense().getMonth() == now.getMonth())
+                .mapToDouble(Depense::getMontant)
+                .sum();
+        depensesMoisLabel.setText(String.format("%.2f DT", monthTotal));
+
+        // Nombre de plannings (optionnel, gardé pour compatibilité)
+        List<Planning> plannings = planningService.getPlanningsByUser(currentUserId);
+        totalPlanningsLabel.setText(String.valueOf(plannings.size()));
+    }
+
+    /**
+     * Met à jour le PieChart des dépenses par catégorie.
+     */
+    private void updatePieChart() {
+        List<Depense> allDepenses = depenseService.getAllByUser(currentUserId);
+        Map<String, Double> depensesParCategorie = allDepenses.stream()
+                .filter(d -> d.getCategorie() != null && !d.getCategorie().isEmpty())
+                .collect(Collectors.groupingBy(
+                        Depense::getCategorie,
+                        Collectors.summingDouble(Depense::getMontant)
+                ));
+
+        ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
+        for (Map.Entry<String, Double> entry : depensesParCategorie.entrySet()) {
+            if (entry.getValue() > 0) {
+                pieData.add(new PieChart.Data(
+                        entry.getKey() + " (" + String.format("%.2f", entry.getValue()) + " DT)",
+                        entry.getValue()
+                ));
             }
         }
 
-        loadData();
-        setupTable();
-    }
-
-    private void loadData() {
-        try {
-            List<Planning> plannings = planningService.getPlanningsByUser(currentUserId);
-
-            if (plannings == null || plannings.isEmpty()) {
-                // Aucune donnée, afficher 0
-                if (totalBudgetsLabel != null) totalBudgetsLabel.setText("0.00 DT");
-                if (totalDepensesLabel != null) totalDepensesLabel.setText("0.00 DT");
-                if (totalPlanningsLabel != null) totalPlanningsLabel.setText("0");
-                return;
-            }
-
-            // CORRECTION : Utiliser Double au lieu de double pour éviter les problèmes avec null
-            double totalBudgets = plannings.stream().mapToDouble(p -> {
-                Double budget = p.getBudgetTotal();
-                return budget != null ? budget : 0.0;
-            }).sum();
-
-            double totalDepenses = plannings.stream().mapToDouble(p -> {
-                Double depense = p.getDepensesActuelles();
-                return depense != null ? depense : 0.0;
-            }).sum();
-
-            int totalPlannings = plannings.size();
-
-            if (totalBudgetsLabel != null) totalBudgetsLabel.setText(String.format("%.2f DT", totalBudgets));
-            if (totalDepensesLabel != null) totalDepensesLabel.setText(String.format("%.2f DT", totalDepenses));
-            if (totalPlanningsLabel != null) totalPlanningsLabel.setText(String.valueOf(totalPlannings));
-
-            updateChart(plannings);
-            updateTable(plannings);
-
-        } catch (Exception e) {
-            System.err.println("[DashboardDepens] Erreur chargement: " + e.getMessage());
-            e.printStackTrace();
-            if (totalBudgetsLabel != null) totalBudgetsLabel.setText("Erreur");
-            if (totalDepensesLabel != null) totalDepensesLabel.setText("Erreur");
+        if (pieData.isEmpty()) {
+            pieData.add(new PieChart.Data("Aucune dépense", 1));
         }
+
+        depensesCategorieChart.setData(pieData);
     }
 
-    private void updateTable(List<Planning> plannings) {
-        if (planningsTable == null) return;
+    /**
+     * Met à jour le LineChart de l'évolution mensuelle des dépenses (12 derniers mois).
+     */
+    private void updateEvolutionChart() {
+        if (evolutionDepensesChart == null) return;
 
-        try {
-            ObservableList<PlanningAdminView> items = FXCollections.observableArrayList();
+        List<Depense> allDepenses = depenseService.getAllByUser(currentUserId);
 
-            for (Planning p : plannings) {
-                // CORRECTION : Utiliser des variables temporaires avec vérification null
-                double budget = 0.0;
-                Double budgetObj = p.getBudgetTotal();
-                if (budgetObj != null) budget = budgetObj;
+        // Grouper par année-mois (format "yyyy-MM")
+        Map<String, Double> monthlySum = allDepenses.stream()
+                .filter(d -> d.getDateDepense() != null)
+                .collect(Collectors.groupingBy(
+                        d -> d.getDateDepense().format(DateTimeFormatter.ofPattern("yyyy-MM")),
+                        Collectors.summingDouble(Depense::getMontant)
+                ));
 
-                double depense = 0.0;
-                Double depenseObj = p.getDepensesActuelles();
-                if (depenseObj != null) depense = depenseObj;
+        // Trier les mois
+        List<String> sortedMonths = monthlySum.keySet().stream()
+                .sorted()
+                .collect(Collectors.toList());
 
-                double reste = budget - depense;
-                double progression = budget > 0 ? (depense / budget) * 100 : 0;
-
-                String nom = p.getNom() != null ? p.getNom() : "Sans nom";
-                String categorie = p.getCategorie() != null ? p.getCategorie() : "Non catégorisé";
-                String statut = p.getStatut() != null ? p.getStatut() : "EN_COURS";
-
-                items.add(new PlanningAdminView(nom, categorie, budget, depense, reste, progression, statut));
-            }
-
-            planningsTable.setItems(items);
-        } catch (Exception e) {
-            System.err.println("[DashboardDepens] Erreur mise à jour tableau: " + e.getMessage());
+        // Ne garder que les 12 derniers mois si la liste est longue
+        if (sortedMonths.size() > 12) {
+            sortedMonths = sortedMonths.subList(sortedMonths.size() - 12, sortedMonths.size());
         }
-    }
 
-    private void updateChart(List<Planning> plannings) {
-        if (depensesChart == null) return;
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Dépenses mensuelles");
 
-        try {
-            Map<String, Double> depensesParCategorie = plannings.stream()
-                    .flatMap(p -> {
-                        List<Depense> depenses = p.getDepenses();
-                        return depenses != null ? depenses.stream() : java.util.stream.Stream.empty();
-                    })
-                    .filter(d -> d.getCategorie() != null && !d.getCategorie().isEmpty())
-                    .collect(Collectors.groupingBy(
-                            Depense::getCategorie,
-                            Collectors.summingDouble(d -> {
-                                Double montant = d.getMontant();
-                                return montant != null ? montant : 0.0;
-                            })
-                    ));
-
-            ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
-            for (Map.Entry<String, Double> entry : depensesParCategorie.entrySet()) {
-                if (entry.getValue() > 0) {
-                    pieData.add(new PieChart.Data(entry.getKey() + " (" + String.format("%.2f", entry.getValue()) + " DT)", entry.getValue()));
-                }
-            }
-
-            if (pieData.isEmpty()) {
-                pieData.add(new PieChart.Data("Aucune dépense", 1));
-            }
-
-            depensesChart.setData(pieData);
-        } catch (Exception e) {
-            System.err.println("[DashboardDepens] Erreur mise à jour graphique: " + e.getMessage());
+        for (String month : sortedMonths) {
+            series.getData().add(new XYChart.Data<>(month, monthlySum.get(month)));
         }
-    }
 
-
-
-    private void setupTable() {
-        if (planningsTable == null) return;
-
-        planningsTable.getColumns().clear();
-
-        TableColumn<PlanningAdminView, String> nameCol = new TableColumn<>("Planning");
-        nameCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getPlanningName()));
-        nameCol.setPrefWidth(150);
-
-        TableColumn<PlanningAdminView, String> catCol = new TableColumn<>("Catégorie");
-        catCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCategorie()));
-        catCol.setPrefWidth(120);
-
-        TableColumn<PlanningAdminView, Double> budgetCol = new TableColumn<>("Budget");
-        budgetCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getBudget()));
-        budgetCol.setPrefWidth(100);
-        budgetCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) setText(null);
-                else setText(String.format("%.2f DT", item));
-            }
-        });
-
-        TableColumn<PlanningAdminView, Double> depenseCol = new TableColumn<>("Dépensé");
-        depenseCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getDepense()));
-        depenseCol.setPrefWidth(100);
-        depenseCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) setText(null);
-                else setText(String.format("%.2f DT", item));
-            }
-        });
-
-        TableColumn<PlanningAdminView, Double> resteCol = new TableColumn<>("Reste");
-        resteCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getReste()));
-        resteCol.setPrefWidth(100);
-        resteCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) setText(null);
-                else setText(String.format("%.2f DT", item));
-            }
-        });
-
-        TableColumn<PlanningAdminView, Double> progCol = new TableColumn<>("Progression");
-        progCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getProgression()));
-        progCol.setPrefWidth(150);
-        progCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    ProgressBar pb = new ProgressBar(Math.min(item / 100, 1.0));
-                    pb.setPrefWidth(80);
-                    Label label = new Label(String.format("%.1f%%", item));
-                    javafx.scene.layout.HBox hbox = new javafx.scene.layout.HBox(5, pb, label);
-                    setGraphic(hbox);
-                    setText(null);
-                }
-            }
-        });
-
-        TableColumn<PlanningAdminView, String> statutCol = new TableColumn<>("Statut");
-        statutCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getStatut()));
-        statutCol.setPrefWidth(100);
-        statutCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    Label badge = new Label(item);
-                    if ("EN_COURS".equals(item)) {
-                        badge.setStyle("-fx-background-color: #f59e0b20; -fx-text-fill: #f59e0b; -fx-padding: 3 8; -fx-background-radius: 10;");
-                    } else if ("TERMINE".equals(item)) {
-                        badge.setStyle("-fx-background-color: #22c55e20; -fx-text-fill: #22c55e; -fx-padding: 3 8; -fx-background-radius: 10;");
-                    } else {
-                        badge.setStyle("-fx-background-color: #ef444420; -fx-text-fill: #ef4444; -fx-padding: 3 8; -fx-background-radius: 10;");
-                    }
-                    setGraphic(badge);
-                    setText(null);
-                }
-            }
-        });
-
-        planningsTable.getColumns().addAll(nameCol, catCol, budgetCol, depenseCol, resteCol, progCol, statutCol);
+        evolutionDepensesChart.getData().clear();
+        if (!series.getData().isEmpty()) {
+            evolutionDepensesChart.getData().add(series);
+        } else {
+            // Aucune donnée : afficher un message
+            evolutionDepensesChart.setTitle("Aucune dépense enregistrée");
+        }
     }
 
     @FXML
@@ -276,36 +172,16 @@ public class DashboardDepensController {
             stage.setTitle("SmartWallet Admin Dashboard");
             stage.centerOnScreen();
         } catch (Exception e) {
-            System.err.println("[DashboardDepens] Erreur retour dashboard: " + e.getMessage());
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner au Dashboard !");
         }
     }
 
-    public static class PlanningAdminView {
-        private final String planningName;
-        private final String categorie;
-        private final double budget;
-        private final double depense;
-        private final double reste;
-        private final double progression;
-        private final String statut;
-
-        public PlanningAdminView(String planningName, String categorie, double budget, double depense, double reste, double progression, String statut) {
-            this.planningName = planningName;
-            this.categorie = categorie;
-            this.budget = budget;
-            this.depense = depense;
-            this.reste = reste;
-            this.progression = progression;
-            this.statut = statut;
-        }
-
-        public String getPlanningName() { return planningName; }
-        public String getCategorie() { return categorie; }
-        public double getBudget() { return budget; }
-        public double getDepense() { return depense; }
-        public double getReste() { return reste; }
-        public double getProgression() { return progression; }
-        public String getStatut() { return statut; }
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import utils.DataChangeNotifier;
 import utils.Session;
 
 import java.time.LocalDate;
@@ -284,6 +285,9 @@ public class DepensesClientController {
                 notificationCallback.accept(null);
             }
 
+            // 🔔 NOTIFIER LE DASHBOARD QU'UNE MODIFICATION A EU LIEU
+            DataChangeNotifier.notifyDataChanged();
+
             if (response.getResult() == AddResult.ADDED_EXCEEDED) {
                 ToastNotification.error("⚠️ ALERTE DÉPASSEMENT", response.getMessage());
                 DialogUtil.error("⚠️ ALERTE BUDGET",
@@ -300,6 +304,7 @@ public class DepensesClientController {
             e.printStackTrace();
         }
     }
+
     private void onSupprimer() {
         Depense sel = depensesList.getSelectionModel().getSelectedItem();
         if (sel == null) {
@@ -324,6 +329,9 @@ public class DepensesClientController {
                     if (notificationCallback != null) {
                         notificationCallback.accept(null);
                     }
+
+                    // 🔔 NOTIFIER LE DASHBOARD
+                    DataChangeNotifier.notifyDataChanged();
                 } else {
                     ToastNotification.error("❌ Erreur", "Impossible de supprimer");
                 }
@@ -359,6 +367,9 @@ public class DepensesClientController {
                 if (notificationCallback != null) {
                     notificationCallback.accept(null);
                 }
+
+                // 🔔 NOTIFIER LE DASHBOARD
+                DataChangeNotifier.notifyDataChanged();
             } else {
                 ToastNotification.error("❌ Erreur", "Impossible de modifier");
             }
@@ -366,8 +377,6 @@ public class DepensesClientController {
             ToastNotification.error("❌ Erreur", "Données invalides");
         }
     }
-
-
 
     @FXML
     private void setBudgetMensuel() {

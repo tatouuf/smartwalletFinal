@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import utils.DataChangeNotifier;
 import utils.Session;
 
 import java.time.LocalDate;
@@ -162,6 +163,9 @@ public class DepensesController {
                 notificationCallback.accept(null);
             }
 
+            // 🔔 NOTIFIER LE DASHBOARD QU'UNE MODIFICATION A EU LIEU
+            DataChangeNotifier.notifyDataChanged();
+
             if (response.getResult() == AddResult.ADDED_EXCEEDED) {
                 System.out.println("[DepensesController] DÉPASSEMENT DÉTECTÉ: " + categorie);
                 ToastNotification.error("⚠️ DÉPASSEMENT BUDGET", response.getMessage());
@@ -204,6 +208,9 @@ public class DepensesController {
                 if (notificationCallback != null) {
                     notificationCallback.accept(null);
                 }
+
+                // 🔔 NOTIFIER LE DASHBOARD
+                DataChangeNotifier.notifyDataChanged();
             } else {
                 DialogUtil.error("Erreur", "Impossible de supprimer la dépense");
                 ToastNotification.error("❌ Erreur", "Suppression échouée");
@@ -238,6 +245,9 @@ public class DepensesController {
                 if (notificationCallback != null) {
                     notificationCallback.accept(null);
                 }
+
+                // 🔔 NOTIFIER LE DASHBOARD
+                DataChangeNotifier.notifyDataChanged();
             } else {
                 DialogUtil.error("Erreur", "Impossible de mettre à jour la dépense");
                 ToastNotification.error("❌ Erreur", "Mise à jour échouée");

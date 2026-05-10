@@ -4,63 +4,125 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="esprit.tn.chayma.controllers.BudgetController"
-            prefHeight="700" prefWidth="1000">
+<BorderPane prefHeight="700" prefWidth="1000"
+            style="-fx-background-color: #f1f5f9; -fx-font-family: 'Segoe UI', system, 'Helvetica Neue', sans-serif;"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.chayma.controllers.BudgetController">
+
     <top>
-        <VBox style="-fx-background-color: #7B1FA2; -fx-padding: 15;">
-            <Label text="Gestion des Budgets" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
-        </VBox>
+        <HBox alignment="CENTER_LEFT" spacing="16"
+              style="-fx-background-color: linear-gradient(to right, #1e293b, #0f172a); -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0.2, 0, 2);"
+              prefHeight="70">
+            <padding><Insets left="24" right="24" top="12" bottom="12"/></padding>
+            <Label text="📊" style="-fx-font-size: 26px; -fx-text-fill: #ffffff;"/>
+            <Label text="Gestion des budgets" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white; -fx-letter-spacing: 0.5px;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnRetourDashboard" text="← Retour"
+                    style="-fx-background-color: rgba(255,255,255,0.12); -fx-text-fill: white; -fx-background-radius: 30px; -fx-padding: 8 20; -fx-font-size: 13px; -fx-cursor: hand;"/>
+        </HBox>
     </top>
 
     <center>
-        <VBox spacing="15" style="-fx-padding: 20;">
-            <!-- Formulaire d'ajout -->
-            <TitledPane text="Ajouter/Modifier un Budget" animated="false" expanded="true">
-                <GridPane hgap="10" vgap="10" style="-fx-padding: 15;">
-                    <columnConstraints>
-                        <ColumnConstraints minWidth="150" prefWidth="150"/>
-                        <ColumnConstraints hgrow="ALWAYS"/>
-                        <ColumnConstraints minWidth="150" prefWidth="150"/>
-                        <ColumnConstraints hgrow="ALWAYS"/>
-                    </columnConstraints>
-
-                    <Label text="Catégorie" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                    <ComboBox fx:id="categorieCombo" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-                    <Label text="Montant Max (DT)" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                    <TextField fx:id="montantMaxField" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
-
-                    <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                    <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-                    <Label text="Mois" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                    <ComboBox fx:id="moisCombo" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-
-                    <Label text="Année" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <ComboBox fx:id="anneeCombo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
-                    <!-- Progression -->
-                    <Label text="Progression" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                    <ProgressBar fx:id="budgetProgressBar" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-
-                    <!-- Boutons -->
-                    <HBox spacing="10" GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="3">
-                        <Button fx:id="ajouterBtn" text="Ajouter" style="-fx-font-size: 12; -fx-padding: 8;"/>
-                        <Button fx:id="modifierBtn" text="Modifier" style="-fx-font-size: 12; -fx-padding: 8;"/>
-                        <Button fx:id="supprimerBtn" text="Supprimer" style="-fx-font-size: 12; -fx-padding: 8; -fx-text-fill: white; -fx-background-color: #f44336;"/>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
+            <VBox spacing="20" style="-fx-padding: 20 24 24 24;">
+                <!-- Carte formulaire compacte -->
+                <VBox spacing="14"
+                      style="-fx-background-color: white; -fx-background-radius: 18; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0.1, 0, 4); -fx-padding: 16 20 20 20;">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="✏️" style="-fx-font-size: 16px;"/>
+                        <Label text="Nouveau budget" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
                     </HBox>
-                </GridPane>
-            </TitledPane>
+                    <Separator style="-fx-background-color: #e2e8f0;"/>
 
-            <!-- Tableau des budgets -->
-            <!-- Liste des budgets -->
-            <TitledPane text="Liste des Budgets" animated="false" expanded="true">
-                <VBox spacing="10" style="-fx-padding: 10;">
-                    <ListView fx:id="budgetsList" prefHeight="300" />
-                    <Label fx:id="totalBudgetsLabel" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <GridPane hgap="12" vgap="10" style="-fx-padding: 5 0 0 0;">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="100" prefWidth="100"/>
+                            <ColumnConstraints hgrow="SOMETIMES" prefWidth="180"/>
+                            <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="90" prefWidth="90"/>
+                            <ColumnConstraints hgrow="SOMETIMES" prefWidth="180"/>
+                        </columnConstraints>
+
+                        <children>
+                            <!-- Ligne 1 -->
+                            <Label text="📂 Catégorie" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <ComboBox fx:id="categorieCombo" promptText="Choisir"
+                                      style="-fx-background-radius: 10; -fx-padding: 5 8; -fx-border-color: #cbd5e1; -fx-border-radius: 10; -fx-background-color: white;"
+                                      GridPane.columnIndex="1"/>
+                            <Label text="💰 Montant max" style="-fx-font-weight: 600; -fx-text-fill: #334155;" GridPane.columnIndex="2"/>
+                            <TextField fx:id="montantMaxField" promptText="Ex: 500 DT"
+                                       style="-fx-background-radius: 10; -fx-padding: 6 10; -fx-border-color: #cbd5e1; -fx-border-radius: 10; -fx-background-color: white;"
+                                       GridPane.columnIndex="3"/>
+
+                            <!-- Ligne 2 -->
+                            <Label text="📝 Description" style="-fx-font-weight: 600; -fx-text-fill: #334155;" GridPane.rowIndex="1"/>
+                            <TextField fx:id="descriptionField" promptText="Optionnel"
+                                       style="-fx-background-radius: 10; -fx-padding: 6 10; -fx-border-color: #cbd5e1; -fx-border-radius: 10; -fx-background-color: white;"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                            <Label text="📅 Mois" style="-fx-font-weight: 600; -fx-text-fill: #334155;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                            <ComboBox fx:id="moisCombo" promptText="Mois"
+                                      style="-fx-background-radius: 10; -fx-padding: 5 8; -fx-border-color: #cbd5e1; -fx-border-radius: 10; -fx-background-color: white;"
+                                      GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                            <!-- Ligne 3 -->
+                            <Label text="📆 Année" style="-fx-font-weight: 600; -fx-text-fill: #334155;" GridPane.rowIndex="2"/>
+                            <ComboBox fx:id="anneeCombo" promptText="Année"
+                                      style="-fx-background-radius: 10; -fx-padding: 5 8; -fx-border-color: #cbd5e1; -fx-border-radius: 10; -fx-background-color: white;"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            <Label text="📊 Progression" style="-fx-font-weight: 600; -fx-text-fill: #334155;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                            <ProgressBar fx:id="budgetProgressBar" prefWidth="180" maxWidth="180"
+                                         style="-fx-accent: #4f46e5; -fx-background-radius: 10; -fx-padding: 2;"
+                                         GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                        </children>
+                    </GridPane>
+
+                    <HBox spacing="12" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="ajouterBtn" text="➕ Ajouter"
+                                style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-background-radius: 24px; -fx-padding: 6 20; -fx-font-weight: bold; -fx-font-size: 12px; -fx-cursor: hand;"/>
+                        <Button fx:id="modifierBtn" text="✏️ Modifier"
+                                style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 24px; -fx-padding: 6 20; -fx-font-weight: bold; -fx-font-size: 12px; -fx-cursor: hand;"/>
+                        <Button fx:id="supprimerBtn" text="🗑️ Supprimer"
+                                style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 24px; -fx-padding: 6 20; -fx-font-weight: bold; -fx-font-size: 12px; -fx-cursor: hand;"/>
+                    </HBox>
                 </VBox>
-            </TitledPane>
-        </VBox>
+
+                <!-- Carte liste des budgets -->
+                <VBox spacing="12"
+                      style="-fx-background-color: white; -fx-background-radius: 18; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0.1, 0, 2); -fx-padding: 16 18 18 18;">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="📋" style="-fx-font-size: 16px;"/>
+                        <Label text="Budgets existants" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                    </HBox>
+                    <Separator style="-fx-background-color: #e2e8f0;"/>
+                    <ListView fx:id="budgetsList" prefHeight="280"
+                              style="-fx-background-color: transparent; -fx-background-radius: 12; -fx-border-color: #e2e8f0; -fx-border-radius: 12; -fx-padding: 2;">
+                        <style>
+                            .list-view .list-cell {
+                            -fx-padding: 10 12;
+                            -fx-background-color: white;
+                            -fx-border-color: #f1f5f9;
+                            -fx-font-size: 12px;
+                            }
+                            .list-view .list-cell:odd {
+                            -fx-background-color: #fafcff;
+                            }
+                            .list-view .list-cell:selected {
+                            -fx-background-color: #eef2ff;
+                            -fx-text-fill: #1e293b;
+                            }
+                        </style>
+                    </ListView>
+                    <Label fx:id="totalBudgetsLabel"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1e293b; -fx-padding: 6 0 0 0;"/>
+                </VBox>
+            </VBox>
+        </ScrollPane>
     </center>
+
+    <bottom>
+        <HBox alignment="CENTER"
+              style="-fx-background-color: #ffffff; -fx-border-color: #e9eef3; -fx-border-width: 1 0 0 0; -fx-padding: 10 20;">
+            <Label text="© 2026 SmartWallet — Gérez vos budgets simplement"
+                   style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: 400;"/>
+        </HBox>
+    </bottom>
 </BorderPane>
