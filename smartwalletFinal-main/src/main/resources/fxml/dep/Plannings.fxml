@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="700" prefWidth="1000" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.chayma.controllers.PlanningsController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #4f46e5; -fx-padding: 15 20;">
+            <Label text="📅" style="-fx-font-size: 28px; -fx-text-fill: white;"/>
+            <Label text="Mes Plannings et Dépenses" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnRetourDashboard" text="← Retour" onAction="#retourDashboard"
+                    style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 8 16;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #f3f4f6;">
+            <VBox spacing="20" style="-fx-padding: 20;">
+
+                <!-- Statistiques -->
+                <HBox spacing="20">
+                    <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-min-width: 200;" HBox.hgrow="ALWAYS">
+                        <Label text="💰 Budget Total" style="-fx-text-fill: #6b7280;"/>
+                        <Label fx:id="totalBudgetLabel" text="0.00 DT" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                    </VBox>
+                    <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-min-width: 200;" HBox.hgrow="ALWAYS">
+                        <Label text="💸 Dépenses Total" style="-fx-text-fill: #6b7280;"/>
+                        <Label fx:id="totalDepensesLabel" text="0.00 DT" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #ef4444;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Ajouter un planning -->
+                <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20;">
+                    <Label text="➕ Créer un nouveau planning" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                    <Separator/>
+                    <GridPane hgap="15" vgap="10">
+                        <Label text="Nom du planning:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="300" promptText="Ex: Courses supermarché"/>
+
+                        <Label text="Description:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <TextArea fx:id="descriptionField" GridPane.rowIndex="1" GridPane.columnIndex="1" prefHeight="60" prefWidth="300" promptText="Description du planning"/>
+
+                        <Label text="Catégorie:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="categorieCombo" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="300"/>
+
+                        <Label text="Budget (DT):" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="budgetField" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="300" promptText="500"/>
+
+                        <Label text="Date échéance:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <DatePicker fx:id="dateEcheancePicker" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="300"/>
+                    </GridPane>
+                    <Button fx:id="btnAjouterPlanning" text="➕ Ajouter Planning"
+                            style="-fx-background-color: #22c55e; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                </VBox>
+
+                <!-- Liste des plannings -->
+                <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20;">
+                    <Label text="📋 Mes Plannings" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                    <Separator/>
+                    <ListView fx:id="planningsList" prefHeight="250"/>
+                </VBox>
+
+                <!-- Dépenses du planning sélectionné -->
+                <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20;">
+                    <Label text="💰 Dépenses du planning sélectionné" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                    <Separator/>
+
+                    <GridPane hgap="15" vgap="10">
+                        <Label text="Description:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="depenseDescriptionField" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="300" promptText="Ex: Lait, yaourts..."/>
+
+                        <Label text="Montant (DT):" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="depenseMontantField" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="300" promptText="15"/>
+
+                        <Label text="Catégorie:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="depenseCategorieCombo" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="300"/>
+
+                        <Label text="Commentaire:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                        <TextArea fx:id="depenseCommentaireField" GridPane.rowIndex="3" GridPane.columnIndex="1" prefHeight="60" prefWidth="300" promptText="Détails supplémentaires..."/>
+                    </GridPane>
+                    <Button fx:id="btnAjouterDepense" text="➕ Ajouter Dépense"
+                            style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
+
+                    <Separator/>
+                    <ScrollPane fitToWidth="true" prefHeight="300">
+                        <VBox fx:id="depensesContainer" spacing="10" style="-fx-padding: 5;"/>
+                    </ScrollPane>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-background-color: #f3f4f6; -fx-padding: 10;">
+            <Label text="© 2026 SmartWallet - Gestion des Plannings et Dépenses" style="-fx-text-fill: #6b7280;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

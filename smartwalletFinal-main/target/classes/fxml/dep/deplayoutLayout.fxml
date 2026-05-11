@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import javafx.geometry.Insets?>
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainContainer"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.chayma.controllers.DeplayoutController"
+            prefWidth="1200" prefHeight="700">
+
+    <!-- Sidebar gauche -->
+    <left>
+        <VBox spacing="15" style="-fx-background-color: linear-gradient(to bottom, #5E35B1, #7E57C2); -fx-padding: 25;">
+
+            <Button text="🏠 Dashboard" onAction="#goDashboard" styleClass="sidebar-button"/>
+            <Button text="📅 Plannings" onAction="#goPlannings" styleClass="sidebar-button"/>
+            <Button text="💰 Budget" onAction="#goBudget" styleClass="sidebar-button"/>
+            <Button text="📝 Dépenses" onAction="#goDepenses" styleClass="sidebar-button"/>
+            <Button text="🔔 Notifications" onAction="#goNotifications" styleClass="sidebar-button"/>
+            <Button text="🧑‍💼 Advisor" onAction="#goAdvisor" styleClass="sidebar-button"/>
+            <Button text="⚙️ Settings" onAction="#goSettings" styleClass="sidebar-button"/>
+            <Region VBox.vgrow="ALWAYS" />
+            <Button text="⬅ Retour" onAction="#goBack" styleClass="sidebar-button" style="-fx-background-color: #ef4444;"/>
+        </VBox>
+    </left>
+
+    <!-- Zone centrale pour charger les pages -->
+    <center>
+        <!-- contenu dynamique -->
+    </center>
+
+</BorderPane>

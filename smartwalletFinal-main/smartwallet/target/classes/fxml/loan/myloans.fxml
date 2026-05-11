@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" style="-fx-background: transparent;" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.souha_pi.controllers.loan.MyLoansController">
+
+    <content>
+        <VBox spacing="20" style="-fx-padding: 20;">
+
+            <Label text="My Loans" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+
+            <!-- Container pour les cartes de prêts -->
+            <VBox fx:id="cardsContainer" spacing="20"/>
+
+        </VBox>
+    </content>
+
+</ScrollPane>

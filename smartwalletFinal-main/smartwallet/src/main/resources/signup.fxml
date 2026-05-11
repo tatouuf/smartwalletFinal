@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@css/signIn.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.SignUpController">
+
+    <Pane prefHeight="700.0" prefWidth="500.0" styleClass="left-panel">
+        <children>
+            <Label layoutX="137.0" layoutY="305.0" styleClass="welcome-label" text="Join SmartWallet" />
+            <Label layoutX="127.0" layoutY="350.0" styleClass="brand-label" text="Your Smart Finance Companion" />
+        </children>
+    </Pane>
+
+    <VBox alignment="CENTER" layoutX="500.0" prefHeight="700" prefWidth="500"
+          spacing="20" styleClass="signup-panel">
+        <padding><Insets left="40" right="40"/></padding>
+
+        <Label styleClass="form-title" text="Sign Up" />
+
+        <TextField fx:id="nomField"       prefWidth="300" promptText="Last Name"      styleClass="input-field"/>
+        <TextField fx:id="prenomField"    prefWidth="300" promptText="First Name"     styleClass="input-field"/>
+        <TextField fx:id="telephoneField" prefWidth="300" promptText="Phone Number"   styleClass="input-field"/>
+        <TextField fx:id="emailField"     prefWidth="300" promptText="Email Address"  styleClass="input-field"/>
+
+        <StackPane prefWidth="300" prefHeight="40">
+            <PasswordField fx:id="passwordField" prefWidth="300" prefHeight="40"
+                           promptText="Password" styleClass="input-field" />
+            <TextField fx:id="passwordVisible" prefWidth="300" prefHeight="40"
+                       promptText="Password" styleClass="input-field"
+                       visible="false" managed="false" />
+            <Button fx:id="togglePasswordBtn" text="👁"
+                    onAction="#handleTogglePassword" styleClass="eye-button"
+                    StackPane.alignment="CENTER_RIGHT" />
+        </StackPane>
+
+        <Button fx:id="btnSignUp" onAction="#handleSignUp" prefWidth="300"
+                styleClass="primary-button" text="Sign Up"/>
+
+        <Hyperlink fx:id="btnLogin" onAction="#handleLogin"
+                   styleClass="link" text="Already have an account? Sign In"/>
+    </VBox>
+
+</AnchorPane>

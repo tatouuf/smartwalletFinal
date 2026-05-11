@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="750" prefWidth="1100" stylesheets="@css/manageUsers.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ManageUsersController">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-bar">
+            <padding>
+                <Insets bottom="15" left="20" right="20" top="15" />
+            </padding>
+
+            <Label styleClass="page-title" text="👤 User Management" HBox.hgrow="ALWAYS" />
+         <BorderPane prefHeight="22.0" prefWidth="618.0" />
+
+            <Button onAction="#handleBack" styleClass="btn-secondary" text="← Back to Dashboard" />
+        </HBox>
+    </top>
+
+    <!-- CENTER CONTENT -->
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- SEARCH & FILTERS -->
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="filter-box">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
+
+                <Label styleClass="filter-label" text="🔍 Search:" />
+                <TextField fx:id="txtSearch" onAction="#handleSearch" prefHeight="34.0" prefWidth="196.0" promptText="Search by name or email..." styleClass="search-field" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Label styleClass="filter-label" text="Status:" />
+                <ComboBox fx:id="comboStatus" prefWidth="120" styleClass="filter-combo" />
+
+                <Button fx:id="btnRefresh" onAction="#handleRefresh" styleClass="btn-secondary" text="🔄 " />
+
+                <Button fx:id="btnSearch" onAction="#handleSearch" prefHeight="31.0" prefWidth="114.0" styleClass="btn-primary" text="🔍 Search" />
+            </HBox>
+
+            <!-- USERS TABLE -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <Label styleClass="section-title" text="📋 All Users" />
+                <TableView fx:id="tableUsers" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colNom" prefWidth="150" text="Last Name" />
+                        <TableColumn fx:id="colPrenom" prefWidth="150" text="First Name" />
+                        <TableColumn fx:id="colEmail" prefWidth="283.20001220703125" text="Email" />
+                        <TableColumn fx:id="colStatus" prefWidth="124.79998779296875" text="Status" />
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+
+    <!-- RIGHT PANEL - USER DETAILS -->
+    <right>
+        <VBox prefWidth="350" spacing="15" styleClass="details-panel">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <Label fx:id="lblSelectedUser" styleClass="details-title" text="Select a user to view details" />
+
+            <Separator />
+
+            <!-- ACCOUNT INFO -->
+            <VBox spacing="8">
+                <Label styleClass="section-subtitle" text="👮 Account Information" />
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefWidth="80" styleClass="field-label" text="ID:" />
+                    <Label fx:id="lblUserId" styleClass="info-text" text="—" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefWidth="80" styleClass="field-label" text="Name:" />
+                    <Label fx:id="lblUserName" styleClass="info-text" text="—" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefWidth="80" styleClass="field-label" text="Email:" />
+                    <Label fx:id="lblUserEmail" styleClass="info-text" text="—" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefWidth="80" styleClass="field-label" text="Phone:" />
+                    <Label fx:id="lblUserPhone" styleClass="info-text" text="—" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefWidth="80" styleClass="field-label" text="Registered:" />
+                    <Label fx:id="lblRegistered" styleClass="info-text" text="—" />
+                </HBox>
+
+                <Label styleClass="field-label" text="Account Status:" />
+                <HBox spacing="15">
+                    <RadioButton fx:id="radioActive" selected="true" text="Active">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="statusToggleGroup" />
+                        </toggleGroup>
+                    </RadioButton>
+                    <RadioButton fx:id="radioInactive" text="Inactive" toggleGroup="$statusToggleGroup" />
+                </HBox>
+            </VBox>
+
+            <Separator />
+
+            <!-- STATISTICS -->
+            <VBox spacing="8">
+                <Label styleClass="section-subtitle" text="📊 User Statistics" />
+
+                <HBox spacing="10">
+                    <Label prefWidth="120" styleClass="stat-label" text="👥 Friends:" />
+                    <Label fx:id="lblFriendsCount" styleClass="stat-value" text="0" />
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label prefWidth="120" styleClass="stat-label" text="📩 Reclamations:" />
+                    <Label fx:id="lblReclamationsCount" styleClass="stat-value" text="0" />
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label prefWidth="120" styleClass="stat-label" text="💳 Transactions:" />
+                    <Label fx:id="lblTransactionsCount" styleClass="stat-value" text="0" />
+                </HBox>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <Separator />
+
+            <!-- ACTION BUTTONS -->
+            <VBox spacing="10">
+                <Button fx:id="btnSave" disable="true" onAction="#handleSave" prefWidth="Infinity" styleClass="btn-success" text="💾 Update Status" />
+
+                <Button fx:id="btnDelete" disable="true" onAction="#handleDelete" prefWidth="Infinity" styleClass="btn-danger" text="🗑️ Delete User" />
+            </VBox>
+        </VBox>
+    </right>
+
+</BorderPane>

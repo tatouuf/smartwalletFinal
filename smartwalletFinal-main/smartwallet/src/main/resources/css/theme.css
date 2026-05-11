@@ -1,0 +1,344 @@
+/* ---------- GLOBAL ---------- */
+.root{
+    -fx-font-family: "Segoe UI", "Inter", Arial;
+}
+
+/* background */
+.page-bg{
+    -fx-background-color: linear-gradient(to bottom right, #f7f8fc, #e9ecf5);
+}
+
+/* ---------- TITLES ---------- */
+.page-header{
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #111827;
+}
+
+/* ---------- CARD ---------- */
+.card{
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 20, 0.2, 0, 5);
+}
+
+/* ---------- BALANCE CARD ---------- */
+.balance-card{
+    -fx-background-color: linear-gradient(to right, #6366f1, #7c3aed);
+    -fx-background-radius: 22;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.5), 25, 0.3, 0, 8);
+}
+
+.balance-title{
+    -fx-text-fill: #e0e7ff;
+    -fx-font-size: 16px;
+}
+
+.balance-value{
+    -fx-text-fill: white;
+    -fx-font-size: 36px;
+    -fx-font-weight: 900;
+}
+
+/* ---------- INPUT ---------- */
+.modern-field{
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #d1d5db;
+    -fx-padding: 12;
+    -fx-font-size: 14px;
+}
+
+.modern-field:focused{
+    -fx-border-color: #6366f1;
+    -fx-border-width: 2;
+}
+
+/* ---------- BUTTONS ---------- */
+.primary-btn{
+    -fx-background-color: #6366f1;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 12 18;
+    -fx-cursor: hand;
+}
+
+.primary-btn:hover{
+    -fx-background-color: #4f46e5;
+}
+
+.success-btn{
+    -fx-background-color: #22c55e;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 12 18;
+}
+
+/* ---------- TABLE ---------- */
+.modern-table{
+    -fx-background-radius: 12;
+}
+
+.table-view{
+    -fx-border-color: transparent;
+}
+
+.table-row-cell{
+    -fx-cell-size: 42px;
+}
+
+.table-row-cell:hover{
+    -fx-background-color: #f1f5f9;
+}
+.root{
+    -fx-background-color:#f3f5f9;
+    -fx-font-family:"Segoe UI";
+}
+
+.page-title{
+    -fx-font-size:26px;
+    -fx-font-weight:bold;
+}
+
+.card-page{
+    -fx-background-color:white;
+    -fx-padding:40;
+    -fx-background-radius:20;
+    -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15),25,0,0,8);
+}
+
+.input{
+    -fx-pref-width:260;
+    -fx-pref-height:40;
+    -fx-background-radius:12;
+    -fx-border-radius:12;
+    -fx-border-color:#d0d5dd;
+    -fx-padding:0 12 0 12;
+}
+
+.input:focused{
+    -fx-border-color:#6c5ce7;
+    -fx-effect:dropshadow(gaussian,#6c5ce7,8,0.3,0,0);
+}
+
+.btn-primary{
+    -fx-background-color:#6c5ce7;
+    -fx-text-fill:white;
+    -fx-font-weight:bold;
+    -fx-background-radius:14;
+    -fx-pref-width:200;
+    -fx-pref-height:42;
+}
+
+.btn-primary:hover{
+    -fx-background-color:#5a4de0;
+}
+.sidebar{
+    -fx-background-color:#111827;
+    -fx-pref-width:240;
+}
+
+.sidebar-title{
+    -fx-text-fill:white;
+    -fx-font-size:20px;
+    -fx-font-weight:bold;
+}
+
+.sidebar-btn{
+    -fx-background-color:transparent;
+    -fx-text-fill:white;
+    -fx-font-size:14px;
+    -fx-background-radius:10;
+}
+
+.sidebar-btn:hover{
+    -fx-background-color:#6c5ce7;
+}
+
+.cards-area{
+    -fx-padding:30;
+}
+
+/* bank card */
+.bank-card{
+    -fx-pref-width:300;
+    -fx-pref-height:170;
+    -fx-padding:18;
+    -fx-background-radius:20;
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.25),25,0,0,8);
+}
+
+.card-number{
+    -fx-text-fill:white;
+    -fx-font-size:18px;
+    -fx-font-weight:bold;
+    -fx-letter-spacing:2px;
+}
+
+.card-holder{
+    -fx-text-fill:white;
+    -fx-font-size:13px;
+}
+
+.card-small{
+    -fx-text-fill:rgba(255,255,255,0.7);
+    -fx-font-size:9px;
+}
+
+.card-type{
+    -fx-text-fill:white;
+    -fx-font-size:16px;
+    -fx-font-weight:bold;
+}
+/* Bouton sidebar mis en évidence */
+.sidebar-btn-highlight{
+    -fx-background-color: #6c5ce7;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 10 15;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn-highlight:hover{
+    -fx-background-color: #5a4de0;
+    -fx-effect: dropshadow(gaussian, rgba(108,92,231,0.4), 10, 0, 0, 3);
+}
+
+/* Content area */
+.content-area {
+    -fx-background-color: transparent;
+    -fx-padding: 20;
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: #111827;
+    -fx-padding: 20 10;
+}
+
+.sidebar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.sidebar-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 14px;
+    -fx-padding: 10 15;
+    -fx-background-radius: 8;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: #6c5ce7;
+    -fx-text-fill: white;
+}
+
+.sidebar-btn-highlight {
+    -fx-background-color: #6c5ce7;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 15;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn-highlight:hover {
+    -fx-background-color: #5a4de0;
+}
+
+ /* Styles pour la page de connexion */
+ .link-btn {
+     -fx-background-color: transparent;
+     -fx-text-fill: #3b82f6;
+     -fx-font-weight: bold;
+     -fx-cursor: hand;
+     -fx-underline: true;
+ }
+
+ .link-btn:hover {
+     -fx-text-fill: #2563eb;
+ }
+
+ .input {
+     -fx-background-radius: 8;
+     -fx-border-radius: 8;
+     -fx-border-color: #d1d5db;
+     -fx-padding: 8 12;
+     -fx-font-size: 14px;
+ }
+
+ .input:focused {
+     -fx-border-color: #3b82f6;
+     -fx-border-width: 2;
+ }
+
+ .primary-btn {
+     -fx-background-color: #3b82f6;
+     -fx-text-fill: white;
+     -fx-font-weight: bold;
+     -fx-background-radius: 8;
+     -fx-padding: 8 16;
+     -fx-cursor: hand;
+ }
+
+ .primary-btn:hover {
+     -fx-background-color: #2563eb;
+ }
+
+ .card {
+     -fx-background-color: white;
+     -fx-background-radius: 16;
+     -fx-padding: 30;
+     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 5);
+ }
+ /* Style pour le RIB */
+ .card-rib {
+     -fx-text-fill: rgba(255,255,255,0.9);
+     -fx-font-size: 12px;
+     -fx-font-family: 'Courier New';
+     -fx-background-color: rgba(0,0,0,0.2);
+     -fx-padding: 5 10;
+     -fx-background-radius: 5;
+ }
+
+
+
+ /* Notifications */
+ .notification-badge {
+     -fx-background-color: #ef4444;
+     -fx-text-fill: white;
+     -fx-font-size: 10px;
+     -fx-font-weight: bold;
+     -fx-min-width: 18px;
+     -fx-min-height: 18px;
+     -fx-max-width: 18px;
+     -fx-max-height: 18px;
+     -fx-background-radius: 9;
+     -fx-alignment: center;
+     -fx-padding: 0;
+     -fx-translate-x: -10;
+     -fx-translate-y: -5;
+ }
+
+ .notification-btn {
+     -fx-background-color: transparent;
+     -fx-font-size: 18px;
+     -fx-cursor: hand;
+ }
+
+ .notification-btn:hover {
+     -fx-opacity: 0.8;
+ }

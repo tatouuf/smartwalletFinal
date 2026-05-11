@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="integration.IntegrationValidationController"
+            stylesheets="@integration.css"
+            prefWidth="1200" prefHeight="760">
+
+    <top>
+        <VBox spacing="6" styleClass="hero">
+            <Label text="SmartWallet — Validation Intégration Finale Web / JavaFX" styleClass="hero-title"/>
+            <Label text="Symfony Web API ⇄ JavaFX Desktop ⇄ même projet / même données" styleClass="hero-subtitle"/>
+            <HBox spacing="10">
+                <Button text="Tester API" onAction="#testApi" styleClass="primary-btn"/>
+                <Button text="Refresh All" onAction="#refreshAll" styleClass="success-btn"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="modulesTabs" tabClosingPolicy="UNAVAILABLE" styleClass="tabs"/>
+    </center>
+
+    <bottom>
+        <VBox spacing="6" styleClass="log-card">
+            <Label text="Journal de synchronisation" styleClass="section-title"/>
+            <TextArea fx:id="logArea" prefRowCount="5" editable="false" wrapText="true"/>
+        </VBox>
+    </bottom>
+
+    <padding>
+        <Insets top="14" right="14" bottom="14" left="14"/>
+    </padding>
+</BorderPane>

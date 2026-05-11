@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0"
+            stylesheets="@css/signUp.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.SignUpController">
+
+    <!-- ═══════════ LEFT PANEL ═══════════ -->
+    <Pane prefHeight="700.0" prefWidth="500.0" styleClass="left-panel">
+        <children>
+            <Label layoutX="100.0" layoutY="250.0" styleClass="welcome-label"
+                   text="Join SmartWallet" />
+            <Label layoutX="100.0" layoutY="300.0" styleClass="brand-label"
+                   text="Your Smart Finance Companion" />
+
+            <!-- decorative sub-labels -->
+            <Label layoutX="120.0" layoutY="370.0"
+                   style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 13px;"
+                   text="✔  Gérez vos finances facilement" />
+            <Label layoutX="120.0" layoutY="400.0"
+                   style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 13px;"
+                   text="✔  Envoyez et recevez de l'argent" />
+            <Label layoutX="120.0" layoutY="430.0"
+                   style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 13px;"
+                   text="✔  Suivi budgétaire intelligent" />
+        </children>
+    </Pane>
+
+    <!-- ═══════════ RIGHT PANEL ═══════════ -->
+    <VBox layoutX="500.0" prefHeight="700.0" prefWidth="500.0"
+          styleClass="signup-panel" spacing="0">
+
+        <ScrollPane fitToWidth="true" prefHeight="700.0"
+                    style="-fx-background-color: transparent; -fx-background: transparent;
+                           -fx-border-color: transparent; -fx-padding: 0;">
+
+            <VBox spacing="14" style="-fx-padding: 10 0 20 0;">
+
+                <!-- Title -->
+                <Label styleClass="form-title" text="Créer un compte"
+                       style="-fx-padding: 10 0 4 0;"/>
+
+                <!-- Subtitle -->
+                <Label text="Tous les champs sont obligatoires sauf la nationalité et le pays."
+                       style="-fx-text-fill: #9ca3af; -fx-font-size: 11px; -fx-padding: 0 0 6 0;"
+                       wrapText="true"/>
+
+                <!-- ── Section : Identité ── -->
+                <Label text="👤  Identité"
+                       style="-fx-font-size: 12px; -fx-font-weight: 700;
+                              -fx-text-fill: #4f46e5; -fx-padding: 4 0 0 0;"/>
+
+                <!-- Nom / Prénom side by side -->
+                <HBox spacing="10">
+                    <TextField fx:id="nomField" promptText="Nom *"
+                               styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="prenomField" promptText="Prénom *"
+                               styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- ── Section : Contact ── -->
+                <Label text="📞  Contact"
+                       style="-fx-font-size: 12px; -fx-font-weight: 700;
+                              -fx-text-fill: #4f46e5; -fx-padding: 4 0 0 0;"/>
+
+                <TextField fx:id="telephoneField" promptText="Téléphone * (8-15 chiffres)"
+                           styleClass="input-field"/>
+
+                <TextField fx:id="emailField" promptText="Adresse email *"
+                           styleClass="input-field"/>
+
+                <!-- ── Section : Localisation ── -->
+                <Label text="🌍  Localisation (optionnel)"
+                       style="-fx-font-size: 12px; -fx-font-weight: 700;
+                              -fx-text-fill: #4f46e5; -fx-padding: 4 0 0 0;"/>
+
+                <ComboBox fx:id="nationaliteCombo"
+                          promptText="Nationalité"
+                          maxWidth="Infinity"
+                          styleClass="input-field"/>
+
+                <ComboBox fx:id="paysResidenceCombo"
+                          promptText="Pays de résidence"
+                          maxWidth="Infinity"
+                          styleClass="input-field"/>
+
+                <!-- ── Section : Mot de passe ── -->
+                <Label text="🔐  Mot de passe"
+                       style="-fx-font-size: 12px; -fx-font-weight: 700;
+                              -fx-text-fill: #4f46e5; -fx-padding: 4 0 0 0;"/>
+
+                <!-- Password with toggle -->
+                <StackPane prefHeight="42.0">
+                    <PasswordField fx:id="passwordField" prefHeight="42.0"
+                                   promptText="Mot de passe * (min. 6 caractères)"
+                                   styleClass="input-field"/>
+                    <TextField fx:id="passwordVisible" prefHeight="42.0"
+                               promptText="Mot de passe * (min. 6 caractères)"
+                               styleClass="input-field"
+                               visible="false" managed="false"/>
+                    <Button fx:id="togglePasswordBtn" text="👁"
+                            onAction="#handleTogglePassword"
+                            styleClass="eye-button"
+                            StackPane.alignment="CENTER_RIGHT"/>
+                </StackPane>
+
+                <!-- Confirm password with toggle -->
+                <StackPane prefHeight="42.0">
+                    <PasswordField fx:id="confirmPasswordField" prefHeight="42.0"
+                                   promptText="Confirmer le mot de passe *"
+                                   styleClass="input-field"/>
+                    <TextField fx:id="confirmPasswordVisible" prefHeight="42.0"
+                               promptText="Confirmer le mot de passe *"
+                               styleClass="input-field"
+                               visible="false" managed="false"/>
+                    <Button fx:id="toggleConfirmBtn" text="👁"
+                            onAction="#handleToggleConfirm"
+                            styleClass="eye-button"
+                            StackPane.alignment="CENTER_RIGHT"/>
+                </StackPane>
+
+                <!-- Error / info message label -->
+                <Label fx:id="messageLabel" text="" wrapText="true"
+                       visible="false"
+                       style="-fx-font-size: 12px; -fx-font-weight: 600;"/>
+
+                <!-- Sign Up button -->
+                <Button fx:id="btnSignUp" onAction="#handleSignUp"
+                        maxWidth="Infinity" prefHeight="42.0"
+                        styleClass="primary-button" text="Créer mon compte"
+                        style="-fx-font-size: 15px; -fx-padding: 10;"/>
+
+                <Hyperlink fx:id="btnLogin" onAction="#handleLogin"
+                           styleClass="link"
+                           text="Déjà un compte ? Se connecter"
+                           style="-fx-alignment: CENTER; -fx-padding: 4 0 0 0;"/>
+
+            </VBox>
+        </ScrollPane>
+    </VBox>
+
+</AnchorPane>

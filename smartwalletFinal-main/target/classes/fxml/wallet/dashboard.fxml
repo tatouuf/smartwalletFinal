@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="esprit.tn.souha_pi.controllers.DashboardController"
+           style="-fx-background-color: linear-gradient(to bottom right, #faf8ff, #fff7fb);">
+
+    <ScrollPane fitToWidth="true"
+                fitToHeight="true"
+                hbarPolicy="NEVER"
+                vbarPolicy="AS_NEEDED"
+                style="-fx-background-color: transparent; -fx-background: transparent;">
+
+        <VBox alignment="TOP_CENTER" spacing="24" maxWidth="1180">
+            <padding>
+                <Insets top="28" right="32" bottom="35" left="32"/>
+            </padding>
+
+            <!-- TOP BAR -->
+            <HBox alignment="CENTER_LEFT" spacing="12" maxWidth="1100">
+                <Button text="⌂ Dashboard"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #111827;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 999;
+                               -fx-padding: 10 20;
+                               -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.08), 12, 0, 0, 4);"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="welcomeLabel"
+                       text="Bienvenue"
+                       style="-fx-text-fill: #111827;
+                              -fx-font-size: 17px;
+                              -fx-font-weight: 800;"/>
+            </HBox>
+
+            <!-- NO WALLET ALERT -->
+            <Label fx:id="noWalletLabel"
+                   text=""
+                   visible="false"
+                   managed="false"
+                   maxWidth="1100"
+                   style="-fx-text-fill: #92400e;
+                          -fx-font-size: 15px;
+                          -fx-font-weight: bold;
+                          -fx-background-color: #fffbeb;
+                          -fx-background-radius: 18;
+                          -fx-padding: 16;
+                          -fx-border-color: #fcd34d;
+                          -fx-border-radius: 18;"/>
+
+            <!-- HERO WALLET -->
+            <HBox alignment="CENTER_LEFT"
+                  spacing="28"
+                  maxWidth="1100"
+                  style="-fx-background-color: linear-gradient(to right, #5646e1, #9947c1, #e6479b);
+                         -fx-background-radius: 30;
+                         -fx-padding: 34;
+                         -fx-effect: dropshadow(gaussian, rgba(86,70,225,0.28), 35, 0, 0, 12);">
+
+                <!-- HERO LEFT -->
+                <VBox spacing="20" HBox.hgrow="ALWAYS">
+
+                    <HBox alignment="CENTER_LEFT" spacing="18">
+
+                        <Label text="💼"
+                               style="-fx-background-color: rgba(255,255,255,0.16);
+                                      -fx-background-radius: 22;
+                                      -fx-min-width: 78;
+                                      -fx-min-height: 78;
+                                      -fx-alignment: center;
+                                      -fx-font-size: 34px;"/>
+
+                        <VBox spacing="4">
+                            <Label text="Solde disponible"
+                                   style="-fx-text-fill: rgba(255,255,255,0.88);
+                                          -fx-font-size: 14px;
+                                          -fx-font-weight: 700;"/>
+
+                            <Label fx:id="balanceLabel"
+                                   text="0.00 TND"
+                                   style="-fx-text-fill: white;
+                                          -fx-font-size: 44px;
+                                          -fx-font-weight: 900;"/>
+
+                            <Label text="Compte principal sécurisé"
+                                   style="-fx-text-fill: rgba(255,255,255,0.78);
+                                          -fx-font-size: 14px;
+                                          -fx-font-weight: 600;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- META CARDS -->
+                    <FlowPane hgap="14" vgap="14">
+
+                        <VBox prefWidth="230"
+                              style="-fx-background-color: rgba(255,255,255,0.14);
+                                     -fx-background-radius: 20;
+                                     -fx-padding: 16;">
+                            <Label text="🏦 RIB"
+                                   style="-fx-text-fill: rgba(255,255,255,0.75);
+                                          -fx-font-size: 12px;
+                                          -fx-font-weight: 800;"/>
+                            <Label fx:id="ribLabel"
+                                   text="Non renseigné"
+                                   wrapText="true"
+                                   style="-fx-text-fill: white;
+                                          -fx-font-size: 15px;
+                                          -fx-font-weight: 900;"/>
+                        </VBox>
+
+                        <VBox prefWidth="230"
+                              style="-fx-background-color: rgba(255,255,255,0.14);
+                                     -fx-background-radius: 20;
+                                     -fx-padding: 16;">
+                            <Label text="🪪 CIN"
+                                   style="-fx-text-fill: rgba(255,255,255,0.75);
+                                          -fx-font-size: 12px;
+                                          -fx-font-weight: 800;"/>
+                            <Label fx:id="cinLabel"
+                                   text="Non renseigné"
+                                   style="-fx-text-fill: white;
+                                          -fx-font-size: 15px;
+                                          -fx-font-weight: 900;"/>
+                        </VBox>
+
+                        <VBox prefWidth="230"
+                              style="-fx-background-color: rgba(255,255,255,0.14);
+                                     -fx-background-radius: 20;
+                                     -fx-padding: 16;">
+                            <Label text="💳 Compte"
+                                   style="-fx-text-fill: rgba(255,255,255,0.75);
+                                          -fx-font-size: 12px;
+                                          -fx-font-weight: 800;"/>
+                            <Label fx:id="numeroCompteLabel"
+                                   text="---"
+                                   style="-fx-text-fill: white;
+                                          -fx-font-size: 15px;
+                                          -fx-font-weight: 900;"/>
+                        </VBox>
+
+                    </FlowPane>
+
+                </VBox>
+
+                <!-- HERO RIGHT QR -->
+                <VBox alignment="CENTER" spacing="12"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 26;
+                             -fx-padding: 24;
+                             -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 20, 0, 0, 8);">
+
+                    <Label text="QR RIB"
+                           style="-fx-text-fill: #5646e1;
+                                  -fx-font-size: 20px;
+                                  -fx-font-weight: 900;"/>
+
+                    <StackPane style="-fx-background-color: #f8fafc;
+                                     -fx-background-radius: 22;
+                                     -fx-padding: 14;
+                                     -fx-border-color: #e5e7eb;
+                                     -fx-border-radius: 22;">
+
+                        <ImageView fx:id="qrImageView"
+                                   fitWidth="150"
+                                   fitHeight="150"
+                                   preserveRatio="true"/>
+                    </StackPane>
+
+                    <Label fx:id="qrTextLabel"
+                           text="Scanner pour récupérer votre RIB"
+                           wrapText="true"
+                           style="-fx-text-fill: #6b7280;
+                                  -fx-font-size: 12px;
+                                  -fx-font-weight: 700;"/>
+
+                    <Button text="Copier RIB"
+                            onAction="#copyRib"
+                            style="-fx-background-color: #5646e1;
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 12;
+                                   -fx-padding: 9 16;"/>
+
+                    <Button fx:id="createWalletButton"
+                            text="Créer mon wallet"
+                            onAction="#createWallet"
+                            visible="false"
+                            managed="false"
+                            style="-fx-background-color: linear-gradient(to right, #5646e1, #e6479b);
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 14;
+                                   -fx-padding: 11 20;"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- ACTIONS -->
+            <FlowPane hgap="18" vgap="18" maxWidth="1100">
+
+
+
+
+
+
+
+
+                <VBox prefWidth="250"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 22;
+                             -fx-padding: 22;
+                             -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.08), 18, 0, 0, 7);">
+
+                    <Label text="🕒" style="-fx-font-size: 32px;"/>
+
+                    <Label text="Historique"
+                           style="-fx-text-fill: #5646e1;
+                                  -fx-font-size: 18px;
+                                  -fx-font-weight: 900;"/>
+
+                    <Label text="Voir les transactions"
+                           style="-fx-text-fill: #64748b;
+                                  -fx-font-size: 13px;"/>
+
+                    <Button text="Ouvrir"
+                            onAction="#openHistoryWindow"
+                            maxWidth="Infinity"
+                            style="-fx-background-color: #ef4444;
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 14;
+                                   -fx-padding: 11;
+                                   -fx-translate-y: 12;"/>
+                </VBox>
+
+            </FlowPane>
+
+            <!-- CARDS SECTION -->
+            <VBox spacing="18"
+                  maxWidth="1100"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 24;
+                         -fx-padding: 24;
+                         -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.07), 25, 0, 0, 8);">
+
+                <HBox alignment="CENTER_LEFT" spacing="14">
+                    <Label text="💳"
+                           style="-fx-background-color: #efeaff;
+                                  -fx-background-radius: 15;
+                                  -fx-min-width: 48;
+                                  -fx-min-height: 48;
+                                  -fx-alignment: center;
+                                  -fx-font-size: 22px;"/>
+
+                    <VBox>
+                        <Label text="Mes cartes"
+                               style="-fx-text-fill: #5646e1;
+                                      -fx-font-size: 20px;
+                                      -fx-font-weight: 900;"/>
+                        <Label fx:id="cardCountLabel"
+                               text="Cartes: 0/5"
+                               style="-fx-text-fill: #777;
+                                      -fx-font-size: 13px;"/>
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button fx:id="addCardButton"
+                            text="+ Ajouter une carte"
+                            onAction="#addCard"
+                            style="-fx-background-color: linear-gradient(to right, #5646e1, #9947c1, #e6479b);
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 14;
+                                   -fx-padding: 11 18;
+                                   -fx-font-size: 14px;"/>
+                </HBox>
+
+                <Separator/>
+
+                <FlowPane fx:id="cardsContainer"
+                          hgap="18"
+                          vgap="18"
+                          alignment="CENTER_LEFT"/>
+            </VBox>
+
+            <!-- LOANS -->
+            <VBox spacing="18"
+                  maxWidth="1100"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 24;
+                         -fx-padding: 24;
+                         -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.07), 25, 0, 0, 8);">
+
+                <HBox alignment="CENTER_LEFT" spacing="14">
+                    <Label text="🤝"
+                           style="-fx-background-color: #e7f0ff;
+                                  -fx-background-radius: 15;
+                                  -fx-min-width: 48;
+                                  -fx-min-height: 48;
+                                  -fx-alignment: center;
+                                  -fx-font-size: 22px;"/>
+
+                    <VBox>
+                        <Label text="Prêts"
+                               style="-fx-text-fill: #5646e1;
+                                      -fx-font-size: 20px;
+                                      -fx-font-weight: 900;"/>
+                        <Label text="Mes prêts, demandes et demandes reçues"
+                               style="-fx-text-fill: #777;
+                                      -fx-font-size: 13px;"/>
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button text="Ouvrir"
+                            onAction="#goLoans"
+                            style="-fx-background-color: linear-gradient(to right, #5646e1, #e6479b);
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 999;
+                                   -fx-padding: 10 18;"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</StackPane>

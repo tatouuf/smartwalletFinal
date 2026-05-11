@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="controller.WalletHomeController"
+           style="-fx-background-color: #f5f7fb;">
+
+    <BorderPane prefHeight="600.0" prefWidth="1200.0">
+
+        <!-- Header avec gradient -->
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="20"
+                  style="-fx-background-color: linear-gradient(to right, #4f46e5, #ec4899); -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);"
+                  prefHeight="80">
+                <padding>
+                    <Insets top="15" right="25" bottom="15" left="25"/>
+                </padding>
+                <Label text="💰" style="-fx-font-size: 36px; -fx-text-fill: white;"/>
+                <Label text="SmartWallet" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="userNameLabel" text="Utilisateur"
+                       style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: 600; -fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 20; -fx-padding: 8 20;"/>
+                <Button text="Déconnexion" onAction="#logout"
+                        style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20; -fx-font-size: 14px; -fx-effect: dropshadow(two-pass-box, rgba(239,68,68,0.3), 8, 0, 0, 2);"/>
+            </HBox>
+        </top>
+
+        <!-- Centre -->
+        <center>
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #f5f7fb; -fx-padding: 0;">
+                <VBox spacing="25" alignment="CENTER">
+                    <padding>
+                        <Insets top="25" bottom="25" left="30" right="30"/>
+                    </padding>
+
+                    <!-- Titre de bienvenue -->
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label text="Bienvenue sur SmartWallet"
+                               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #4f46e5;"/>
+                        <Label text="Gérez vos finances simplement et intelligemment"
+                               style="-fx-font-size: 14px; -fx-text-fill: #64748b;"/>
+                    </VBox>
+
+                    <!-- GRID MENU Principal (3x4) -->
+                    <GridPane hgap="20" vgap="20" alignment="CENTER">
+
+                        <!-- ROW 0 -->
+                        <!-- Wallet -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goWallet">
+                            <Label text="💰" style="-fx-font-size: 36px;"/>
+                            <Label text="Wallet" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Mon portefeuille" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- Cartes -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goCards">
+                            <Label text="💳" style="-fx-font-size: 36px;"/>
+                            <Label text="ajouter Cartes" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Gérer mes cartes" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- Transfert (Send) -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="2"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goSend">
+                            <Label text="📤" style="-fx-font-size: 36px;"/>
+                            <Label text="Envoyer" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Transférer de l'argent" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- Retrait (Withdraw) -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="3"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goWithdraw">
+                            <Label text="🏧" style="-fx-font-size: 36px;"/>
+                            <Label text="Retrait" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Retirer de l'argent" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- ROW 1 -->
+                        <!-- Historique -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goHistory">
+                            <Label text="📊" style="-fx-font-size: 36px;"/>
+                            <Label text="Historique" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Voir mes transactions" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- Prêts (Loans) -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goLoans">
+                            <Label text="💸" style="-fx-font-size: 36px;"/>
+                            <Label text="Prêts" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Gérer mes prêts" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- liste cards -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="2"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#list">
+                            <Label text="📤" style="-fx-font-size: 36px;"/>
+                            <Label text="cartes disponibles " style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="list des cards" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+                        <!-- Services -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="3"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goServices">
+                            <Label text="🛠️" style="-fx-font-size: 36px;"/>
+                            <Label text="Services" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Services clients" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- ROW 2 -->
+                        <!-- Amis -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goFriends">
+                            <Label text="👥" style="-fx-font-size: 36px;"/>
+                            <Label text="Amis" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Gérer mes relations" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- Réclamations -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goReclamations">
+                            <Label text="📝" style="-fx-font-size: 36px;"/>
+                            <Label text="Réclamations" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Suivre mes réclamations" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- Budget & Expenses -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="2"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goBudgetExpenses">
+                            <Label text="📉" style="-fx-font-size: 36px;"/>
+                            <Label text="Budget" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Gérer mon budget" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                        <!-- Assurances -->
+                        <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="3"
+                              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-min-width: 160; -fx-min-height: 140; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 20; -fx-cursor: hand;"
+                              onMouseClicked="#goAssurances">
+                            <Label text="🛡️" style="-fx-font-size: 36px;"/>
+                            <Label text="Assurances" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Mes assurances" style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                        </VBox>
+
+                    </GridPane>
+
+                    <!-- Message d'information -->
+                    <Label text="Sélectionnez une option pour commencer"
+                           style="-fx-text-fill: #94a3b8; -fx-font-size: 12px; -fx-font-style: italic;"/>
+                </VBox>
+            </ScrollPane>
+        </center>
+
+        <!-- Footer -->
+        <bottom>
+            <HBox alignment="CENTER" style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 1 0 0 0;" prefHeight="50">
+                <Label text="© 2026 SmartWallet - Tous droits réservés" style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+            </HBox>
+        </bottom>
+
+    </BorderPane>
+</StackPane>

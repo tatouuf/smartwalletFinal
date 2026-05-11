@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="controller.WalletHomeControllerAdmin">
+
+    <VBox spacing="30" alignment="TOP_CENTER"
+          style="-fx-background-color:linear-gradient(to bottom,#0f172a,#020617);">
+
+        <!-- TOP BAR with profile access -->
+        <HBox alignment="CENTER_RIGHT" spacing="14"
+              style="-fx-background-color: rgba(255,255,255,0.04);
+                     -fx-padding: 12 24;
+                     -fx-border-color: rgba(255,255,255,0.08);
+                     -fx-border-width: 0 0 1 0;">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="adminNameBtn"
+                    text="👤 Admin"
+                    onAction="#openProfile"
+                    style="-fx-background-color: rgba(255,255,255,0.08); -fx-text-fill: white;
+                           -fx-font-size: 13px; -fx-font-weight: 600; -fx-background-radius: 20;
+                           -fx-cursor: hand; -fx-padding: 7 18;
+                           -fx-border-color: rgba(255,255,255,0.2); -fx-border-radius: 20;"/>
+            <Button text="🔓 Déconnexion" onAction="#logout"
+                    style="-fx-background-color: #ef4444; -fx-text-fill: white;
+                           -fx-font-weight: bold; -fx-background-radius: 20;
+                           -fx-cursor: hand; -fx-padding: 7 18;"/>
+        </HBox>
+
+        <!-- TITLE -->
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="SMART WALLET"
+                   style="-fx-text-fill:white; -fx-font-size:28px; -fx-font-weight:bold;"/>
+            <Label text="Gérez vos finances simplement"
+                   style="-fx-text-fill:#94a3b8; -fx-font-size:14px;"/>
+        </VBox>
+
+        <!-- GRID MENU -->
+        <GridPane hgap="25" vgap="25" alignment="CENTER">
+
+            <!-- WALLET -->
+            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                  styleClass="menuCard" onMouseClicked="#goWallet">
+                <Label text="💰" style="-fx-font-size:36px; -fx-text-fill:white;"/>
+                <Label text="Wallet" styleClass="menuText"/>
+            </VBox>
+
+            <!-- CREDIT CARD -->
+            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                  styleClass="menuCard" onMouseClicked="#goCards">
+                <Label text="💳" style="-fx-font-size:36px; -fx-text-fill:white;"/>
+                <Label text="Cartes Bancaires" styleClass="menuText"/>
+            </VBox>
+
+            <!-- SERVICES -->
+            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                  styleClass="menuCard" onMouseClicked="#goServices">
+                <Label text="🔔" style="-fx-font-size:36px; -fx-text-fill:white;"/>
+                <Label text="Services" styleClass="menuText"/>
+            </VBox>
+
+            <!-- ASSURANCES -->
+            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                  styleClass="menuCard" onMouseClicked="#goAssurances">
+                <Label text="🛡️" style="-fx-font-size:36px; -fx-text-fill:white;"/>
+                <Label text="Assurances" styleClass="menuText"/>
+            </VBox>
+
+            <!-- FRIENDS -->
+            <VBox alignment="CENTER" spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                  styleClass="menuCard" onMouseClicked="#goFriends">
+                <Label text="👥" style="-fx-font-size:36px; -fx-text-fill:white;"/>
+                <Label text="Friends &amp; Reclamations" styleClass="menuText"/>
+            </VBox>
+
+        </GridPane>
+
+    </VBox>
+</StackPane>
